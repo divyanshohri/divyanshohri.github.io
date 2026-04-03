@@ -683,6 +683,8 @@ const tradeCatalog = {
   "Not listed": ["","Not listed"]
 };
 
+const tradeStorageOptions = ["","128GB","256GB","512GB","1TB","2TB"];
+
 const tradeValues = {
   "Apple": {"iPhone 17":200,"iPhone 16":180,"iPhone 15":160,"iPhone 14":140,"iPhone 13":120,"iPhone 12":100,"iPhone 11":80,"Not listed":0},
   "Samsung": {"Samsung Galaxy S26":200,"Samsung Galaxy S25":180,"Samsung Galaxy S24":160,"Samsung Galaxy S23":140,"Samsung Galaxy S22":120,"Samsung Galaxy S21":100,"Samsung Galaxy S20":80,"Not listed":0},
@@ -802,7 +804,7 @@ function syncTradeRows(){
   if(state.tradeDecision !== "yes"){ state.tradeRows = []; return; }
   const rows = [];
   for(let i=0;i<state.tradeCount;i++){
-    rows.push(state.tradeRows[i] || {make:"", model:""});
+    rows.push(state.tradeRows[i] || {make:"", model:"", storage:""});
   }
   state.tradeRows = rows;
 }
@@ -888,7 +890,7 @@ function renderTradeRows(){
       <div class="trade-row">
         <div class="trade-row-title">Trade-in device ${idx+1}</div>
         <div class="hint" style="margin-bottom:10px">Estimated value: ${val===null ? "—" : "$"+val}</div>
-        <div class="grid-2">
+        <div class="grid-3">
           <div class="field">
             <label>Make</label>
             <select data-trade-idx="${idx}" data-trade-field="make">
@@ -901,6 +903,12 @@ function renderTradeRows(){
               ${models.map(model=>`<option value="${model}" ${row.model===model?"selected":""}>${model || "Select model"}</option>`).join("")}
             </select>
           </div>
+          <div class="field">
+            <label>Storage</label>
+            <select data-trade-idx="${idx}" data-trade-field="storage">
+              ${tradeStorageOptions.map(storage=>`<option value="${storage}" ${row.storage===storage?"selected":""}>${storage || "Select storage"}</option>`).join("")}
+            </select>
+          </div>
         </div>
       </div>`;
   }).join("");
@@ -908,12 +916,17 @@ function renderTradeRows(){
     sel.onchange = () => {
       const idx = Number(sel.dataset.tradeIdx);
       const field = sel.dataset.tradeField;
+      if(!state.tradeRows[idx]) state.tradeRows[idx] = {make:"", model:"", storage:""};
+
       if(field==="make"){
         state.tradeRows[idx].make = sel.value;
         state.tradeRows[idx].model = "";
-      } else {
+      } else if(field==="model"){
         state.tradeRows[idx].model = sel.value;
+      } else if(field==="storage"){
+        state.tradeRows[idx].storage = sel.value;
       }
+
       renderConfigurator();
     };
   });
@@ -1002,7 +1015,7 @@ function renderReview(){
   $("reviewProtection").textContent = state.plan==="Pro" ? "XMC Included Automatically" : (state.protectionDecision==="yes" ? `${state.protectionCount} line(s)` : "No");
   $("reviewPort").textContent = state.portDecision==="yes" ? state.portCount : 0;
   $("reviewTrade").textContent = state.tradeDecision==="yes" ? state.tradeCount : 0;
-  $("reviewTradeModels").textContent = state.tradeRows.length ? state.tradeRows.map(r=>r.make && r.model ? `${r.make} ${r.model}` : "Not selected").join(", ") : "—";
+  $("reviewTradeModels").textContent = state.tradeRows.length ? state.tradeRows.map(r=>r.make && r.model ? `${r.make} ${r.model}${r.storage ? " • " + r.storage : ""}` : "Not selected").join(", ") : "—";
   const dcost = (d?.basePrice || 0) * state.quantity;
   $("reviewTotal").textContent = money(dcost);
   $("reviewDueToday").textContent = money((d?.basePrice || 0) * state.retail);
