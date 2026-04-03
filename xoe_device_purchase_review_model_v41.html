@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>XOE Device Purchase Configuration - Review Flow</title>
+  <style>
+    :root{--bg:#eef4ff;--panel:#ffffff;--line:#cfdcf3;--text:#18212f;--muted:#52627b;--primary:#0a4fb3;--primary-dark:#083b86;--accent:#14b8a6;--accent-soft:#ccfbf1;--magenta:#d946ef;--magenta-soft:#fae8ff;--good-bg:#ecfdf5;--good:#047857;--bad-bg:#fff1f2;--bad:#be123c;--soft:#f7fbff;--promo-bg:#eef6ff;--promo-line:#9ec5ff;--promo-text:#0a4fb3;--shadow:0 14px 36px rgba(10,79,179,.10);--radius:18px}
+    *{box-sizing:border-box} body{margin:0;font-family:Inter,Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)} .hidden{display:none!important}
+    .topbar{background:linear-gradient(180deg,#ffffff 0%,#f5f9ff 100%);border-bottom:1px solid var(--line);padding:22px 0}.container{width:min(1380px,calc(100% - 32px));margin:0 auto}
+    .header,.review-header{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap}.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--muted);font-weight:700}
+    h1{margin:6px 0 6px;font-size:30px;line-height:1.15}.subtitle{color:var(--muted);font-size:14px;max-width:900px}
+    .header-cards{display:grid;grid-template-columns:repeat(4,minmax(120px,1fr));gap:10px;min-width:420px}.mini-card{background:linear-gradient(180deg,#ffffff 0%,#f6fbff 100%);border:1px solid var(--line);border-radius:14px;padding:12px 14px}.mini-card .label{font-size:11px;text-transform:uppercase;color:var(--muted);letter-spacing:.06em;font-weight:700}.mini-card .value{margin-top:6px;font-size:14px;font-weight:700}
+    .promo-catalog{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;padding:18px 0 0}.promo-catalog-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow)}.promo-catalog-card .title{font-size:15px;font-weight:800}.promo-catalog-card .price{margin-top:8px;font-size:14px;color:var(--text);font-weight:700}.promo-catalog-card .desc{margin-top:8px;font-size:13px;color:var(--muted);line-height:1.45}.promo-catalog-card .pill{margin-top:10px;display:inline-flex;background:var(--soft);color:var(--muted);padding:6px 10px;border-radius:999px;font-size:12px;font-weight:800}
+    .layout{display:grid;grid-template-columns:minmax(0,1fr) 430px;gap:24px;padding:24px 0 36px}.stack{display:grid;gap:20px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+    .panel-head{display:flex;justify-content:space-between;gap:12px;padding:20px 22px;border-bottom:1px solid var(--line);flex-wrap:wrap}.panel-title-wrap{display:flex;gap:14px;align-items:flex-start}.step{width:38px;height:38px;border-radius:12px;background:var(--primary);color:#fff;display:grid;place-items:center;font-weight:800;font-size:14px}
+    .panel h2{margin:0;font-size:19px}.desc{margin-top:6px;color:var(--muted);font-size:14px}.badge{align-self:flex-start;padding:8px 12px;border-radius:999px;background:var(--soft);border:1px solid var(--line);font-size:12px;font-weight:700;color:var(--muted)}.panel-body{padding:22px}
+    .grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.grid-2-compact{display:grid;grid-template-columns:280px minmax(0,1fr);gap:18px}.field label{display:block;margin-bottom:8px;font-size:14px;font-weight:700}.hint{margin-top:8px;font-size:12px;color:var(--muted)}
+    select{width:100%;height:44px;border:1px solid #bfc8d8;border-radius:12px;background:#fff;padding:0 14px;font-size:14px;color:var(--text)}
+    .info-box{border:1px solid var(--line);border-radius:14px;background:var(--soft);padding:16px}.info-box .title{font-size:13px;text-transform:uppercase;color:var(--muted);font-weight:800;letter-spacing:.05em}.info-box .big{margin-top:10px;font-size:21px;font-weight:800}.info-list{display:grid;gap:8px;margin-top:12px;font-size:14px;color:var(--muted)}.info-row{display:flex;justify-content:space-between;gap:12px}.info-row strong{color:var(--text)}
+    .counter{display:flex;align-items:center;height:44px;border:1px solid #bfc8d8;border-radius:12px;background:#fff;overflow:hidden}.counter button{width:48px;height:100%;border:0;background:#fff;font-size:24px;cursor:pointer;color:var(--text)}.counter button:hover{background:var(--soft)}.counter .value{flex:1;text-align:center;font-size:20px;font-weight:800;border-left:1px solid #dbe3ef;border-right:1px solid #dbe3ef;height:100%;display:grid;place-items:center}
+    .payment-box,.plan-card{border:1px solid var(--line);border-radius:16px;padding:18px}.payment-header{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:14px}.payment-count{min-width:78px;text-align:center;border-radius:12px;background:var(--soft);padding:10px 12px}.payment-count .small,.summary-card .small{font-size:11px;text-transform:uppercase;color:var(--muted);letter-spacing:.06em;font-weight:700}.payment-count .big,.summary-card .big{font-size:22px;font-weight:800;margin-top:4px}
+    .status{margin-top:18px;padding:13px 14px;border-radius:14px;font-size:14px;font-weight:600;border:1px solid}.good{background:var(--good-bg);color:var(--good);border-color:#a7f3d0}.bad{background:var(--bad-bg);color:var(--bad);border-color:#fecdd3}
+    .toggle{display:inline-flex;gap:8px;padding:4px;border-radius:12px;background:var(--soft);border:1px solid var(--line)}.toggle button{border:0;background:transparent;padding:10px 16px;font-size:14px;font-weight:700;border-radius:10px;cursor:pointer;color:var(--muted)}.toggle button.active{background:var(--primary);color:#fff}
+    .plan-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.plan-card{cursor:pointer;transition:.18s ease;background:#fff}.plan-card:hover{transform:translateY(-1px)}.plan-card.active{background:linear-gradient(135deg,var(--primary) 0%, var(--primary-dark) 100%);color:#fff;border-color:var(--primary)}.plan-card .plan-title{font-size:17px;font-weight:800}.plan-card .plan-desc{margin-top:8px;font-size:14px;color:inherit;opacity:.82}
+    .promo-box{border:1px solid var(--promo-line);background:linear-gradient(135deg,var(--promo-bg) 0%,#ffffff 100%);border-radius:16px;padding:16px}.promo-title{font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--promo-text);font-weight:800}.promo-name{margin-top:8px;font-size:18px;font-weight:800}.promo-meta{margin-top:8px;color:var(--muted);font-size:14px;line-height:1.5}.promo-pill{display:inline-flex;margin-top:10px;padding:6px 10px;border-radius:999px;background:#dbeafe;color:#1d4ed8;font-size:12px;font-weight:800}
+    .reset-note{margin-top:10px;padding:10px 12px;border-radius:12px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-size:13px}.plan-banner{margin-top:14px;padding:14px 16px;border-radius:14px;background:#ecfeff;border:1px solid #a5f3fc;color:#155e75;font-size:14px;font-weight:700}.promo-check{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #eef2f7}.promo-check:last-child{border-bottom:none}
+    .device-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.device-card{border:1px solid var(--line);border-radius:16px;background:#fff;padding:14px;cursor:pointer;transition:.18s ease;display:flex;flex-direction:column;gap:10px;min-height:180px}.device-card:hover{transform:translateY(-1px);box-shadow:var(--shadow)}.device-card.active{border-color:var(--primary);background:linear-gradient(180deg,#eff6ff 0%,#ffffff 100%);box-shadow:0 0 0 3px rgba(10,79,179,.08)}.device-card-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.device-brand{font-size:11px;text-transform:uppercase;color:var(--muted);letter-spacing:.06em;font-weight:700}.device-name{margin-top:4px;font-size:16px;font-weight:800}.device-price{font-size:13px;font-weight:800;color:var(--text)}.device-svg-wrap{display:flex;justify-content:center;align-items:center;min-height:84px;padding:2px 0}.device-sku{font-size:12px;color:var(--muted)}.selected-photo{display:flex;justify-content:center;align-items:center;background:#fff;border:1px dashed var(--line);border-radius:16px;padding:12px;margin-top:12px}
+    .summary{position:sticky;top:20px}.summary-section{padding:20px}.summary-title{font-size:20px;font-weight:800;margin:0}.summary-sub{margin-top:6px;font-size:14px;color:var(--muted)}.pill{display:inline-flex;align-items:center;padding:7px 12px;border-radius:999px;font-size:12px;font-weight:800}.summary-banner{border-radius:14px;background:var(--soft);padding:14px;border:1px solid var(--line);margin-top:16px;display:flex;justify-content:space-between;gap:12px;align-items:center}.checklist{border:1px solid var(--line);border-radius:14px;margin-top:18px;overflow:hidden}.checklist-head{padding:14px 16px;border-bottom:1px solid var(--line);font-size:14px;font-weight:800}.checklist-body{padding:14px 16px;display:grid;gap:12px}.check-item{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--text)}.dot{width:10px;height:10px;border-radius:999px;margin-top:5px;flex:0 0 auto}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}.btn{height:46px;border-radius:12px;font-weight:800;font-size:14px;cursor:pointer;border:1px solid #c7d0e0;background:#fff;color:var(--text)}.btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%);color:#fff;border-color:var(--primary)}.summary-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:16px}.summary-card{background:linear-gradient(180deg,#ffffff 0%,#f7fbff 100%);border:1px solid var(--line);border-radius:14px;padding:14px}
+    .review-wrap{padding:24px 0 40px}.review-grid{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:24px;margin-top:20px}.review-card{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:22px}.review-card{position:relative;overflow:hidden}.review-card:before{content:'';position:absolute;left:0;top:0;right:0;height:4px;background:linear-gradient(90deg,var(--primary) 0%, var(--accent) 50%, var(--magenta) 100%)}.review-card h3{margin:0 0 14px 0;font-size:20px}.review-section{border:1px solid var(--line);border-radius:16px;padding:16px;background:var(--soft);margin-top:16px}.review-section:first-of-type{margin-top:0}.review-section-title{font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:800;margin-bottom:10px}.review-list{display:grid;gap:10px}.review-row{display:flex;justify-content:space-between;gap:12px;font-size:14px}.review-row strong{text-align:right}.review-highlight{background:linear-gradient(135deg,#eef6ff 0%,#ffffff 100%);border:1px solid #b6d0ff;border-radius:16px;padding:16px}.review-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.add-device-btn{background:#f0f7ff;border:1px dashed var(--primary);color:var(--primary)}.footer-note{font-size:13px;color:var(--muted)}
+    
+    .hero-note{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+    .hero-chip{display:inline-flex;align-items:center;padding:8px 12px;border-radius:999px;background:linear-gradient(135deg,#e0ecff 0%,#ffffff 100%);color:var(--primary-dark);font-size:12px;font-weight:800;border:1px solid #bdd3ff}
+    .exec-banner{margin-top:18px;padding:14px 16px;border-radius:16px;background:linear-gradient(135deg,#eaf4ff 0%,#f5fffd 55%,#fff6fe 100%);border:1px solid #b9d4ff;color:var(--primary-dark);font-size:14px;font-weight:700}
+    .review-kpi-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:16px}
+    .review-kpi{background:linear-gradient(180deg,#ffffff 0%,#f8fbff 100%);border:1px solid var(--line);border-radius:16px;padding:16px}
+    .review-kpi .label{font-size:11px;text-transform:uppercase;color:var(--muted);letter-spacing:.06em;font-weight:800}
+    .review-kpi .value{font-size:24px;font-weight:900;margin-top:6px}
+    .review-kpi .sub{font-size:12px;color:var(--muted);margin-top:4px}
+    @media (max-width:1100px){.layout,.review-grid{grid-template-columns:1fr}.summary{position:static}.review-kpi-grid{grid-template-columns:1fr}}
+@media (max-width:1100px){.layout,.review-grid{grid-template-columns:1fr}.summary{position:static}}
+    
+    .modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.45);display:flex;align-items:center;justify-content:center;padding:20px;z-index:9999}
+    .modal-card{width:min(720px,100%);background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:24px}
+    .modal-header{display:flex;gap:14px;align-items:flex-start}
+    .modal-icon{width:42px;height:42px;border-radius:12px;background:#1d4ed8;color:#fff;display:grid;place-items:center;font-size:20px;font-weight:800}
+    .modal-title{font-size:28px;font-weight:800;margin:0}
+    .modal-sub{font-size:14px;color:var(--muted);margin-top:2px}
+    .modal-info{margin-top:18px;background:var(--soft);border:1px solid var(--line);border-radius:16px;padding:18px}
+    .modal-info-title{font-size:14px;font-weight:800;margin-bottom:10px}
+    .modal-list{display:grid;gap:12px;color:var(--text);font-size:14px;line-height:1.45}
+    .modal-list-item{display:flex;gap:10px;align-items:flex-start}
+    .modal-checks-title{margin-top:18px;font-size:14px;font-weight:800}
+    .confirm-list{display:grid;gap:12px;margin-top:12px}
+    .confirm-item{display:flex;gap:12px;align-items:flex-start;padding:16px;border:1px solid #a7f3d0;background:#f0fdf4;border-radius:14px}
+    .confirm-item input{margin-top:4px;transform:scale(1.1)}
+    .confirm-item label{font-size:14px;line-height:1.45;cursor:pointer}
+    .confirm-timestamp{margin-top:18px;font-size:13px;color:#047857}
+    .modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px;flex-wrap:wrap}
+    .success-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;background:var(--bg)}
+    .success-card{width:min(760px,100%);background:#fff;border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);padding:40px;text-align:center}
+    .success-badge{width:72px;height:72px;border-radius:999px;background:#dcfce7;color:#047857;display:grid;place-items:center;font-size:34px;font-weight:800;margin:0 auto 18px}
+    .success-title{font-size:34px;font-weight:800;margin:0}
+    .success-sub{margin-top:10px;color:var(--muted);font-size:16px}
+    .success-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:28px}.asurion-wrap{padding:24px 0 40px}.asurion-grid{display:grid;grid-template-columns:320px minmax(0,1fr);gap:24px;margin-top:20px}.as-sidebar,.as-main{background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow)}.as-sidebar{padding:20px;position:sticky;top:20px;height:fit-content}.as-main{padding:20px}.as-title{font-size:20px;font-weight:800;margin:0}.as-sub{margin-top:6px;color:var(--muted);font-size:14px}.pool-grid{display:grid;gap:12px;margin-top:16px}.pool-card{border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,#fff 0%,#f8fbff 100%);padding:14px}.pool-label{font-size:11px;text-transform:uppercase;color:var(--muted);letter-spacing:.06em;font-weight:800}.pool-value{font-size:28px;font-weight:900;margin-top:6px}.pool-sub{font-size:12px;color:var(--muted);margin-top:4px}.line-toolbar{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:18px}.line-grid{display:grid;gap:16px}.line-card{border:1px solid var(--line);border-radius:18px;padding:18px;background:linear-gradient(180deg,#ffffff 0%,#f9fbff 100%)}.line-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:14px}.line-name{font-size:18px;font-weight:800}.line-status{padding:6px 10px;border-radius:999px;font-size:12px;font-weight:800;background:#eef2ff;color:#3730a3;border:1px solid #c7d2fe}.line-layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.inline-chip{display:inline-flex;padding:6px 10px;border-radius:999px;background:#eff6ff;color:var(--primary-dark);border:1px solid #bfd4ff;font-size:12px;font-weight:800}.mdn-input{width:100%;height:44px;border:1px solid #bfc8d8;border-radius:12px;background:#fff;padding:0 14px;font-size:14px;color:var(--text)}.line-footer{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:14px;padding-top:14px;border-top:1px dashed #d6deeb}.as-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.assignment-note{margin-top:14px;padding:12px 14px;border-radius:14px;background:#f0fdf4;border:1px solid #a7f3d0;color:#166534;font-size:13px}.catalog-shell{min-height:100vh;background:#fbfbfd}.catalog-top{background:#fff;border-bottom:1px solid #e5e7eb}.catalog-top-inner{width:min(1380px,calc(100% - 40px));margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:24px 0}.brand-word{font-size:24px;font-weight:700;letter-spacing:-.02em}.catalog-actions{display:flex;align-items:center;gap:24px;color:#111827;font-size:14px}.catalog-body{width:min(1380px,calc(100% - 40px));margin:0 auto;padding:12px 0 28px}.catalog-page-title{font-size:20px;font-weight:700;margin:0 0 12px}.catalog-filter-wrap{display:grid;gap:18px;max-width:100%}.catalog-filter-box{border:1px solid #e8e8ef;border-radius:12px;background:#fff;padding:18px 22px;box-shadow:0 6px 18px rgba(15,23,42,.04)}.catalog-filter-title{font-size:14px;font-weight:700;margin-bottom:12px}.catalog-brand-tabs{display:flex;gap:28px;justify-content:center;flex-wrap:wrap}.catalog-brand-tab{font-size:14px;font-weight:600;color:#4b5563;padding-bottom:8px;border-bottom:2px solid transparent;cursor:pointer}.catalog-brand-tab.active{color:var(--primary);border-color:var(--primary)}.catalog-sort-row{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}.catalog-sort-box{display:grid;gap:6px}.catalog-sort-label{font-size:12px;color:#4b5563;font-weight:600}.catalog-sort-value{font-size:16px;border-bottom:1px solid #d1d5db;padding-bottom:10px;min-width:180px}.catalog-trade-toggle{display:flex;align-items:center;gap:12px;font-size:14px}.catalog-switch{width:44px;height:24px;border-radius:999px;background:#d1d5db;position:relative}.catalog-switch:after{content:'';position:absolute;left:3px;top:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.18)}.catalog-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin-top:24px}.catalog-card{background:#fff;border:1px solid #ececf3;border-radius:20px;padding:14px;box-shadow:0 6px 18px rgba(15,23,42,.04);cursor:pointer;transition:.18s ease}.catalog-card:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(15,23,42,.08)}.catalog-card-media{background:#f7f7fb;border-radius:16px;min-height:270px;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:16px}.catalog-card-brand{font-size:11px;color:#6b7280;margin-bottom:6px}.catalog-card-name{font-size:18px;font-weight:800;text-align:center;margin-bottom:10px}.catalog-promo-pill{display:inline-flex;background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%);color:#fff;border-radius:999px;padding:9px 14px;font-size:12px;font-weight:700;text-align:center;line-height:1.2;margin-top:10px}.catalog-card-body{padding:14px 8px 6px;text-align:center}.catalog-starting{font-size:12px;color:#6b7280}.catalog-price{font-size:16px;color:#6b7280;text-decoration:line-through}.catalog-main-price{font-size:20px;font-weight:900}.catalog-main-price span{font-size:14px;font-weight:700}.catalog-down{font-size:12px;color:#6b7280;margin-top:2px}.catalog-finance{font-size:12px;color:#6b7280;margin-top:12px}.catalog-pagination{display:flex;justify-content:center;align-items:center;gap:18px;margin-top:42px;color:#4b5563}.catalog-page-pill{width:46px;height:46px;border:1px solid #9ca3af;border-radius:6px;display:grid;place-items:center;background:#fff;font-weight:700}.catalog-footer{width:min(1380px,calc(100% - 40px));margin:0 auto;padding:28px 0 18px;color:#6b7280;font-size:12px;display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}.catalog-footer-links{display:flex;gap:24px;flex-wrap:wrap}.catalog-bottom-bar{background:#0b0b16;color:#fff;font-size:12px;text-align:center;padding:12px 0}.catalog-back-btn{margin-top:16px}.catalog-hidden{display:none!important}.post-catalog-mode .topbar{display:none!important}.post-catalog-mode .promo-catalog{display:none!important}.post-catalog-mode #panel1{display:none!important}.post-catalog-mode .layout{padding-top:8px}@media (max-width:1100px){.catalog-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (max-width:760px){.catalog-grid{grid-template-columns:1fr}.catalog-top-inner,.catalog-body,.catalog-footer{width:calc(100% - 24px)}}.trade-device-list{display:grid;gap:12px;margin-top:16px}.trade-device-row{border:1px solid var(--line);border-radius:14px;background:#fff;padding:14px}.trade-device-title{font-size:13px;font-weight:800;margin-bottom:10px;color:var(--text)}
+@media (max-width:860px){.header-cards,.promo-catalog{grid-template-columns:repeat(2,minmax(120px,1fr));min-width:0;width:100%}.grid-2,.grid-3,.grid-2-compact,.plan-grid,.device-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+
+
+<div id="catalogView" class="catalog-shell">
+  <div class="catalog-top">
+    <div class="catalog-top-inner">
+      <div class="brand-word">Comcast Business</div>
+      <div class="catalog-actions"><span>⌕</span></div>
+    </div>
+  </div>
+  <div class="catalog-body">
+    <h1 class="catalog-page-title">Shop phones</h1>
+
+    <div class="catalog-grid">
+      <div class="catalog-card" data-catalog-type="byod">
+        <div class="catalog-card-media">
+          <div class="catalog-card-brand">BYO</div>
+          <div class="catalog-card-name">Bring your phone</div>
+          <div style="margin-top:8px"><svg width="72" height="122" viewBox="0 0 88 150" xmlns="http://www.w3.org/2000/svg" aria-label="BYOD">
+            <defs><linearGradient id="BYOD" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0a4fb3"/><stop offset="100%" stop-color="#2563eb"/></linearGradient></defs>
+            <rect x="14" y="4" rx="18" ry="18" width="60" height="142" fill="#111827"/><rect x="18" y="8" rx="15" ry="15" width="52" height="134" fill="url(#BYOD)"/><rect x="32" y="14" rx="4" ry="4" width="24" height="6" fill="rgba(17,24,39,0.82)"/><circle cx="44" cy="132" r="2.5" fill="rgba(255,255,255,0.45)"/>
+          </svg></div>
+        </div>
+        <div class="catalog-card-body">
+          <div class="catalog-starting">Starting at</div>
+          <div class="catalog-main-price">$0.00<span>/mo</span></div>
+          <div class="catalog-down">with $0.00 down</div>
+          <div class="catalog-finance">Only pay for service</div>
+        </div>
+      </div>
+
+      <div class="catalog-card" data-catalog-type="purchase" data-device-id="galaxy-s25">
+        <div class="catalog-card-media">
+          <div class="catalog-card-brand">Samsung</div>
+          <div class="catalog-card-name">Galaxy S26 Ultra</div>
+          <div><svg width="72" height="122" viewBox="0 0 88 150" xmlns="http://www.w3.org/2000/svg" aria-label="Galaxy Ultra">
+            <defs><linearGradient id="GalaxyUltra" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1f2937"/><stop offset="100%" stop-color="#7c83ff"/></linearGradient></defs>
+            <rect x="14" y="4" rx="18" ry="18" width="60" height="142" fill="#111827"/><rect x="18" y="8" rx="15" ry="15" width="52" height="134" fill="url(#GalaxyUltra)"/><rect x="32" y="14" rx="4" ry="4" width="24" height="6" fill="rgba(17,24,39,0.82)"/><circle cx="44" cy="132" r="2.5" fill="rgba(255,255,255,0.45)"/>
+          </svg></div>
+          <div class="catalog-promo-pill">Up to $1100 savings with trade<br/>in promotions</div>
+        </div>
+        <div class="catalog-card-body">
+          <div class="catalog-starting">Starting at</div>
+          <div class="catalog-price">$36.11/mo</div>
+          <div class="catalog-main-price">$22.22<span>/mo</span></div>
+          <div class="catalog-down">with $0.00 down</div>
+          <div class="catalog-finance">For 36 months, 0% APR. Full Price $1299.99</div>
+        </div>
+      </div>
+
+      <div class="catalog-card" data-catalog-type="purchase" data-device-id="galaxy-s25">
+        <div class="catalog-card-media">
+          <div class="catalog-card-brand">Samsung</div>
+          <div class="catalog-card-name">Galaxy S26+</div>
+          <div><svg width="72" height="122" viewBox="0 0 88 150" xmlns="http://www.w3.org/2000/svg" aria-label="Galaxy Plus">
+            <defs><linearGradient id="GalaxyPlus" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#374151"/><stop offset="100%" stop-color="#8b92ff"/></linearGradient></defs>
+            <rect x="14" y="4" rx="18" ry="18" width="60" height="142" fill="#111827"/><rect x="18" y="8" rx="15" ry="15" width="52" height="134" fill="url(#GalaxyPlus)"/><rect x="32" y="14" rx="4" ry="4" width="24" height="6" fill="rgba(17,24,39,0.82)"/><circle cx="44" cy="132" r="2.5" fill="rgba(255,255,255,0.45)"/>
+          </svg></div>
+          <div class="catalog-promo-pill">Up to $1099.99 savings with<br/>trade in promotions</div>
+        </div>
+        <div class="catalog-card-body">
+          <div class="catalog-starting">Starting at</div>
+          <div class="catalog-price">$30.56/mo</div>
+          <div class="catalog-main-price">$16.66<span>/mo</span></div>
+          <div class="catalog-down">with $0.00 down</div>
+          <div class="catalog-finance">For 36 months, 0% APR. Full Price $1099.99</div>
+        </div>
+      </div>
+
+      <div class="catalog-card" data-catalog-type="purchase" data-device-id="iphone-16-pro">
+        <div class="catalog-card-media">
+          <div class="catalog-card-brand">Apple</div>
+          <div class="catalog-card-name">iPhone 17 Pro</div>
+          <div><svg width="72" height="122" viewBox="0 0 88 150" xmlns="http://www.w3.org/2000/svg" aria-label="iPhone Pro">
+            <defs><linearGradient id="iPhonePro" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fb923c"/><stop offset="100%" stop-color="#0f172a"/></linearGradient></defs>
+            <rect x="14" y="4" rx="18" ry="18" width="60" height="142" fill="#111827"/><rect x="18" y="8" rx="15" ry="15" width="52" height="134" fill="url(#iPhonePro)"/><rect x="32" y="14" rx="4" ry="4" width="24" height="6" fill="rgba(17,24,39,0.82)"/><circle cx="44" cy="132" r="2.5" fill="rgba(255,255,255,0.45)"/>
+          </svg></div>
+          <div class="catalog-promo-pill">Up to $830 savings with trade<br/>in promotions</div>
+        </div>
+        <div class="catalog-card-body">
+          <div class="catalog-starting">Starting at</div>
+          <div class="catalog-price">$30.55/mo</div>
+          <div class="catalog-main-price">$19.44<span>/mo</span></div>
+          <div class="catalog-down">with $0.00 down</div>
+          <div class="catalog-finance">For 36 months, 0% APR. Full Price $1099.99</div>
+        </div>
+      </div>
+
+      <div class="catalog-card" data-catalog-type="purchase" data-device-id="iphone-16-pro">
+        <div class="catalog-card-media">
+          <div class="catalog-card-brand">Apple</div>
+          <div class="catalog-card-name">iPhone 17</div>
+          <div><svg width="72" height="122" viewBox="0 0 88 150" xmlns="http://www.w3.org/2000/svg" aria-label="iPhone 17">
+            <defs><linearGradient id="iPhone17" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e9d5ff"/><stop offset="100%" stop-color="#c4b5fd"/></linearGradient></defs>
+            <rect x="14" y="4" rx="18" ry="18" width="60" height="142" fill="#111827"/><rect x="18" y="8" rx="15" ry="15" width="52" height="134" fill="url(#iPhone17)"/><rect x="32" y="14" rx="4" ry="4" width="24" height="6" fill="rgba(17,24,39,0.82)"/><circle cx="44" cy="132" r="2.5" fill="rgba(255,255,255,0.45)"/>
+          </svg></div>
+          <div class="catalog-promo-pill">Up to $829.99 savings with<br/>trade in promotions</div>
+        </div>
+        <div class="catalog-card-body">
+          <div class="catalog-starting">Starting at</div>
+          <div class="catalog-price">$23.05/mo</div>
+          <div class="catalog-main-price">$11.94<span>/mo</span></div>
+          <div class="catalog-down">with $0.00 down</div>
+          <div class="catalog-finance">For 36 months, 0% APR. Full Price $829.99</div>
+        </div>
+      </div>
+
+      <div class="catalog-card" data-catalog-type="purchase" data-device-id="pixel-10">
+        <div class="catalog-card-media">
+          <div class="catalog-card-brand">Google</div>
+          <div class="catalog-card-name">Pixel 10 Pro XL</div>
+          <div><svg width="72" height="122" viewBox="0 0 88 150" xmlns="http://www.w3.org/2000/svg" aria-label="Pixel">
+            <defs><linearGradient id="Pixel" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#64748b"/><stop offset="100%" stop-color="#93c5fd"/></linearGradient></defs>
+            <rect x="14" y="4" rx="18" ry="18" width="60" height="142" fill="#111827"/><rect x="18" y="8" rx="15" ry="15" width="52" height="134" fill="url(#Pixel)"/><rect x="32" y="14" rx="4" ry="4" width="24" height="6" fill="rgba(17,24,39,0.82)"/><circle cx="44" cy="132" r="2.5" fill="rgba(255,255,255,0.45)"/>
+          </svg></div>
+          <div class="catalog-promo-pill">Up to $830 savings with trade<br/>in promotions</div>
+        </div>
+        <div class="catalog-card-body">
+          <div class="catalog-starting">Starting at</div>
+          <div class="catalog-price">$33.33/mo</div>
+          <div class="catalog-main-price">$22.22<span>/mo</span></div>
+          <div class="catalog-down">with $0.00 down</div>
+          <div class="catalog-finance">For 36 months, 0% APR. Full Price $1199.99</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="catalog-bottom-bar">Cookie Settings</div>
+</div>
+
+<div id="configuratorView" class="catalog-hidden">
+  <div class="topbar"><div class="container"><div class="header"><div><div class="eyebrow">XOE seller experience</div><h1>Device purchase configuration</h1><div class="subtitle">After Continue, the flow opens a review page with all details. Review includes an Start New Quote action that takes you back to this configurator.</div></div><div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><button class="btn" id="backToCatalogBtn">Back to Catalog</button></div><div class="header-cards"><div class="mini-card"><div class="label">Order Type</div><div class="value">Purchase</div></div><div class="mini-card"><div class="label">Promo Logic</div><div class="value">Scalable Allocation</div></div><div class="mini-card"><div class="label">Device Limit</div><div class="value">20 Max</div></div><div class="mini-card"><div class="label">Status</div><div id="topStatus" class="value">Start</div></div></div></div>
+  <div class="promo-catalog"><div class="promo-catalog-card"><div class="title">iPhone</div><div class="price">Base price: $1,000</div><div class="desc">$500 promo applies to devices that are on monthly payment and also counted in both port-in and trade-in. $200 promo applies to remaining monthly devices.</div><div class="pill">2 promos available</div></div><div class="promo-catalog-card"><div class="title">Galaxy</div><div class="price">Base price: $900</div><div class="desc">No promo configured in this sample.</div><div class="pill">No promo</div></div><div class="promo-catalog-card"><div class="title">Pixel</div><div class="price">Base price: $800</div><div class="desc">No promo configured in this sample.</div><div class="pill">No promo</div></div></div></div></div>
+  <div class="container layout">
+    <div class="stack">
+      <div class="panel" id="panel1"><div class="panel-head"><div class="panel-title-wrap"><div class="step">1</div><div><h2>Select device</h2><div class="desc">Choose whether the customer is buying a new device or bringing their own device.</div></div></div><div class="badge">Required</div></div><div class="panel-body"><div class="field" style="margin-bottom:16px"><label>Order type</label><div class="toggle" id="orderTypeToggle"><button data-value="purchase">Buy New Device</button><button data-value="byod">BYOD</button></div><div class="hint">Use BYOD when the customer is bringing their own device.</div></div><div id="deviceCatalogSection"><div class="device-grid" id="deviceGrid"></div></div><div id="selectedProductSummaryWrap" class="grid-2" style="margin-top:12px"><div class="info-box"><div class="title">Selected device</div><div id="selectedDeviceName" class="big">No device selected</div><div class="info-list"><div class="info-row"><span>SKU</span><strong id="selectedSku">—</strong></div><div class="info-row"><span>Base device price</span><strong id="selectedPrice">$0</strong></div><div class="info-row"><span>Available colors</span><strong id="colorCount">0</strong></div><div class="info-row"><span>SIM options</span><strong id="simCount">0</strong></div></div><div id="resetNote" class="reset-note hidden">Device changed. Configurator was reset to step 1.</div></div><div class="info-box"><div class="title">Selected device image</div><div class="selected-photo" id="selectedDevicePhoto"></div></div></div></div></div>
+
+      <div class="panel hidden" id="panel2"><div class="panel-head"><div class="panel-title-wrap"><div class="step" id="step2num">2</div><div><h2 id="qtyHeading">Purchase quantity</h2><div class="desc" id="qtyDesc">Enter how many units the customer wants to buy.</div></div></div><div class="badge">Maximum 20</div></div><div class="panel-body"><div class="grid-2-compact"><div class="field"><label id="qtyLabel">Devices being purchased</label><div class="counter"><button id="qtyMinus">−</button><div id="qtyValue" class="value">0</div><button id="qtyPlus">+</button></div><div class="hint">For this example, quantity is capped at 20 devices.</div></div><div class="info-box"><div class="title">Price calculation</div><div class="big" id="deviceSubtotal">$0</div><div class="desc">Base device price × total selected quantity.</div></div></div></div></div>
+
+      <div class="panel hidden" id="panel3"><div class="panel-head"><div class="panel-title-wrap"><div class="step">3</div><div><h2>Device attributes</h2><div class="desc">Select color, storage, and SIM type.</div></div></div></div><div class="panel-body"><div class="grid-3"><div class="field"><label>Color</label><select id="colorSelect"></select></div><div class="field"><label>Storage</label><select id="storageSelect"></select></div><div class="field"><label>SIM Type</label><select id="simSelect"></select></div></div></div></div>
+
+      <div class="panel hidden" id="panelPromoSelect"><div class="panel-head"><div class="panel-title-wrap"><div class="step">4</div><div><h2>Select promo</h2><div class="desc">Choose one or more promo options. The system allocates promos across eligible devices.</div></div></div><div class="badge">Scales to 20</div></div><div class="panel-body"><div id="promoSelectEmpty" class="info-box"><div class="title">Available promos</div><div class="big" style="font-size:18px">No promos available for this device</div><div class="desc">This device does not have any configured promos.</div></div><div id="promoSelectorWrap" class="hidden"><div class="field"><label>Select promo options</label><div id="promoCheckboxList" class="info-box" style="background:#fff"></div><div id="promoHint" class="hint">You can choose multiple promos. Allocation is calculated automatically.</div></div></div></div></div>
+
+      <div class="panel hidden" id="panel4"><div class="panel-head"><div class="panel-title-wrap"><div class="step">5</div><div><h2>Payment type</h2><div class="desc">Split the quantity between Monthly and Full Price. The counters cannot go beyond the purchased quantity.</div></div></div><div id="paymentBadge" class="badge">Needs adjustment</div></div><div class="panel-body"><div class="grid-2"><div class="payment-box"><div class="payment-header"><div><div style="font-size:16px;font-weight:800">Monthly</div><div class="desc">Financed monthly</div></div><div class="payment-count"><div class="small">Count</div><div id="monthlyDisplay" class="big">0</div></div></div><div class="counter"><button id="monthlyMinus">−</button><div id="monthlyValue" class="value">0</div><button id="monthlyPlus">+</button></div></div><div class="payment-box"><div class="payment-header"><div><div style="font-size:16px;font-weight:800">Full Price</div><div class="desc">Paid today</div></div><div class="payment-count"><div class="small">Count</div><div id="retailDisplay" class="big">0</div></div></div><div class="counter"><button id="retailMinus">−</button><div id="retailValue" class="value">0</div><button id="retailPlus">+</button></div></div></div><div id="paymentStatus" class="status bad"></div></div></div>
+
+      <div class="panel hidden" id="panel5"><div class="panel-head"><div class="panel-title-wrap"><div class="step" id="step5num">6</div><div><h2 id="portHeading">Port-in intent</h2><div class="desc">Choose Yes or No first. If Yes, the MDN field appears.</div></div></div></div><div class="panel-body"><div class="grid-2-compact"><div class="field"><label>Port-in required?</label><div class="toggle" id="portToggle"><button data-value="yes">Yes</button><button data-value="no">No</button></div></div><div id="portDetails" class="grid-2 hidden"><div class="field"><label>Number of MDNs to port in</label><div class="counter"><button id="portMinus">−</button><div id="portValue" class="value">0</div><button id="portPlus">+</button></div><div class="hint">Cannot exceed purchased quantity.</div></div><div class="info-box"><div class="title">New lines</div><div id="newLinesValue" class="big">0</div><div class="desc">Delta = purchased devices − MDNs to port in.</div></div></div></div></div></div>
+
+      <div class="panel hidden" id="panel6"><div class="panel-head"><div class="panel-title-wrap"><div class="step">7</div><div><h2>Trade-in intent</h2><div class="desc">Choose Yes or No first. If Yes, the trade-in field appears.</div></div></div></div><div class="panel-body"><div class="grid-2-compact"><div class="field"><label>Trade-in required?</label><div class="toggle" id="tradeToggle"><button data-value="yes">Yes</button><button data-value="no">No</button></div></div><div class="field hidden" id="tradeDetails"><label>Number of devices to trade in</label><div class="counter"><button id="tradeMinus">−</button><div id="tradeValue" class="value">0</div><button id="tradePlus">+</button></div><div class="hint">Cannot exceed purchased quantity.</div><div id="tradeDeviceCaptureWrap" class="trade-device-list hidden"></div></div></div></div></div>
+
+      <div class="panel hidden" id="panel7"><div class="panel-head"><div class="panel-title-wrap"><div class="step" id="step7num">8</div><div><h2 id="planHeading">Plan selection</h2><div class="desc" id="planDesc">Choose the plan for the devices.</div></div></div></div><div class="panel-body"><div class="plan-grid"><div id="planPro" class="plan-card"><div class="plan-title">Pro Plan</div><div class="plan-desc">XMC Plus is included as part of the Pro plan.</div></div><div id="planStandard" class="plan-card"><div class="plan-title">Standard Plan</div><div class="plan-desc">Standard plan with optional device protection.</div></div></div></div></div>
+
+      <div class="panel hidden" id="panel8"><div class="panel-head"><div class="panel-title-wrap"><div class="step" id="step8num">9</div><div><h2 id="protectionHeading">Device protection</h2><div class="desc" id="protectionDesc">Choose Yes or No first. If Yes, the protection count appears.</div></div></div></div><div class="panel-body"><div id="proProtectionFlow" class="hidden"><div class="plan-banner">XMC is automatically included with your Pro Plan.</div></div><div id="standardProtectionFlow" class="grid-3"><div class="field"><label>Buying device protection today?</label><div class="toggle" id="protectionToggle"><button data-value="yes">Yes</button><button data-value="no">No</button></div></div><div class="field hidden" id="protectionDetails"><label>Devices with protection</label><div class="counter"><button id="protectionMinus">−</button><div id="protectionValue" class="value">0</div><button id="protectionPlus">+</button></div><div class="hint">Cannot exceed purchased quantity.</div></div><div><div class="info-box"><div class="title">Protection summary</div><div id="protectionSummary" class="desc" style="margin-top:10px">Select Yes or No to continue.</div></div></div></div></div></div>
+
+      <div class="panel hidden" id="panel9"><div class="panel-head"><div class="panel-title-wrap"><div class="step">10</div><div><h2>Selected device promo</h2><div class="desc">Promos are distributed across eligible devices based on your counts.</div></div></div></div><div class="panel-body"><div id="promoEligibleBox" class="promo-box hidden"><div class="promo-title">Promo allocation</div><div class="promo-name" id="promoName">Allocated Promos</div><div class="promo-meta" id="promoMeta"></div><div class="promo-pill" id="promoPill"></div></div><div id="promoNotEligibleBox" class="info-box"><div class="title">Promo status</div><div class="big" style="font-size:18px">No eligible promo yet</div><div class="desc" id="promoReason">Select one or more promos and complete the required conditions.</div></div></div></div>
+    </div>
+
+    <div class="summary"><div class="panel"><div class="summary-section"><h3 class="summary-title">Configurator summary</h3><div class="summary-sub">Continue becomes available once the configuration is ready for review.</div>
+            <div id="selectedCatalogDeviceCard" class="summary-banner" style="margin-top:14px;align-items:flex-start">
+              <div style="display:flex;gap:12px;align-items:center">
+                <div id="selectedCatalogThumb" style="width:64px;height:90px;border-radius:14px;background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;padding:6px"></div>
+                <div>
+                  <div style="font-size:12px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.05em">Selected from catalog</div>
+                  <div id="selectedCatalogName" style="font-size:16px;font-weight:800;margin-top:4px">No device selected</div>
+                  <div id="selectedCatalogMeta" style="font-size:13px;color:var(--muted);margin-top:4px">Choose a device from the catalog to begin.</div>
+                </div>
+              </div>
+            </div><div class="summary-banner"><div style="font-size:14px;color:var(--muted)">Status</div><div id="summaryStatus" class="pill bad">In progress</div></div><div class="summary-cards"><div class="summary-card"><div class="small">Total Devices Cost</div><div id="cardTotalDeviceCost" class="big">$0</div></div><div class="summary-card"><div class="small">Due Today</div><div id="cardDueToday" class="big">$0</div></div><div class="summary-card"><div class="small">Total Monthly Due</div><div id="cardMonthlyDue" class="big">$0</div></div><div class="summary-card"><div class="small">Promo Credit / Month</div><div id="cardPromoPerMonth" class="big">$0</div></div><div class="summary-card"><div class="small">Net Monthly Due</div><div id="cardNetMonthlyDue" class="big">$0</div></div><div class="summary-card"><div class="small">Total Promo Credit</div><div id="cardPromoCredit" class="big">$0</div></div><div class="summary-card"><div class="small">Trade-In Estimate</div><div id="cardTradeInEstimate" class="big">$0</div></div></div><div class="checklist"><div class="checklist-head">Validation checklist</div><div class="checklist-body" id="checklistBody"></div></div><div class="actions"><button class="btn" id="saveDraftBtn">Save Draft Quote</button><button class="btn" id="goToCartBtn">View Cart</button><button class="btn primary" id="continueBtn">Add to Cart</button></div></div></div></div>
+  </div>
+</div>
+
+<div id="reviewView" class="hidden">
+  <div class="topbar"><div class="container review-header"><div><div class="eyebrow">XOE seller experience</div><h1>Review device configuration</h1><div class="subtitle">Review the complete device configuration, pricing, promo allocation, protection, and handoff readiness before proceeding.</div></div><div class="header-cards"><div class="mini-card"><div class="label">Review Status</div><div id="reviewStatus" class="value">Ready</div></div><div class="mini-card"><div class="label">Devices</div><div id="reviewQtyHeader" class="value">0</div></div><div class="mini-card"><div class="label">Due Today</div><div id="reviewDueTodayHeader" class="value">$0</div></div><div class="mini-card"><div class="label">Net Monthly</div><div id="reviewNetMonthlyHeader" class="value">$0</div></div></div></div></div>
+  <div class="container review-wrap"><div class="review-kpi-grid">
+        <div class="review-kpi"><div class="label">Order Value</div><div class="value" id="reviewKpiOrderValue">$0</div><div class="sub">Total configured device value</div></div>
+        <div class="review-kpi"><div class="label">Promo Savings</div><div class="value" id="reviewKpiSavings">$0</div><div class="sub">Total promotional credit</div></div>
+        <div class="review-kpi"><div class="label">Monthly Outcome</div><div class="value" id="reviewKpiMonthly">$0</div><div class="sub">Net monthly after credits</div></div><div class="review-kpi"><div class="label">Trade-In Estimate</div><div class="value" id="reviewKpiTradeIn">$0</div><div class="sub">Estimated value from selected trade-ins</div></div>
+      </div>
+      <div class="review-grid"><div class="review-card"><h3>Order review</h3>
+    <div class="review-section"><div class="review-section-title">Device selection</div><div class="review-list"><div class="review-row"><span>Device</span><strong id="reviewDevice">—</strong></div><div class="review-row"><span>Color</span><strong id="reviewColor">—</strong></div><div class="review-row"><span>Storage</span><strong id="reviewStorage">—</strong></div><div class="review-row"><span>SIM Type</span><strong id="reviewSim">—</strong></div><div class="review-row"><span>Quantity</span><strong id="reviewQty">0</strong></div></div></div>
+    <div class="review-section"><div class="review-section-title">Payment and line setup</div><div class="review-list"><div class="review-row"><span>Monthly quantity</span><strong id="reviewMonthlyQty">0</strong></div><div class="review-row"><span>Full price quantity</span><strong id="reviewRetailQty">0</strong></div><div class="review-row"><span>Port-in MDNs</span><strong id="reviewPortQty">0</strong></div><div class="review-row"><span>Trade-in devices</span><strong id="reviewTradeQty">0</strong></div><div class="review-row"><span>Trade-in models</span><strong id="reviewTradeModels">—</strong></div><div class="review-row"><span>New lines</span><strong id="reviewNewLines">0</strong></div></div></div>
+    <div class="review-section"><div class="review-section-title">Plan and protection</div><div class="review-list"><div class="review-row"><span>Selected plan</span><strong id="reviewPlan">—</strong></div><div class="review-row"><span>Protection</span><strong id="reviewProtection">—</strong></div></div></div>
+    <div class="review-section"><div class="review-section-title">Promo allocation</div><div class="review-list"><div class="review-row"><span>$500 promo devices</span><strong id="reviewPromo500">0</strong></div><div class="review-row"><span>$200 promo devices</span><strong id="reviewPromo200">0</strong></div><div class="review-row"><span>Total promo credit</span><strong id="reviewPromoTotal">$0</strong></div><div class="review-row"><span>Promo credit per month</span><strong id="reviewPromoPerMonth">$0</strong></div></div></div><div class="review-section"><div class="review-section-title">Promo details</div><div id="reviewPromoEmpty" class="footer-note">No promo allocation has been generated yet.</div><div id="reviewPromoBox" class="hidden"><div class="review-list"><div class="review-row"><span>Applied promo</span><strong id="reviewPromoName">—</strong></div><div class="review-row"><span>Allocation</span><strong id="reviewPromoDetail">—</strong></div><div class="review-row"><span>Value</span><strong id="reviewPromoValue">—</strong></div></div></div></div>
+    <div class="review-actions"><button class="btn add-device-btn" id="addMoreDeviceBtn">Start New Quote</button><button class="btn" id="backToEditBtn">Edit Configuration</button><button class="btn" id="saveQuoteBtn">Save Quote</button><button class="btn" id="moveToConciergeBtn">Move to Concierge</button><button class="btn primary">Proceed to Next Step</button></div>
+  </div>
+  <div class="review-card"><h3>Pricing summary</h3><div class="review-highlight"><div class="review-list"><div class="review-row"><span>Total device cost</span><strong id="reviewTotalCost">$0</strong></div><div class="review-row"><span>Due today</span><strong id="reviewDueToday">$0</strong></div><div class="review-row"><span>Monthly due before credit</span><strong id="reviewMonthlyBefore">$0</strong></div><div class="review-row"><span>Promo credit per month</span><strong id="reviewMonthlyCredit">$0</strong></div><div class="review-row"><span>Total trade-in estimate</span><strong id="reviewTradeInTotal">$0</strong></div><div class="review-row"><span>Net monthly due</span><strong id="reviewNetMonthly">$0</strong></div></div></div><div class="review-section" style="margin-top:18px"><div class="review-section-title">What happens next</div><div class="footer-note">Use Start New Quote to return to the configurator and start a fresh device configuration flow. All previous values are cleared and the screen opens again from step 1.</div></div></div></div></div>
+</div>
+
+<div id="conciergeModal" class="modal-backdrop hidden">
+  <div class="modal-card">
+    <div class="modal-header">
+      <div class="modal-icon">◌</div>
+      <div>
+        <h2 class="modal-title">Customer Verbal Confirmation</h2>
+        <div class="modal-sub">Read the following to the customer and confirm their acknowledgment.</div>
+      </div>
+    </div>
+
+    <div class="modal-info">
+      <div class="modal-info-title">Please let the customer know:</div>
+      <div class="modal-list">
+        <div class="modal-list-item"><span>☑</span><span>They will receive an order confirmation email with a summary of today's order and next steps.</span></div>
+        <div class="modal-list-item"><span>☏</span><span>A Comcast Business representative will follow up to complete the remaining steps, including payment collection, consent confirmation, and number porting or activation.</span></div>
+        <div class="modal-list-item"><span>⌘</span><span>No charges will be applied until the follow-up process is complete and the customer has provided final authorization.</span></div>
+      </div>
+    </div>
+
+    <div class="modal-checks-title">Seller: confirm the customer has verbally acknowledged the following.</div>
+
+    <div class="confirm-list">
+      <div class="confirm-item">
+        <input type="checkbox" id="confirm1" />
+        <label for="confirm1">The customer understands they will receive an order confirmation email with a summary and next steps.</label>
+      </div>
+      <div class="confirm-item">
+        <input type="checkbox" id="confirm2" />
+        <label for="confirm2">The customer understands a representative will contact them to finalize payment, consent, and activation details.</label>
+      </div>
+      <div class="confirm-item">
+        <input type="checkbox" id="confirm3" />
+        <label for="confirm3">The customer has given verbal authorization to proceed with this order.</label>
+      </div>
+    </div>
+
+    <div id="confirmTimestamp" class="confirm-timestamp hidden"></div>
+
+    <div class="modal-actions">
+      <button class="btn" id="cancelConciergeBtn">Cancel</button>
+      <button class="btn primary hidden" id="proceedConciergeBtn">Proceed</button>
+    </div>
+  </div>
+</div>
+
+<div id="successView" class="hidden">
+  <div class="success-screen">
+    <div class="success-card">
+      <div class="success-badge">✓</div>
+      <h1 class="success-title">Congratulations</h1>
+      <div class="success-sub">Your order has been sent to Asurion. The handoff is complete and the next follow-up steps can now begin.</div>
+      <div class="success-actions">
+        <button class="btn" id="exitSuccessBtn">Exit</button>
+        <button class="btn" id="goToAsurionBtn">Go to Asurion</button>
+        <button class="btn primary" id="configureAnotherBtn">Start New Quote</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="asurionView" class="hidden">
+  <div class="topbar">
+    <div class="container review-header">
+      <div>
+        <div class="eyebrow">Asurion line configuration</div>
+        <h1>Line-based configuration workspace</h1>
+        <div class="subtitle">Convert the order summary into line-level setup. Each purchased device or BYOD line becomes one configurable line.</div>
+      </div>
+      <div class="header-cards">
+        <div class="mini-card"><div class="label">Lines</div><div id="asTotalLinesHeader" class="value">0</div></div>
+        <div class="mini-card"><div class="label">Port-In Lines</div><div id="asPortHeader" class="value">0</div></div>
+        <div class="mini-card"><div class="label">Trade-In Lines</div><div id="asTradeHeader" class="value">0</div></div>
+        <div class="mini-card"><div class="label">Status</div><div id="asStatusHeader" class="value">In Progress</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="container asurion-wrap">
+    <div class="asurion-grid">
+      <div class="as-sidebar">
+        <h3 class="as-title">Order pools</h3>
+        <div class="as-sub">Allocate the quote-level totals across individual lines.</div>
+        <div class="pool-grid">
+          <div class="pool-card"><div class="pool-label">Total Lines</div><div class="pool-value" id="poolDevices">0</div><div class="pool-sub">One line per device or BYOD activation</div></div>
+          <div class="pool-card"><div class="pool-label">Port-In Available</div><div class="pool-value" id="poolPort">0</div><div class="pool-sub">Lines that must receive a port-in number</div></div>
+          <div class="pool-card"><div class="pool-label">New Numbers</div><div class="pool-value" id="poolNew">0</div><div class="pool-sub">Remaining lines that need a new number</div></div>
+          <div class="pool-card"><div class="pool-label">Trade-In Available</div><div class="pool-value" id="poolTrade">0</div><div class="pool-sub">Lines that can receive trade-in</div></div>
+        </div>
+        <div class="assignment-note" id="assignmentStatusNote">Assignments are in progress.</div>
+        <div class="as-actions">
+          <button class="btn" id="autoAssignLinesBtn">Auto-Configure Lines</button>
+          <button class="btn" id="backToReviewFromAsurionBtn">Back to Review</button>
+          <button class="btn primary" id="completeAsurionBtn">Complete Line Configuration</button>
+        </div>
+      </div>
+      <div class="as-main">
+        <div class="line-toolbar">
+          <div>
+            <h3 class="as-title">Line configuration</h3>
+            <div class="as-sub">Assign nickname, number type, trade-in, plan, and protection for each line.</div>
+          </div>
+          <div class="inline-chip">Quote-driven line setup</div>
+        </div>
+        <div class="line-grid" id="lineGrid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const phoneSvg=(a,b,l)=>`<svg width="72" height="122" viewBox="0 0 88 150" xmlns="http://www.w3.org/2000/svg" aria-label="${l}"><defs><linearGradient id="${l.replace(/\s+/g,'')}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${a}"/><stop offset="100%" stop-color="${b}"/></linearGradient></defs><rect x="14" y="4" rx="18" ry="18" width="60" height="142" fill="#111827"/><rect x="18" y="8" rx="15" ry="15" width="52" height="134" fill="url(#${l.replace(/\s+/g,'')})"/><rect x="32" y="14" rx="4" ry="4" width="24" height="6" fill="rgba(17,24,39,0.82)"/><circle cx="44" cy="132" r="2.5" fill="rgba(255,255,255,0.45)"/></svg>`;
+const devices=[
+{id:'iphone-16-pro',name:'iPhone 16 Pro',brand:'Apple',sku:'APL-IP16P',basePrice:1000,image:phoneSvg('#f8fafc','#cbd5e1','iPhone'),colors:['Natural Titanium','Black Titanium','White Titanium','Desert Titanium'],storages:['128 GB','256 GB','512 GB','1 TB'],sims:['eSIM','Physical SIM'],promos:[{id:'iphone500',name:'iPhone $500 Off',description:'$500 off for devices that are Monthly + Port-In + Trade-In',type:'iphone500'},{id:'iphone200monthly',name:'iPhone $200 Off',description:'$200 off for remaining Monthly devices',type:'iphone200monthly'}]},
+{id:'galaxy-s25',name:'Galaxy S25',brand:'Samsung',sku:'SMS-S25',basePrice:900,image:phoneSvg('#111827','#475569','Galaxy'),colors:['Navy','Silver Shadow','Mint'],storages:['128 GB','256 GB','512 GB'],sims:['eSIM','Physical SIM','Dual SIM'],promos:[]},
+{id:'pixel-10',name:'Pixel 10',brand:'Google',sku:'GGL-PX10',basePrice:800,image:phoneSvg('#bfdbfe','#1d4ed8','Pixel'),colors:['Obsidian','Porcelain','Bay'],storages:['128 GB','256 GB'],sims:['eSIM','Physical SIM'],promos:[]}
+];
+const tradeDeviceCatalog = {
+  "": [""],
+  "Apple": ["","iPhone 17","iPhone 16","iPhone 15","iPhone 14","iPhone 13","iPhone 12","iPhone 11","Not listed"],
+  "Google": ["","Pixel 1","Pixel 2","Pixel 3","Not listed"],
+  "Samsung": ["","Samsung Galaxy S20","Samsung Galaxy S21","Samsung Galaxy S22","Samsung Galaxy S23","Samsung Galaxy S24","Samsung Galaxy S25","Samsung Galaxy S26","Not listed"],
+  "Not listed": ["","Not listed"]
+};
+function getTradeInValue(make, model){
+  if(!make || !model) return null;
+  if(make === 'Not listed' || model === 'Not listed') return 0;
+  const table = {
+    "Apple": {
+      "iPhone 17": 200, "iPhone 16": 180, "iPhone 15": 160, "iPhone 14": 140,
+      "iPhone 13": 120, "iPhone 12": 100, "iPhone 11": 80
+    },
+    "Samsung": {
+      "Samsung Galaxy S26": 200, "Samsung Galaxy S25": 180, "Samsung Galaxy S24": 160,
+      "Samsung Galaxy S23": 140, "Samsung Galaxy S22": 120, "Samsung Galaxy S21": 100,
+      "Samsung Galaxy S20": 80
+    },
+    "Google": {
+      "Pixel 3": 200, "Pixel 2": 180, "Pixel 1": 160
+    }
+  };
+  return (table[make] && table[make][model] !== undefined) ? table[make][model] : 0;
+}
+function getTotalTradeInValue(){
+  return (state.tradeInDevices || []).reduce((sum, d) => sum + (getTradeInValue(d.make, d.model) || 0), 0);
+}
+function syncTradeInDevices(){
+  const count = state.tradeDecision==='yes' ? state.tradeCount : 0;
+  const next = [];
+  for(let i=0;i<count;i++){
+    const existing = state.tradeInDevices[i] || {make:'', model:''};
+    const validModels = tradeDeviceCatalog[existing.make] || [''];
+    next.push({
+      make: (existing.make in tradeDeviceCatalog) ? existing.make : '',
+      model: validModels.includes(existing.model) ? existing.model : ''
+    });
+  }
+  state.tradeInDevices = next;
+}
+function renderTradeInDevices(){
+  const wrap = $('tradeDeviceCaptureWrap');
+  if(!wrap) return;
+  syncTradeInDevices();
+  const shouldShow = state.tradeDecision==='yes' && state.tradeCount > 0 && !isByod();
+  wrap.classList.toggle('hidden', !shouldShow);
+  if(!shouldShow){
+    wrap.innerHTML = '';
+    return;
+  }
+  wrap.innerHTML = state.tradeInDevices.map((item, idx) => {
+    const models = tradeDeviceCatalog[item.make] || [];
+    return `
+      <div class="trade-device-row">
+        <div class="trade-device-title">Trade-in device ${idx+1}</div><div class="hint" style="margin-bottom:10px">Estimated value: ${getTradeInValue(item.make, item.model)===null ? "—" : ("$" + getTradeInValue(item.make, item.model))}</div>
+        <div class="grid-2">
+          <div class="field">
+            <label>Make</label>
+            <select data-trade-idx="${idx}" data-trade-field="make">
+              ${Object.keys(tradeDeviceCatalog).map(make => `<option value="${make}" ${item.make===make?'selected':''}>${make || "Select make"}</option>`).join('')}
+            </select>
+          </div>
+          <div class="field">
+            <label>Model</label>
+            <select data-trade-idx="${idx}" data-trade-field="model">
+              ${models.map(model => `<option value="${model}" ${item.model===model?'selected':''}>${model || "Select model"}</option>`).join('')}
+            </select>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+  [...wrap.querySelectorAll('select')].forEach(sel => {
+    sel.onchange = () => {
+      const idx = Number(sel.dataset.tradeIdx);
+      const field = sel.dataset.tradeField;
+      if(field === 'make'){
+        state.tradeInDevices[idx].make = sel.value;
+        state.tradeInDevices[idx].model = '';
+      } else {
+        state.tradeInDevices[idx].model = sel.value;
+      }
+      if(document.getElementById('backToCatalogBtn')) $('backToCatalogBtn').onclick=()=>showCatalog();
+bindCatalogCards();
+
+render();
+    };
+  });
+}
+const initialState=()=>({orderType:'purchase',deviceId:'',quantity:0,monthly:0,retail:0,portDecision:null,portCount:0,tradeDecision:null,tradeCount:0,tradeInDevices:[],plan:'',protectionDecision:null,protectionCount:0,color:'',storage:'',sim:'',selectedPromoIds:[],promo:null,showResetNote:false});
+let state=initialState();
+let cart=[];
+let asurionLines=[];
+const $=id=>document.getElementById(id);
+const colorSelect=$('colorSelect'),storageSelect=$('storageSelect'),simSelect=$('simSelect');
+
+
+function isByod(){return state.orderType==='byod';}
+
+
+function showCatalog(){
+  const catalog = document.getElementById('catalogView');
+  const configurator = document.getElementById('configuratorView');
+  if(catalog){catalog.classList.remove('catalog-hidden'); catalog.classList.remove('hidden'); catalog.style.display='block';}
+  if(configurator){configurator.classList.add('catalog-hidden'); configurator.classList.remove('post-catalog-mode'); configurator.style.display='none';}
+  ['reviewView','cartView','successView','asurionView'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){el.classList.add('hidden'); el.style.display='none';}
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function showConfiguratorFromCatalog(orderType, deviceId){
+  state = initialState();
+  state.orderType = orderType;
+  if(orderType === 'byod'){
+    state.deviceId = 'byod';
+  } else {
+    state.deviceId = deviceId || '';
+  }
+  const d = currentDevice();
+  if(d){
+    state.color = d.colors[0] || '';
+    state.storage = d.storages[0] || '';
+    state.sim = d.sims[0] || '';
+  }
+  const catalog = document.getElementById('catalogView');
+  const configurator = document.getElementById('configuratorView');
+  if(catalog){catalog.classList.add('catalog-hidden'); catalog.classList.add('hidden'); catalog.style.display='none';}
+  if(configurator){configurator.classList.remove('catalog-hidden'); configurator.classList.remove('hidden'); configurator.classList.add('post-catalog-mode'); configurator.style.display='block';}
+  ['reviewView','cartView','successView','asurionView'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){el.classList.add('hidden'); el.style.display='none';}
+  });
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function bindCatalogCards(){
+  document.querySelectorAll('.catalog-card').forEach(card=>{
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', ()=>{
+      const type = card.getAttribute('data-catalog-type');
+      const deviceId = card.getAttribute('data-device-id') || '';
+      showConfiguratorFromCatalog(type, deviceId);
+    });
+  });
+}
+function setOrderTypeToggle(){[...$('orderTypeToggle').querySelectorAll('button')].forEach(btn=>btn.classList.toggle('active',btn.dataset.value===state.orderType));}
+function currentDevice(){if(isByod()){return{id:'byod',name:'BYOD Activation',brand:'Customer Owned',sku:'BYOD',basePrice:0,image:'',colors:['Customer Device'],storages:['Customer Device'],sims:['Physical SIM','eSIM'],promos:[]};}return devices.find(d=>d.id===state.deviceId)||null;}
+function getCatalogThumbHtml(){
+  const d = currentDevice();
+  if(!d) return '';
+  if(isByod()){
+    return `<svg width="40" height="68" viewBox="0 0 88 150" xmlns="http://www.w3.org/2000/svg" aria-label="BYOD">
+      <defs><linearGradient id="byodMini" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0a4fb3"/><stop offset="100%" stop-color="#2563eb"/></linearGradient></defs>
+      <rect x="14" y="4" rx="18" ry="18" width="60" height="142" fill="#111827"/><rect x="18" y="8" rx="15" ry="15" width="52" height="134" fill="url(#byodMini)"/><rect x="32" y="14" rx="4" ry="4" width="24" height="6" fill="rgba(17,24,39,0.82)"/><circle cx="44" cy="132" r="2.5" fill="rgba(255,255,255,0.45)"/>
+    </svg>`;
+  }
+  return d.image || '';
+}
+function selectedPromoConfigs(){const d=currentDevice();if(!d)return[];return(d.promos||[]).filter(p=>(state.selectedPromoIds||[]).includes(p.id));}
+function calcMetrics(){const d=currentDevice();const basePrice=d?d.basePrice:0;const totalCost=basePrice*state.quantity;const dueToday=basePrice*state.retail;const monthlyBase=state.monthly>0?(basePrice*state.monthly)/36:0;const promoMonthlyCredit=state.promo?Number(state.promo.monthlyCredit):0;const netMonthlyDue=Math.max(0,monthlyBase-promoMonthlyCredit);const newLines=state.portDecision==='yes'?Math.max(0,state.quantity-state.portCount):0;return{basePrice,totalCost,dueToday,monthlyBase,promoMonthlyCredit,netMonthlyDue,newLines};}
+function renderDeviceGrid(){
+const grid=$('deviceGrid');
+setOrderTypeToggle();
+$('deviceCatalogSection').classList.toggle('hidden',isByod());
+$('selectedProductSummaryWrap').classList.toggle('hidden',isByod());
+if(isByod()){grid.innerHTML='';return;}
+grid.innerHTML=devices.map(d=>`<div class="device-card ${state.deviceId===d.id?'active':''}" data-id="${d.id}"><div class="device-card-head"><div><div class="device-brand">${d.brand}</div><div class="device-name">${d.name}</div></div><div class="device-price">$${d.basePrice}</div></div><div class="device-svg-wrap">${d.image}</div><div class="device-sku">${d.sku}</div></div>`).join('');
+[...grid.querySelectorAll('.device-card')].forEach(card=>{card.onclick=()=>{resetConfiguratorPreserveDevice(card.dataset.id);render();};});
+}
+function fillSelect(select,options,value){select.innerHTML=options.map(v=>`<option value="${v}">${v}</option>`).join('');select.value=options.includes(value)?value:(options[0]||'');}
+function bindCounter(minusId,plusId,getValue,setValue,min,maxFn){
+  $(minusId).onclick=()=>setValue(Math.max(min,getValue()-1));
+  $(plusId).onclick=()=>setValue(Math.min(maxFn(),getValue()+1));
+}
+function setToggle(toggleId,value){[...$(toggleId).querySelectorAll('button')].forEach(btn=>btn.classList.toggle('active',value!==null&&btn.dataset.value===value));}
+function updatePlanUi(){$('planPro').classList.toggle('active',state.plan==='Pro');$('planStandard').classList.toggle('active',state.plan==='Standard');}
+function clampValues(){
+state.monthly=Math.min(state.monthly,state.quantity);
+state.retail=Math.min(state.retail,state.quantity);
+if(state.monthly + state.retail > state.quantity){
+  const overflow = (state.monthly + state.retail) - state.quantity;
+  state.retail = Math.max(0, state.retail - overflow);
+}
+state.portCount=Math.min(state.portCount,state.quantity);
+state.tradeCount=Math.min(state.tradeCount,state.quantity);
+state.protectionCount=Math.min(state.protectionCount,state.quantity);
+syncTradeInDevices();
+}
+function resetConfiguratorPreserveDevice(deviceId){const showReset=!!state.deviceId&&state.deviceId!==deviceId;const keepOrderType=state.orderType;state=initialState();state.orderType=keepOrderType;state.deviceId=deviceId||'';state.showResetNote=showReset;const d=currentDevice();if(d){state.color=d.colors[0];state.storage=d.storages[0];state.sim=d.sims[0];}}
+function renderPromoSelector(){const d=currentDevice(),wrap=$('promoSelectorWrap'),empty=$('promoSelectEmpty'),list=$('promoCheckboxList'),hint=$('promoHint');if(!d||!d.promos||d.promos.length===0){wrap.classList.add('hidden');empty.classList.remove('hidden');return;}wrap.classList.remove('hidden');empty.classList.add('hidden');const selected=new Set(state.selectedPromoIds||[]);list.innerHTML=d.promos.map(p=>`<label class="promo-check"><input type="checkbox" data-id="${p.id}" ${selected.has(p.id)?'checked':''} /><div><div style="font-weight:800;font-size:14px">${p.name}</div><div style="font-size:13px;color:var(--muted);margin-top:4px">${p.description}</div></div></label>`).join('');[...list.querySelectorAll('input[type="checkbox"]')].forEach(box=>{box.onchange=()=>{const ids=new Set(state.selectedPromoIds||[]);if(box.checked)ids.add(box.dataset.id);else ids.delete(box.dataset.id);state.selectedPromoIds=[...ids];render();};});const count=(state.selectedPromoIds||[]).length;hint.textContent=count?`${count} promo option(s) selected. Allocation will be calculated automatically.`:'You can choose multiple promos. Allocation is calculated automatically.';}
+function evaluatePromo(){const d=currentDevice(),selected=selectedPromoConfigs();if(!d||selected.length===0||d.id!=='iphone-16-pro'){state.promo=null;return;}const has500=selected.some(p=>p.type==='iphone500');const has200=selected.some(p=>p.type==='iphone200monthly');const monthlyEligible=state.monthly;const portTradeEligible=(state.portDecision==='yes'&&state.tradeDecision==='yes')?Math.min(state.monthly,state.portCount,state.tradeCount):0;const promo500Devices=has500?portTradeEligible:0;const remainingMonthly=Math.max(0,monthlyEligible-promo500Devices);const promo200Devices=has200?remainingMonthly:0;const total500Credit=promo500Devices*500,total200Credit=promo200Devices*200,totalCredit=total500Credit+total200Credit;if(totalCredit<=0){state.promo=null;return;}const parts=[];if(promo500Devices>0)parts.push({name:'iPhone $500 Off',count:promo500Devices,credit:total500Credit,perDevice:500});if(promo200Devices>0)parts.push({name:'iPhone $200 Off',count:promo200Devices,credit:total200Credit,perDevice:200});state.promo={promoName:'Allocated iPhone Promos',durationMonths:36,totalCredit,monthlyCredit:(totalCredit/36).toFixed(2),promo500Devices,promo200Devices,eligibleDeviceCount:promo500Devices+promo200Devices,parts};}
+function deviceSelected(){return isByod()?true:!!state.deviceId;} function quantityComplete(){return deviceSelected()&&state.quantity>0;} function attributesComplete(){return quantityComplete()&&!!state.color&&!!state.storage&&!!state.sim;}
+function promoSelectionComplete(){const d=currentDevice();if(!attributesComplete())return false;if(!d||!d.promos||d.promos.length===0)return true;return(state.selectedPromoIds||[]).length>0;}
+function paymentComplete(){return isByod()?true:(promoSelectionComplete()&&state.monthly+state.retail===state.quantity);}
+function portComplete(){if(isByod()){if(!protectionComplete())return false;if(state.portDecision===null)return false;if(state.portDecision==='no')return true;return state.portCount<=state.quantity;}if(!paymentComplete())return false;if(state.portDecision===null)return false;if(state.portDecision==='no')return true;return state.portCount<=state.quantity;}
+function tradeComplete(){if(!portComplete())return false;if(state.tradeDecision===null)return false;if(state.tradeDecision==='no')return true;return state.tradeCount<=state.quantity;}
+function planComplete(){return (isByod()?quantityComplete():tradeComplete())&&!!state.plan;}
+function protectionComplete(){if(!planComplete())return false;if(state.plan==='Pro')return true;if(state.protectionDecision===null)return false;if(state.protectionDecision==='no')return true;return state.protectionCount<=state.quantity;}
+function renderPanels(){if(isByod()){$('panel2').classList.toggle('hidden',false);$('panel3').classList.add('hidden');$('panelPromoSelect').classList.add('hidden');$('panel4').classList.add('hidden');$('panel6').classList.add('hidden');$('panel9').classList.add('hidden');$('panel7').classList.toggle('hidden',!quantityComplete());$('panel8').classList.toggle('hidden',!planComplete());$('panel5').classList.toggle('hidden',!protectionComplete());}else{$('panel2').classList.toggle('hidden',!deviceSelected());$('panel3').classList.toggle('hidden',!quantityComplete());$('panelPromoSelect').classList.toggle('hidden',!attributesComplete());$('panel4').classList.toggle('hidden',!promoSelectionComplete());$('panel5').classList.toggle('hidden',!paymentComplete());$('panel6').classList.toggle('hidden',!portComplete());$('panel7').classList.toggle('hidden',!tradeComplete());$('panel8').classList.toggle('hidden',!planComplete());$('panel9').classList.toggle('hidden',!protectionComplete());}}
+function renderPromo(){evaluatePromo();if(state.promo){$('promoEligibleBox').classList.remove('hidden');$('promoNotEligibleBox').classList.add('hidden');$('promoName').textContent=state.promo.promoName;$('promoMeta').textContent=state.promo.parts.map(p=>`${p.count} device(s) get ${p.name}`).join(' and ')+`. Total credit is $${state.promo.totalCredit} across 36 months.`;$('promoPill').textContent=`$${state.promo.monthlyCredit}/mo total credit`;$('reviewPromoEmpty').classList.add('hidden');$('reviewPromoBox').classList.remove('hidden');$('reviewPromoName').textContent='Promo allocation applied';$('reviewPromoDetail').textContent=state.promo.parts.map(p=>`${p.count} × $${p.perDevice}`).join(' | ');$('reviewPromoValue').textContent=`$${state.promo.totalCredit} total credit across 36 months ($${state.promo.monthlyCredit}/mo).`;}else{$('promoEligibleBox').classList.add('hidden');$('promoNotEligibleBox').classList.remove('hidden');let reason='Select one or more promos and complete the required conditions.';const ids=state.selectedPromoIds||[];if(ids.includes('iphone500')&&ids.includes('iphone200monthly'))reason='$500 promo needs Monthly + Port-In + Trade-In. $200 promo needs Monthly.';else if(ids.includes('iphone500'))reason='$500 promo needs Monthly + Port-In + Trade-In.';else if(ids.includes('iphone200monthly'))reason='$200 promo needs Monthly.';else if(currentDevice()&&(!currentDevice().promos||currentDevice().promos.length===0))reason='No promos are configured for this device.';$('promoReason').textContent=reason;$('reviewPromoEmpty').classList.remove('hidden');$('reviewPromoBox').classList.add('hidden');}}
+function renderReview(){const d=currentDevice(),m=calcMetrics();$('reviewDevice').textContent=d?d.name:'—';$('reviewColor').textContent=state.color||'—';$('reviewStorage').textContent=state.storage||'—';$('reviewSim').textContent=state.sim||'—';$('reviewQty').textContent=state.quantity;$('reviewMonthlyQty').textContent=state.monthly;$('reviewRetailQty').textContent=state.retail;$('reviewPortQty').textContent=state.portDecision==='yes'?state.portCount:0;$('reviewTradeQty').textContent=state.tradeDecision==='yes'?state.tradeCount:0;$('reviewTradeModels').textContent=(state.tradeInDevices&&state.tradeInDevices.length)?state.tradeInDevices.map(d=>`${d.make} ${d.model}`).join(', '):'—';$('reviewNewLines').textContent=m.newLines;$('reviewPlan').textContent=state.plan?`${state.plan} Plan`:'—';$('reviewProtection').textContent=isByod()?(state.plan==='Pro'?'XMC Plus Included Automatically':(state.protectionDecision==='yes'?`${state.protectionCount} BYOD line(s)`:'No BYOD protection selected')):(state.plan==='Pro'?'XMC Included Automatically':(state.protectionDecision==='yes'?`${state.protectionCount} device(s)`:'No'));$('reviewPromo500').textContent=state.promo?state.promo.promo500Devices:0;$('reviewPromo200').textContent=state.promo?state.promo.promo200Devices:0;$('reviewPromoTotal').textContent=state.promo?`$${state.promo.totalCredit}`:'$0';$('reviewPromoPerMonth').textContent=state.promo?`$${state.promo.monthlyCredit}`:'$0';$('reviewTotalCost').textContent=`$${m.totalCost.toFixed(0)}`;$('reviewDueToday').textContent=`$${m.dueToday.toFixed(2)}`;$('reviewMonthlyBefore').textContent=`$${m.monthlyBase.toFixed(2)}`;$('reviewMonthlyCredit').textContent=`$${m.promoMonthlyCredit.toFixed(2)}`;$('reviewTradeInTotal').textContent=`$${getTotalTradeInValue().toFixed(0)}`;$('reviewNetMonthly').textContent=`$${m.netMonthlyDue.toFixed(2)}`;$('reviewKpiOrderValue').textContent=`$${m.totalCost.toFixed(0)}`;$('reviewKpiSavings').textContent=state.promo?`$${state.promo.totalCredit}`:'$0';$('reviewKpiMonthly').textContent=`$${m.netMonthlyDue.toFixed(2)}`;$('reviewKpiTradeIn').textContent=`$${getTotalTradeInValue().toFixed(0)}`;$('reviewStatus').textContent='Ready';$('reviewQtyHeader').textContent=state.quantity;$('reviewDueTodayHeader').textContent=`$${m.dueToday.toFixed(2)}`;$('reviewNetMonthlyHeader').textContent=`$${m.netMonthlyDue.toFixed(2)}`;}
+function render(){clampValues();renderDeviceGrid();const d=currentDevice();if(d){fillSelect(colorSelect,d.colors,state.color||d.colors[0]);fillSelect(storageSelect,d.storages,state.storage||d.storages[0]);fillSelect(simSelect,d.sims,state.sim||d.sims[0]);state.color=colorSelect.value;state.storage=isByod()?'Customer Device':storageSelect.value;state.sim=simSelect.value;$('selectedDeviceName').textContent=d.name;$('selectedSku').textContent=d.sku;$('selectedPrice').textContent=`$${d.basePrice}`;$('colorCount').textContent=d.colors.length;$('simCount').textContent=d.sims.length;$('selectedDevicePhoto').innerHTML=isByod()?'':d.image;}else{colorSelect.innerHTML='';storageSelect.innerHTML='';simSelect.innerHTML='';$('selectedDeviceName').textContent='No device selected';$('selectedSku').textContent='—';$('selectedPrice').textContent='$0';$('colorCount').textContent='0';$('simCount').textContent='0';$('selectedDevicePhoto').innerHTML='';state.color='';state.storage='';state.sim='';}
+$('qtyHeading').textContent=isByod()?'How many devices are you bringing?':'Purchase quantity';
+if(document.getElementById('step2num')) $('step2num').textContent='1';
+$('qtyDesc').textContent=isByod()?'Capture the number of customer-owned devices that will be activated.':'Enter how many units the customer wants to buy.';
+$('qtyLabel').textContent=isByod()?'BYOD quantity':'Devices being purchased';
+$('step2num').textContent='2';
+$('step7num').textContent=isByod()?'2':'4';
+$('step8num').textContent=isByod()?'3':'5';
+$('step5num').textContent=isByod()?'4':'3';
+$('planHeading').textContent=isByod()?'Plan type':'Plan selection';
+$('planDesc').textContent=isByod()?'Choose Standard or Pro for the customer-owned devices.':'Choose the plan for the devices.';
+$('protectionHeading').textContent='Device protection';
+$('protectionDesc').textContent=isByod()?'For Pro, XMC Plus is included automatically. For Standard, the seller can choose whether to add protection.':'Choose Yes or No first. If Yes, the protection count appears.';
+
+// enforce visible BYOD sequence
+if(isByod()){
+  $('step2num').textContent='1';
+  $('step7num').textContent='2';
+  $('step8num').textContent='3';
+  $('step5num').textContent='4';
+} else {
+  $('step2num').textContent='1';
+  $('step5num').textContent='5';
+  $('step7num').textContent='7';
+  $('step8num').textContent='8';
+}
+renderPromoSelector();$('resetNote').classList.toggle('hidden',!state.showResetNote);$('qtyValue').textContent=state.quantity;$('monthlyValue').textContent=state.monthly;$('retailValue').textContent=state.retail;$('monthlyDisplay').textContent=state.monthly;$('retailDisplay').textContent=state.retail;$('portValue').textContent=state.portCount;$('tradeValue').textContent=state.tradeCount;$('protectionValue').textContent=state.protectionCount;renderTradeInDevices();const m=calcMetrics();$('deviceSubtotal').textContent=`$${m.totalCost.toFixed(0)}`;$('newLinesValue').textContent=m.newLines;const paymentValid=isByod()?true:(state.quantity>0&&(state.monthly+state.retail===state.quantity));const portValid=state.portDecision!=='yes'||state.portCount<=state.quantity;const tradeValid=state.tradeDecision!=='yes'||state.tradeCount<=state.quantity;const allValid=protectionComplete()&&paymentValid&&portValid&&tradeValid;$('paymentStatus').className=`status ${paymentValid?'good':'bad'}`;if(isByod()){$('paymentStatus').textContent='BYOD does not require a device payment split.';$('paymentBadge').textContent='BYOD';}else{$('paymentStatus').textContent=state.quantity===0?'Enter purchased quantity first.':`Monthly (${state.monthly}) + Full Price (${state.retail}) = ${state.monthly+state.retail} of ${state.quantity} devices.`;$('paymentBadge').textContent=paymentValid?'Balanced':'Needs adjustment';}if(state.plan==='Pro'){state.protectionDecision=null;state.protectionCount=0;}
+setToggle('portToggle',state.portDecision);setToggle('tradeToggle',state.tradeDecision);setToggle('protectionToggle',state.protectionDecision);updatePlanUi();$('portDetails').classList.toggle('hidden',state.portDecision!=='yes');$('tradeDetails').classList.toggle('hidden',state.tradeDecision!=='yes');$('protectionDetails').classList.toggle('hidden',state.protectionDecision!=='yes');
+$('proProtectionFlow').classList.toggle('hidden',state.plan!=='Pro');
+$('standardProtectionFlow').classList.toggle('hidden',state.plan==='Pro');
+renderPanels();renderPromo();$('topStatus').textContent=allValid?'Ready':'In Progress';$('summaryStatus').textContent=allValid?'Ready for review':'In progress';$('summaryStatus').className=`pill ${allValid?'good':'bad'}`;
+$('protectionSummary').textContent=state.plan==='Pro'?(isByod()?'XMC Plus is automatically included with BYOD Pro Plan.':'XMC is automatically included with your Pro Plan.'):(state.protectionDecision==='yes'?`${state.protectionCount} of ${state.quantity} ${isByod()?'BYOD lines':'purchased devices'} will receive protection.`:state.protectionDecision==='no'?'No protection selected for this order.':'Select Yes or No to continue.');$('cardTotalDeviceCost').textContent=`$${m.totalCost.toFixed(0)}`;$('cardDueToday').textContent=`$${m.dueToday.toFixed(2)}`;$('cardMonthlyDue').textContent=`$${m.monthlyBase.toFixed(2)}`;$('cardPromoPerMonth').textContent=`$${m.promoMonthlyCredit.toFixed(2)}`;$('cardNetMonthlyDue').textContent=`$${m.netMonthlyDue.toFixed(2)}`;$('cardPromoCredit').textContent=state.promo?`$${state.promo.totalCredit}`:'$0';$('cardTradeInEstimate').textContent=`$${getTotalTradeInValue().toFixed(0)}`;
+const cardName = document.getElementById('selectedCatalogName');
+const cardMeta = document.getElementById('selectedCatalogMeta');
+const cardThumb = document.getElementById('selectedCatalogThumb');
+if(cardName && cardMeta && cardThumb){
+  if(currentDevice()){
+    cardName.textContent = currentDevice().name;
+    cardMeta.textContent = isByod() ? 'Customer-owned device activation path' : `${currentDevice().brand} • ${currentDevice().sku}`;
+    cardThumb.innerHTML = getCatalogThumbHtml();
+  } else {
+    cardName.textContent = 'No device selected';
+    cardMeta.textContent = 'Choose a device from the catalog to begin.';
+    cardThumb.innerHTML = '';
+  }
+}const checks=[{label:'Device selected',ok:deviceSelected()},{label:'Configurator resets when device changes',ok:true},{label:'Promo allocation scales across all selected devices up to 20',ok:true},{label:`Monthly + Full Price must equal ${state.quantity}`,ok:state.quantity===0?false:paymentValid},{label:'Port-in decision selected',ok:state.portDecision!==null||!paymentComplete()},{label:'Trade-in decision selected',ok:state.tradeDecision!==null||!portComplete()},{label:'Promo allocation shown for selected device',ok:protectionComplete()||!planComplete()},{label:'Protection decision selected',ok:state.plan==='Pro'?true:(state.protectionDecision!==null||!planComplete())}];$('checklistBody').innerHTML=checks.map(c=>`<div class="check-item"><div class="dot" style="background:${c.ok?'#10b981':'#e11d48'}"></div><div>${c.label}</div></div>`).join('');$('continueBtn').disabled=!allValid;$('continueBtn').style.opacity=allValid?'1':'.55';$('goToCartBtn').classList.toggle('hidden',cart.length===0);if(!$('reviewView').classList.contains('hidden'))renderReview();}
+function showReview(){
+  hideSuccessView();
+  hideAsurion();
+  const c=document.getElementById('catalogView');
+  if(c){c.classList.add('catalog-hidden'); c.classList.add('hidden'); c.style.display='none';}
+  const cfg=document.getElementById('configuratorView');
+  if(cfg){cfg.classList.add('catalog-hidden'); cfg.classList.add('hidden'); cfg.style.display='none';}
+  const rv=document.getElementById('reviewView');
+  if(rv){rv.classList.remove('hidden'); rv.style.display='block';}
+  if(document.getElementById('cartView')) {$('cartView').classList.add('hidden'); $('cartView').style.display='none';}
+  renderReview();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function snapshotCurrentConfig(){
+  const d=currentDevice(), m=calcMetrics();
+  return {
+    deviceName:d?d.name:'—',
+    color:state.color||'—',
+    storage:state.storage||'—',
+    sim:state.sim||'—',
+    quantity:state.quantity,
+    monthly:state.monthly,
+    retail:state.retail,
+    portCount:state.portDecision==='yes'?state.portCount:0,
+    tradeCount:state.tradeDecision==='yes'?state.tradeCount:0,
+    tradeModels:(state.tradeInDevices||[]).map(d=>d.make && d.model ? `${d.make} ${d.model}` : 'Not selected').join(', '),
+    tradeEstimate:getTotalTradeInValue(),
+    newLines:m.newLines,
+    plan:state.plan?`${state.plan} Plan`:'—',
+    protection:state.plan==='Pro'?'XMC Included Automatically':(state.protectionDecision==='yes'?`${state.protectionCount} device(s)`:'No'),
+    totalCost:m.totalCost,
+    dueToday:m.dueToday,
+    monthlyBefore:m.monthlyBase,
+    promoMonthly:m.promoMonthlyCredit,
+    netMonthly:m.netMonthlyDue,
+    promo500:state.promo?state.promo.promo500Devices:0,
+    promo200:state.promo?state.promo.promo200Devices:0,
+    totalPromo:state.promo?state.promo.totalCredit:0
+  };
+}
+function addCurrentToCart(){
+  cart.push(snapshotCurrentConfig());
+}
+function renderCart(){
+  const wrap=$('cartItemsWrap');
+  const totalCost=cart.reduce((a,c)=>a+c.totalCost,0);
+  const dueToday=cart.reduce((a,c)=>a+c.dueToday,0);
+  const monthlyBefore=cart.reduce((a,c)=>a+c.monthlyBefore,0);
+  const monthlyCredit=cart.reduce((a,c)=>a+c.promoMonthly,0);
+  const netMonthly=cart.reduce((a,c)=>a+c.netMonthly,0);
+  const totalPromo=cart.reduce((a,c)=>a+c.totalPromo,0);
+
+  $('cartItemCount').textContent=cart.length;
+  $('cartDueTodayHeader').textContent=`$${dueToday.toFixed(2)}`;
+  $('cartNetMonthlyHeader').textContent=`$${netMonthly.toFixed(2)}`;
+  $('cartPromoHeader').textContent=`$${totalPromo.toFixed(0)}`;
+  $('cartTotalCost').textContent=`$${totalCost.toFixed(0)}`;
+  $('cartDueToday').textContent=`$${dueToday.toFixed(2)}`;
+  $('cartMonthlyBefore').textContent=`$${monthlyBefore.toFixed(2)}`;
+  $('cartMonthlyCredit').textContent=`$${monthlyCredit.toFixed(2)}`;
+  $('cartNetMonthly').textContent=`$${netMonthly.toFixed(2)}`;
+
+  if(cart.length===0){
+    wrap.innerHTML='<div class="info-box"><div class="title">Cart</div><div class="big" style="font-size:18px">No devices added yet</div></div>';
+    return;
+  }
+
+  wrap.innerHTML=cart.map((item,i)=>`
+    <div class="review-section">
+      <div class="review-section-title">Device ${i+1}</div>
+      <div class="review-list">
+        <div class="review-row"><span>Device</span><strong>${item.deviceName}</strong></div>
+        <div class="review-row"><span>Configuration</span><strong>${item.color} / ${item.storage} / ${item.sim}</strong></div>
+        <div class="review-row"><span>Quantity</span><strong>${item.quantity}</strong></div>
+        <div class="review-row"><span>Monthly / Full price</span><strong>${item.monthly} / ${item.retail}</strong></div>
+        <div class="review-row"><span>Plan</span><strong>${item.plan}</strong></div>
+        <div class="review-row"><span>Protection</span><strong>${item.protection}</strong></div>
+        <div class="review-row"><span>Due today / Net monthly</span><strong>$${item.dueToday.toFixed(2)} / $${item.netMonthly.toFixed(2)}</strong></div>
+      </div>
+    </div>
+  `).join('');
+}
+function showCart(){
+  hideSuccessView();
+  hideAsurion();
+  const c=document.getElementById('catalogView');
+  if(c){c.classList.add('catalog-hidden'); c.classList.add('hidden'); c.style.display='none';}
+  const cfg=document.getElementById('configuratorView');
+  if(cfg){cfg.classList.add('catalog-hidden'); cfg.classList.add('hidden'); cfg.style.display='none';}
+  const rv=document.getElementById('reviewView');
+  if(rv){rv.classList.add('hidden'); rv.style.display='none';}
+  const cart=document.getElementById('cartView');
+  if(cart){cart.classList.remove('hidden'); cart.style.display='block';}
+  renderCart();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+
+function showConciergeModal(){
+  ['confirm1','confirm2','confirm3'].forEach(id=>{$(id).checked=false;});
+  $('confirmTimestamp').classList.add('hidden');
+  $('confirmTimestamp').textContent='';
+  updateConciergeProceed();
+  $('conciergeModal').classList.remove('hidden');
+}
+function hideConciergeModal(){
+  $('conciergeModal').classList.add('hidden');
+}
+function updateConciergeProceed(){
+  const allChecked = $('confirm1').checked && $('confirm2').checked && $('confirm3').checked;
+  $('proceedConciergeBtn').classList.toggle('hidden', !allChecked);
+  if(allChecked){
+    const now = new Date();
+    $('confirmTimestamp').textContent = `Verbal confirmation recorded — ${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
+    $('confirmTimestamp').classList.remove('hidden');
+  } else {
+    $('confirmTimestamp').classList.add('hidden');
+    $('confirmTimestamp').textContent = '';
+  }
+}
+function showSuccessView(){
+  hideConciergeModal();
+  $('configuratorView').classList.add('hidden');
+  $('reviewView').classList.add('hidden');
+  const cartView = document.getElementById('cartView');
+  if(cartView) cartView.classList.add('hidden');
+  $('successView').classList.remove('hidden');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function hideSuccessView(){
+  $('successView').classList.add('hidden');
+}
+
+function initAsurionLinesFromCurrentState(){
+  const d=currentDevice();
+  asurionLines = Array.from({length: state.quantity}, (_,i)=>({
+    id:i+1,
+    lineLabel:`Line ${i+1}`,
+    nickname:'',
+    deviceName:d?d.name:(isByod()?'BYOD Activation':'Selected Device'),
+    deviceSku:d?d.sku:'—',
+    numberType:(state.portDecision==='yes' && i < state.portCount)?'port':'new',
+    mdn:(state.portDecision==='yes' && i < state.portCount)?`Port-In ${i+1}`:'',
+    tradeIn:(!isByod() && state.tradeDecision==='yes' && i < state.tradeCount),
+    plan:state.plan || 'Standard',
+    protection:state.plan==='Pro' ? 'included' : ((state.protectionDecision==='yes' && i < state.protectionCount)?'yes':'no')
+  }));
+}
+function getAsurionPools(){
+  const portTarget = state.portDecision==='yes' ? state.portCount : 0;
+  const tradeTarget = (!isByod() && state.tradeDecision==='yes') ? state.tradeCount : 0;
+  const assignedPort = asurionLines.filter(l=>l.numberType==='port').length;
+  const assignedNew = asurionLines.filter(l=>l.numberType==='new').length;
+  const assignedTrade = asurionLines.filter(l=>l.tradeIn).length;
+  return {total:state.quantity,portTarget,newTarget:Math.max(0,state.quantity-portTarget),tradeTarget,assignedPort,assignedNew,assignedTrade};
+}
+function autoAssignAsurionLines(){ initAsurionLinesFromCurrentState(); renderAsurion(); }
+function renderAsurion(){
+  const pools=getAsurionPools();
+  const complete = pools.assignedPort===pools.portTarget && pools.assignedNew===pools.newTarget && pools.assignedTrade===pools.tradeTarget;
+  $('asTotalLinesHeader').textContent=pools.total;
+  $('asPortHeader').textContent=`${pools.assignedPort}/${pools.portTarget}`;
+  $('asTradeHeader').textContent=`${pools.assignedTrade}/${pools.tradeTarget}`;
+  $('asStatusHeader').textContent=complete?'Ready':'In Progress';
+  $('poolDevices').textContent=pools.total;
+  $('poolPort').textContent=`${pools.assignedPort}/${pools.portTarget}`;
+  $('poolNew').textContent=`${pools.assignedNew}/${pools.newTarget}`;
+  $('poolTrade').textContent=`${pools.assignedTrade}/${pools.tradeTarget}`;
+  $('assignmentStatusNote').textContent=complete?'All line assignments are complete.':'Continue assigning line details until all required counts are allocated.';
+  $('completeAsurionBtn').disabled=!complete;
+  $('completeAsurionBtn').style.opacity=complete?'1':'.55';
+
+  $('lineGrid').innerHTML=asurionLines.map((line,idx)=>`
+    <div class="line-card">
+      <div class="line-head">
+        <div>
+          <div class="line-name">${line.lineLabel}</div>
+          <div class="as-sub">${line.nickname ? ("Nickname: " + line.nickname) : "No nickname added"}</div>
+        </div>
+        <div class="line-status">${line.numberType==='port'?'Port-In Line':'New Number Line'}</div>
+      </div>
+      <div class="line-layout">
+        <div class="field">
+          <label>Line nickname</label>
+          <input class="mdn-input" data-line="${idx}" data-field="nickname" value="${line.nickname || ''}" placeholder="Enter line nickname" />
+        </div>
+        <div class="field">
+          <label>Assigned product</label>
+          <select data-line="${idx}" data-field="deviceName"><option value="${line.deviceName}" selected>${line.deviceName}</option></select>
+        </div>
+        <div class="field">
+          <label>Number setup</label>
+          <select data-line="${idx}" data-field="numberType" class="line-number-type">
+            <option value="port" ${line.numberType==='port'?'selected':''}>Port-In Number</option>
+            <option value="new" ${line.numberType==='new'?'selected':''}>New Number</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Port-In MDN</label>
+          <input class="mdn-input" data-line="${idx}" data-field="mdn" value="${line.mdn}" ${line.numberType==='new'?'disabled':''} placeholder="Enter MDN or reference" />
+        </div>
+        <div class="field">
+          <label>Trade-In</label>
+          <select data-line="${idx}" data-field="tradeIn" ${isByod()?'disabled':''}>
+            <option value="yes" ${line.tradeIn?'selected':''}>Yes</option>
+            <option value="no" ${!line.tradeIn?'selected':''}>No</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Plan</label>
+          <select data-line="${idx}" data-field="plan">
+            <option value="Pro" ${line.plan==='Pro'?'selected':''}>Pro Plan</option>
+            <option value="Standard" ${line.plan==='Standard'?'selected':''}>Standard Plan</option>
+          </select>
+        </div>
+      </div>
+      <div class="line-footer">
+        <div class="footer-note">Line-level setup follows the quote-level order rules but allows explicit assignment.</div>
+        <div class="inline-chip">${line.tradeIn ? 'Trade-In Attached' : 'No Trade-In'}</div>
+      </div>
+    </div>
+  `).join('');
+
+  [...document.querySelectorAll('#lineGrid select, #lineGrid input')].forEach(el=>{
+    el.onchange=()=>{
+      const idx=Number(el.dataset.line), field=el.dataset.field;
+      if(field==='tradeIn'){ asurionLines[idx][field]=el.value==='yes'; }
+      else { asurionLines[idx][field]=el.value; }
+      if(field==='numberType' && el.value==='new'){ asurionLines[idx].mdn=''; }
+      renderAsurion();
+    };
+  });
+
+  document.querySelectorAll('.line-number-type').forEach(sel=>{
+    const idx=Number(sel.dataset.line);
+    const mdnInput=document.querySelector(`input[data-line="${idx}"][data-field="mdn"]`);
+    if(mdnInput) mdnInput.disabled=asurionLines[idx].numberType==='new';
+  });
+}
+function showAsurion(){
+  hideSuccessView();
+  const c=document.getElementById('catalogView');
+  if(c){c.classList.add('catalog-hidden'); c.classList.add('hidden'); c.style.display='none';}
+  const cfg=document.getElementById('configuratorView');
+  if(cfg){cfg.classList.add('catalog-hidden'); cfg.classList.add('hidden'); cfg.style.display='none';}
+  const rv=document.getElementById('reviewView');
+  if(rv){rv.classList.add('hidden'); rv.style.display='none';}
+  if(document.getElementById('cartView')) {$('cartView').classList.add('hidden'); $('cartView').style.display='none';}
+  $('asurionView').classList.remove('hidden');
+  $('asurionView').style.display='block';
+  if(asurionLines.length===0){ initAsurionLinesFromCurrentState(); }
+  renderAsurion();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function hideAsurion(){ if(document.getElementById('asurionView')) $('asurionView').classList.add('hidden'); }
+
+
+function bindCatalogCards(){
+  document.querySelectorAll('.catalog-card').forEach(card=>{
+    card.onclick=()=>{
+      const type = card.dataset.catalogType;
+      const deviceId = card.dataset.deviceId || '';
+      showConfiguratorFromCatalog(type, deviceId);
+    };
+  });
+}
+function init(){renderDeviceGrid();bindCatalogCards();if(document.getElementById('backToCatalogBtn')) $('backToCatalogBtn').onclick=()=>showCatalog();[...$('orderTypeToggle').querySelectorAll('button')].forEach(btn=>btn.onclick=()=>{state=initialState();state.orderType=btn.dataset.value;if(isByod()){state.deviceId='byod';const d=currentDevice();state.color=d.colors[0];state.storage=d.storages[0];state.sim=d.sims[0];}render();});colorSelect.onchange=()=>{state.color=colorSelect.value;render();};storageSelect.onchange=()=>{state.storage=storageSelect.value;render();};simSelect.onchange=()=>{state.sim=simSelect.value;render();};bindCounter('qtyMinus','qtyPlus',()=>state.quantity,v=>{state.quantity=v;render();},0,()=>20);bindCounter('monthlyMinus','monthlyPlus',()=>state.monthly,v=>{state.monthly=v;render();},0,()=>Math.max(0,state.quantity-state.retail));bindCounter('retailMinus','retailPlus',()=>state.retail,v=>{state.retail=v;render();},0,()=>Math.max(0,state.quantity-state.monthly));bindCounter('portMinus','portPlus',()=>state.portCount,v=>{state.portCount=v;render();},0,()=>state.quantity);bindCounter('tradeMinus','tradePlus',()=>state.tradeCount,v=>{state.tradeCount=v;render();},0,()=>state.quantity);bindCounter('protectionMinus','protectionPlus',()=>state.protectionCount,v=>{state.protectionCount=v;render();},0,()=>state.quantity);[...$('portToggle').querySelectorAll('button')].forEach(btn=>btn.onclick=()=>{state.portDecision=btn.dataset.value;render();});[...$('tradeToggle').querySelectorAll('button')].forEach(btn=>btn.onclick=()=>{state.tradeDecision=btn.dataset.value;render();});[...$('protectionToggle').querySelectorAll('button')].forEach(btn=>btn.onclick=()=>{state.protectionDecision=btn.dataset.value;render();});$('planPro').onclick=()=>{state.plan='Pro';render();};$('planStandard').onclick=()=>{state.plan='Standard';render();};$('continueBtn').onclick=()=>{const paymentValid=isByod()?true:(state.quantity>0&&(state.monthly+state.retail===state.quantity));const portValid=state.portDecision!=='yes'||state.portCount<=state.quantity;const tradeValid=isByod()?true:(state.tradeDecision!=='yes'||state.tradeCount<=state.quantity);const allValid=protectionComplete()&&paymentValid&&portValid&&tradeValid;if(allValid){showReview();}};
+if(document.getElementById('addMoreLinesBtn')) $('addMoreLinesBtn').onclick=()=>showConfigurator(false);
+if(document.getElementById('moveToConciergeBtn')) $('moveToConciergeBtn').onclick=()=>showConciergeModal();
+if(document.getElementById('cancelConciergeBtn')) $('cancelConciergeBtn').onclick=()=>hideConciergeModal();
+['confirm1','confirm2','confirm3'].forEach(id=>{ if(document.getElementById(id)) $(id).onchange=()=>updateConciergeProceed(); });
+if(document.getElementById('proceedConciergeBtn')) $('proceedConciergeBtn').onclick=()=>showSuccessView();
+if(document.getElementById('goToAsurionBtn')) $('goToAsurionBtn').onclick=()=>showAsurion();
+if(document.getElementById('exitSuccessBtn')) $('exitSuccessBtn').onclick=()=>{hideSuccessView(); showConfigurator(false);};
+if(document.getElementById('goToAsurionBtn')) $('goToAsurionBtn').onclick=()=>showAsurion();
+if(document.getElementById('autoAssignLinesBtn')) $('autoAssignLinesBtn').onclick=()=>autoAssignAsurionLines();
+if(document.getElementById('backToReviewFromAsurionBtn')) $('backToReviewFromAsurionBtn').onclick=()=>showReview();
+if(document.getElementById('completeAsurionBtn')) $('completeAsurionBtn').onclick=()=>alert('Line configuration completed for this conceptual demo.');
+$('moveToConciergeBtn').onclick=()=>showConciergeModal();
+$('cancelConciergeBtn').onclick=()=>hideConciergeModal();
+['confirm1','confirm2','confirm3'].forEach(id=>{$(id).onchange=()=>updateConciergeProceed();});
+$('proceedConciergeBtn').onclick=()=>showSuccessView();
+$('exitSuccessBtn').onclick=()=>{hideSuccessView(); showConfigurator(false); };
+$('configureAnotherBtn').onclick=()=>{hideSuccessView(); showConfigurator(true); };
+$('addMoreDeviceBtn').onclick=()=>{addCurrentToCart();showConfigurator(true);};
+$('backToEditBtn').onclick=()=>showConfigurator(false);
+$('goToCartBtn').onclick=()=>showCart();
+$('cartBackToConfiguratorBtn').onclick=()=>showConfigurator(false);
+$('saveQuoteBtn').onclick=()=>alert('Quote saved successfully for this demo.');
+render();}
+init();
+</script>
+
+<div id="cartView" class="hidden">
+  <div class="topbar">
+    <div class="container review-header">
+      <div>
+        <div class="eyebrow">XOE seller experience</div>
+        <h1>Order Cart</h1>
+        <div class="subtitle">Review all added devices before proceeding.</div>
+      </div>
+      <div class="header-cards">
+        <div class="mini-card"><div class="label">Items</div><div id="cartItemCount" class="value">0</div></div>
+        <div class="mini-card"><div class="label">Due Today</div><div id="cartDueTodayHeader" class="value">$0</div></div>
+        <div class="mini-card"><div class="label">Net Monthly</div><div id="cartNetMonthlyHeader" class="value">$0</div></div>
+        <div class="mini-card"><div class="label">Promo Credit</div><div id="cartPromoHeader" class="value">$0</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="container review-wrap">
+    <div class="review-kpi-grid">
+        <div class="review-kpi"><div class="label">Order Value</div><div class="value" id="reviewKpiOrderValue">$0</div><div class="sub">Total configured device value</div></div>
+        <div class="review-kpi"><div class="label">Promo Savings</div><div class="value" id="reviewKpiSavings">$0</div><div class="sub">Total promotional credit</div></div>
+        <div class="review-kpi"><div class="label">Monthly Outcome</div><div class="value" id="reviewKpiMonthly">$0</div><div class="sub">Net monthly after credits</div></div>
+      </div>
+      <div class="review-grid">
+      <div class="review-card">
+        <h3>Cart items</h3>
+        <div id="cartItemsWrap"></div>
+        <div class="review-actions">
+          <button class="btn" id="cartBackToConfiguratorBtn">Return to Configurator</button>
+          <button class="btn primary">Proceed</button>
+        </div>
+      </div>
+      <div class="review-card">
+        <h3>Cart totals</h3>
+        <div class="review-highlight">
+          <div class="review-list">
+            <div class="review-row"><span>Total device cost</span><strong id="cartTotalCost">$0</strong></div>
+            <div class="review-row"><span>Due today</span><strong id="cartDueToday">$0</strong></div>
+            <div class="review-row"><span>Monthly due before credit</span><strong id="cartMonthlyBefore">$0</strong></div>
+            <div class="review-row"><span>Promo credit per month</span><strong id="cartMonthlyCredit">$0</strong></div>
+            <div class="review-row"><span>Net monthly due</span><strong id="cartNetMonthly">$0</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
