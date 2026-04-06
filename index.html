@@ -3,406 +3,864 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>XOE Device Configurator - Stable Multi-Category Build</title>
+<title>XOE Device Configurator - Stable Redesign</title>
 <style>
-:root{
-  --bg:#f4f7fc; --panel:#fff; --line:#d9e3f4; --text:#162235; --muted:#5b6b84;
-  --blue:#0a4fb3; --blue-dark:#083b86; --soft:#f8fbff; --shadow:0 14px 34px rgba(10,79,179,.10);
-  --good:#047857; --goodbg:#ecfdf5; --bad:#be123c; --badbg:#fff1f2; --warn:#8a5a00; --warnbg:#fff8e8;
-}
-*{box-sizing:border-box}
-body{margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--text)}
-.hidden{display:none !important}
-.container{width:min(1380px,calc(100% - 28px));margin:0 auto}
-button,select,input{font:inherit}
-.btn{height:44px;border-radius:12px;border:1px solid #c9d4e7;background:#fff;color:var(--text);padding:0 16px;font-weight:800;cursor:pointer}
-.btn.primary{background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;border-color:var(--blue)}
-.btn.dashed{border-style:dashed;color:var(--blue);background:#f1f7ff}
-.topbar{background:#001a8d;color:#fff}
-.topbar-inner{display:flex;justify-content:space-between;align-items:center;padding:16px 0}
-.brand{font-size:22px;font-weight:900}
-.page-shell{min-height:100vh;background:#f5f5f7}
-.catalog-body{padding:22px 0 18px}
-.catalog-canvas{display:flex;flex-direction:column;align-items:flex-start;padding:0 0 40px;gap:24px;width:1090px;margin:0 auto}
-.catalog-title{margin:0;font-size:22px;font-weight:900;color:#111827}
-.device-type-tabs{display:flex;gap:12px;align-items:center}
-.device-type-tab{padding:10px 14px;border:1px solid #c2d8ff;border-radius:999px;background:#fff;font-family:Montserrat,Arial,sans-serif;font-weight:700;font-size:12px;line-height:20px;letter-spacing:1.2px;text-transform:uppercase;color:#757575;cursor:pointer}
-.device-type-tab.active{background:#eef5ff;color:#0d62ff;border-color:#0d62ff}
-.banner{padding:12px 14px;border-radius:12px;border:1px solid #c2d8ff;background:#ebf1ff;color:#1f3b73;font-size:13px;width:100%}
-.banner.warn{border-color:#f5c26b;background:var(--warnbg);color:var(--warn)}
-.catalog-filter-label{font-family:Montserrat,Arial,sans-serif;font-weight:700;font-size:12px;line-height:20px;letter-spacing:1.5px;text-transform:uppercase;color:#141417}
-.catalog-filter-bar{display:flex;justify-content:center;align-items:center;padding:0 40px;gap:32px;width:1090px;height:60px;overflow-x:auto;background:#fff;border:1px solid #C2D8FF;box-shadow:0 8px 20px rgba(57,22,160,.08);border-radius:8px}
-.catalog-brand-tabs{display:flex;justify-content:center;align-items:center;gap:8px;min-width:501px;height:60px}
-.catalog-brand-tab{display:flex;align-items:center;padding:4px 12px;height:28px;border-radius:20px;font-family:Montserrat,Arial,sans-serif;font-weight:700;font-size:12px;line-height:20px;letter-spacing:1.5px;text-transform:uppercase;color:#757575;background:#fff;cursor:pointer}
-.catalog-brand-tab.active{padding:4px 0;border-bottom:2px solid #0D62FF;border-radius:0;color:#000}
-.catalog-filters-row2{display:flex;justify-content:space-between;align-items:flex-end;padding:0;width:1090px;height:60px}
-.catalog-sort{display:flex;flex-direction:column;align-items:flex-start;gap:4px;width:180px;height:60px}
-.catalog-sort-label{font-family:Lato,Arial,sans-serif;font-size:11px;line-height:16px;color:#000}
-.catalog-sort-text{display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;width:180px;height:40px;border-bottom:1px solid #757575;font-family:Lato,Arial,sans-serif;font-size:16px;line-height:24px;color:#000}
-.catalog-term-toggle{display:flex;align-items:center;gap:16px;width:294px;height:40px}
-.catalog-term-text{font-family:Montserrat,Arial,sans-serif;font-weight:700;font-size:12px;line-height:20px;letter-spacing:1.5px;text-transform:uppercase;color:#000}
-.catalog-switch{width:48px;height:24px;background:#CCC;border-radius:31px;position:relative}
-.catalog-switch::after{content:'';position:absolute;width:20px;height:20px;left:2px;top:2px;background:#fff;border-radius:50%}
-.catalog-grid{display:grid;grid-template-columns:repeat(3,347.33px);gap:24px;width:1090px}
-.catalog-card{display:flex;flex-direction:column;align-items:center;padding:0 0 8px;gap:8px;width:347.33px;height:448px;background:#fff;border:1px solid #E5E5E5;box-shadow:0 8px 20px rgba(57,22,160,.08);border-radius:16px;cursor:pointer}
-.catalog-card-inner{display:flex;flex-direction:column;align-items:center;padding:8px;gap:16px;width:347.33px;height:440px;background:#fff;border-radius:24px}
-.catalog-media{width:331.33px;height:312px;background:#F7F7F7;border-radius:12px;padding:16px 0;display:flex;flex-direction:column;align-items:center;gap:16px}
-.catalog-brand{font-family:Lato,Arial,sans-serif;font-size:11px;line-height:16px;letter-spacing:.5px;color:#62626C}
-.catalog-name{font-family:Montserrat,Arial,sans-serif;font-weight:700;font-size:24px;line-height:32px;text-align:center;color:#141417;margin:0}
-.catalog-body-card{text-align:center;padding:0;display:flex;flex-direction:column;align-items:center}
-.small{font-family:Lato,Arial,sans-serif;font-size:11px;line-height:16px;color:#000}
-.strike{font-family:Lato,Arial,sans-serif;font-size:11px;line-height:16px;color:#414141;text-decoration:line-through}
-.main-price{font-family:Montserrat,Arial,sans-serif;font-size:24px;line-height:32px;font-weight:700}
-.main-price span{font-size:16px;line-height:24px}
-.promo-pill{display:inline-flex;padding:4px 12px;border-radius:16px;background:#C2D8FF;color:#000;font-family:Lato,Arial,sans-serif;font-size:11px;line-height:16px;text-align:center}
-.catalog-page-nav{display:flex;align-items:center;padding:16px 0;gap:24px;width:166px;height:64px;margin:0 auto}
-.catalog-page-box{display:flex;justify-content:center;align-items:center;padding:8px 7px;width:32px;height:32px;background:#fff;border:1px solid #0D62FF;border-radius:8px;font-family:Lato,Arial,sans-serif;font-size:14px;line-height:24px;color:#141417}
-.catalog-disclaimer{margin-top:24px;background:#f1f2f4;border-top:1px solid #dfe4ee;border-bottom:1px solid #dfe4ee;padding:22px 0;color:#5c6678;font-size:10px;line-height:1.45}
-.catalog-footer{background:#001a8d;color:#fff;padding:28px 0 20px}
-.catalog-footer-grid{display:grid;grid-template-columns:1.2fr repeat(5,1fr);gap:26px}
-.catalog-footer h4{margin:0 0 10px;font-size:13px;font-weight:900}
-.catalog-footer ul{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:12px;color:#dfe8ff}
-.catalog-footer-bottom{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-top:18px;margin-top:18px;border-top:1px solid rgba(255,255,255,.25);font-size:12px;color:#dfe8ff}
-.catalog-bottom{background:#001a8d;color:#fff;text-align:center;font-size:12px;padding:12px 0}
-.layout{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:22px;padding:14px 0 36px}
-.stack{display:grid;gap:18px}
-.panel{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}
-.panel-head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
-.panel-title-wrap{display:flex;gap:14px;align-items:flex-start}
-.step{width:38px;height:38px;border-radius:12px;background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:900}
-.panel-head h2{margin:0;font-size:19px}
-.badge{padding:8px 12px;border-radius:999px;background:var(--soft);border:1px solid var(--line);font-size:12px;font-weight:800;color:var(--muted)}
-.panel-body{padding:20px}
-.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-.field label{display:block;margin-bottom:8px;font-size:14px;font-weight:800}
-select,input[type="text"]{width:100%;height:44px;border:1px solid #c4d0e1;border-radius:12px;background:#fff;padding:0 14px}
-.toggle{display:inline-flex;gap:8px;background:var(--soft);border:1px solid var(--line);padding:4px;border-radius:12px}
-.toggle button{border:0;background:transparent;padding:10px 16px;border-radius:10px;font-weight:800;color:var(--muted);cursor:pointer}
-.toggle button.active{background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff}
-.counter{display:flex;align-items:center;height:44px;border:1px solid #c4d0e1;border-radius:12px;background:#fff;overflow:hidden}
-.counter button{width:48px;height:100%;border:0;background:#fff;font-size:22px;cursor:pointer}
-.counter .value{flex:1;text-align:center;font-size:20px;font-weight:900;border-left:1px solid #e2e8f0;border-right:1px solid #e2e8f0;height:100%;display:grid;place-items:center}
-.info{border:1px solid var(--line);background:var(--soft);border-radius:14px;padding:14px}
-.info-title{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:800}
-.info-big{font-size:20px;font-weight:900;margin-top:8px}
-.hint{font-size:12px;color:var(--muted);margin-top:8px}
-.hint-link{font-size:12px;color:#0d62ff;font-weight:700;cursor:pointer;text-decoration:underline;margin-top:8px;display:inline-block}
-.status{margin-top:16px;padding:12px 14px;border-radius:14px;border:1px solid}
-.good{background:var(--goodbg);color:var(--good);border-color:#a7f3d0}
-.bad{background:var(--badbg);color:var(--bad);border-color:#fecdd3}
-.plan-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-.plan-card{border:1px solid var(--line);border-radius:16px;padding:18px;cursor:pointer}
-.plan-card.active{background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;border-color:var(--blue)}
-.plan-title{font-size:17px;font-weight:900}
-.plan-desc{font-size:14px;color:inherit;opacity:.85;margin-top:8px}
-.summary{position:sticky;top:18px}
-.summary-section{padding:20px}
-.summary-title{margin:0;font-size:20px;font-weight:900}
-.summary-sub{margin-top:6px;font-size:14px;color:var(--muted)}
-.summary-banner{border-radius:14px;background:var(--soft);padding:12px 14px;border:1px solid var(--line);margin-top:16px}
-.summary-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:16px}
-.summary-card{background:linear-gradient(180deg,#fff,#f7fbff);border:1px solid var(--line);border-radius:14px;padding:14px}
-.summary-card .label{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:800}
-.summary-card .value{font-size:22px;font-weight:900;margin-top:4px}
-.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
-.selected-card{display:flex;gap:12px;align-items:center;margin-top:14px;padding:12px;border-radius:14px;background:var(--soft);border:1px solid var(--line)}
-.selected-thumb{width:88px;height:88px;border-radius:14px;background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;padding:6px}
-.trade-list,.promo-list{display:grid;gap:12px;margin-top:16px}
-.trade-row{border:1px solid var(--line);background:#fff;border-radius:14px;padding:14px}
-.trade-row-title{font-size:13px;font-weight:900;margin-bottom:8px}
-.promo-option{display:flex;gap:12px;align-items:flex-start;padding:14px;border:1px solid var(--line);border-radius:14px;background:#fff}
-.promo-title{font-size:14px;font-weight:900}
-.promo-desc{font-size:13px;color:var(--muted);margin-top:4px;line-height:1.45}
-.promo-result{margin-top:14px;padding:14px;border-radius:14px;border:1px solid var(--line);background:var(--soft)}
-.promo-result .applied{font-size:16px;font-weight:900}
-.promo-result .meta{font-size:13px;color:var(--muted);margin-top:6px}
-.review-wrap{padding:20px 0 36px}
-.review-grid{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:22px}
-.review-card{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:20px}
-.review-card h3{margin:0 0 14px;font-size:20px}
-.review-section{border:1px solid var(--line);background:var(--soft);border-radius:16px;padding:16px;margin-top:14px}
-.review-section:first-of-type{margin-top:0}
-.review-section-title{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:800;margin-bottom:10px}
-.review-list{display:grid;gap:10px}
-.review-row{display:flex;justify-content:space-between;gap:12px;font-size:14px}
-.review-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
-.cart-grid{display:grid;gap:14px}
-.cart-item-card{border:1px solid var(--line);background:#fff;border-radius:16px;padding:16px;box-shadow:0 8px 20px rgba(10,79,179,.06)}
-.cart-item-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
-.cart-item-title{font-size:17px;font-weight:900}
-.cart-item-meta{font-size:13px;color:var(--muted);margin-top:4px}
-.cart-pill{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;background:#eef5ff;color:#0d62ff;font-size:12px;font-weight:800}
-.cart-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}
-.cart-metric{border:1px solid var(--line);border-radius:12px;background:var(--soft);padding:12px}
-.cart-metric .k{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:800}
-.cart-metric .v{font-size:18px;font-weight:900;margin-top:4px}
-.cart-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
-.cart-detail{font-size:13px;color:var(--text);padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#fff}
-.cart-summary-banner{margin-top:14px;padding:14px;border-radius:14px;border:1px solid var(--line);background:linear-gradient(180deg,#fff,#f7fbff)}
+  :root{
+    --cb-blue:#0a4fb3;
+    --cb-blue-dark:#083b86;
+    --cb-blue-soft:#ebf3ff;
+    --cb-ink:#182433;
+    --cb-muted:#64748b;
+    --cb-line:#d8e2f0;
+    --cb-bg:#f4f7fb;
+    --cb-card:#ffffff;
+    --cb-good:#0f766e;
+    --cb-good-bg:#ecfeff;
+    --cb-warn:#9a3412;
+    --cb-warn-bg:#fff7ed;
+    --cb-shadow:0 16px 36px rgba(10,79,179,.10);
+    --radius-xl:24px;
+    --radius-lg:18px;
+    --radius-md:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;font-family:Inter,Arial,sans-serif;background:var(--cb-bg);color:var(--cb-ink)}
+  .hidden{display:none!important}
+  .container{width:min(1360px,calc(100% - 28px));margin:0 auto}
+  .topbar{background:#001a8d;color:#fff;position:sticky;top:0;z-index:20}
+  .topbar-inner{display:flex;align-items:center;justify-content:space-between;padding:16px 0;gap:12px}
+  .brand{font-size:24px;font-weight:900;letter-spacing:.01em}
+  .topbar-actions{display:flex;align-items:center;gap:10px}
+  .ghost-top-btn{
+    background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.18);
+    height:40px;padding:0 14px;border-radius:999px;font-weight:700;cursor:pointer
+  }
+  .page{min-height:100vh}
+  .catalog-shell{padding:26px 0 40px}
+  .page-title{font-size:30px;line-height:1.15;font-weight:900;margin:0}
+  .page-sub{margin-top:8px;color:var(--cb-muted);font-size:15px}
+  .type-tabs{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
+  .type-tab{
+    border:1px solid #bfd6ff;background:#fff;color:#567;padding:11px 16px;border-radius:999px;cursor:pointer;
+    font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase
+  }
+  .type-tab.active{background:var(--cb-blue-soft);border-color:var(--cb-blue);color:var(--cb-blue)}
+  .catalog-banner{
+    margin-top:16px;padding:14px 16px;border:1px solid #cfe0ff;background:var(--cb-blue-soft);border-radius:16px;
+    color:#1d4f91;font-size:14px
+  }
+  .filter-chip-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+  .filter-chip{
+    background:#fff;border:1px solid var(--cb-line);border-radius:999px;padding:10px 14px;cursor:pointer;
+    font-weight:700;font-size:13px;color:var(--cb-muted)
+  }
+  .filter-chip.active{border-color:var(--cb-blue);color:var(--cb-blue);background:#f7fbff}
+  .catalog-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:24px}
+  .catalog-card{
+    background:var(--cb-card);border:1px solid #e2e8f0;border-radius:20px;padding:10px;box-shadow:0 10px 26px rgba(15,23,42,.06);
+    cursor:pointer;transition:transform .15s ease, box-shadow .15s ease,border-color .15s ease;min-height:440px
+  }
+  .catalog-card:hover{transform:translateY(-2px);box-shadow:0 16px 32px rgba(15,23,42,.1);border-color:#bfd6ff}
+  .catalog-card-body{
+    height:100%;display:flex;flex-direction:column;border-radius:16px;overflow:hidden;background:#fff
+  }
+  .catalog-media{
+    background:#f7f7f8;border-radius:14px;padding:18px 16px;display:flex;flex-direction:column;align-items:center;gap:14px;min-height:286px
+  }
+  .catalog-brand{font-size:12px;color:#6b7280}
+  .catalog-name{text-align:center;font-weight:900;font-size:24px;line-height:1.2}
+  .swatches{display:flex;gap:6px}
+  .swatch{width:8px;height:8px;border-radius:999px;display:inline-block}
+  .offer-pill{background:#c2d8ff;border-radius:999px;padding:6px 12px;font-size:11px}
+  .catalog-pricing{padding:14px 10px 8px;text-align:center;display:grid;gap:4px}
+  .catalog-small{font-size:11px}
+  .catalog-strike{font-size:11px;color:#666;text-decoration:line-through}
+  .catalog-price{font-size:28px;font-weight:900}
+  .catalog-price span{font-size:15px}
+  .config-shell{padding:24px 0 40px}
+  .config-layout{display:grid;grid-template-columns:minmax(0,1fr) 410px;gap:22px}
+  .config-main{display:grid;gap:18px}
+  .card{
+    background:#fff;border:1px solid var(--cb-line);border-radius:var(--radius-lg);box-shadow:var(--cb-shadow)
+  }
+  .card-head{
+    padding:18px 20px;border-bottom:1px solid var(--cb-line);display:flex;align-items:flex-start;justify-content:space-between;gap:16px
+  }
+  .card-head-left{display:flex;gap:14px;align-items:flex-start}
+  .step-dot{
+    width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--cb-blue),var(--cb-blue-dark));color:#fff;
+    display:grid;place-items:center;font-weight:900;flex:none
+  }
+  .card-title{font-size:19px;font-weight:900;margin:0}
+  .card-sub{margin-top:6px;color:var(--cb-muted);font-size:14px}
+  .card-body{padding:20px}
+  .grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  .grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+  .field label{display:block;font-size:14px;font-weight:800;margin-bottom:8px}
+  select,input[type=text]{width:100%;height:46px;border:1px solid #cbd5e1;border-radius:12px;padding:0 14px;background:#fff}
+  .counter{
+    display:flex;height:46px;align-items:center;border:1px solid #cbd5e1;border-radius:12px;overflow:hidden;background:#fff
+  }
+  .counter button{
+    width:48px;height:100%;border:0;background:#fff;font-size:22px;cursor:pointer
+  }
+  .counter .value{
+    flex:1;height:100%;display:grid;place-items:center;font-size:20px;font-weight:900;border-left:1px solid #e5e7eb;border-right:1px solid #e5e7eb
+  }
+  .toggle{display:inline-flex;gap:8px;background:#f8fbff;border:1px solid var(--cb-line);padding:4px;border-radius:12px}
+  .toggle button{
+    border:0;background:transparent;padding:10px 16px;border-radius:10px;font-weight:800;color:var(--cb-muted);cursor:pointer
+  }
+  .toggle button.active{background:linear-gradient(135deg,var(--cb-blue),var(--cb-blue-dark));color:#fff}
+  .status-banner{
+    padding:14px 16px;border:1px solid #bfe6de;background:var(--cb-good-bg);border-radius:14px;color:var(--cb-good);font-weight:700
+  }
+  .warn-banner{
+    padding:14px 16px;border:1px solid #f5cba7;background:var(--cb-warn-bg);border-radius:14px;color:var(--cb-warn);font-size:14px
+  }
+  .info-tile{
+    border:1px solid var(--cb-line);background:#f8fbff;border-radius:16px;padding:14px
+  }
+  .info-k{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--cb-muted);font-weight:800}
+  .info-v{font-size:22px;font-weight:900;margin-top:6px}
+  .plan-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .plan-card{
+    border:1px solid var(--cb-line);border-radius:16px;padding:18px;cursor:pointer;background:#fff
+  }
+  .plan-card.active{background:linear-gradient(135deg,var(--cb-blue),var(--cb-blue-dark));border-color:var(--cb-blue);color:#fff}
+  .plan-name{font-size:18px;font-weight:900}
+  .plan-copy{font-size:14px;opacity:.9;margin-top:8px}
+  .selected-product{
+    display:flex;gap:14px;align-items:center;padding:14px;border:1px solid var(--cb-line);border-radius:16px;background:#f8fbff
+  }
+  .thumb-shell{
+    width:88px;height:88px;border:1px solid var(--cb-line);background:#fff;border-radius:18px;display:flex;align-items:center;justify-content:center;flex:none
+  }
+  .summary-sticky{position:sticky;top:86px}
+  .summary-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
+  .summary-card{
+    border:1px solid var(--cb-line);border-radius:14px;padding:14px;background:linear-gradient(180deg,#fff,#f8fbff)
+  }
+  .summary-card .k{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--cb-muted);font-weight:800}
+  .summary-card .v{font-size:22px;font-weight:900;margin-top:6px}
+  .actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+  .btn{
+    height:44px;border:1px solid var(--cb-line);border-radius:12px;background:#fff;font-weight:800;cursor:pointer
+  }
+  .btn.primary{background:linear-gradient(135deg,var(--cb-blue),var(--cb-blue-dark));color:#fff;border-color:var(--cb-blue)}
+  .trade-list,.promo-list{display:grid;gap:12px;margin-top:14px}
+  .trade-card,.promo-option{
+    border:1px solid var(--cb-line);border-radius:16px;padding:14px;background:#fff
+  }
+  .trade-title,.promo-title{font-size:14px;font-weight:900}
+  .promo-desc,.trade-copy{margin-top:6px;font-size:13px;color:var(--cb-muted)}
+  .promo-option{display:flex;gap:12px;align-items:flex-start}
+  .skip-trade-card{
+    margin-top:14px;
+    border:1px dashed #bfd6ff;
+    background:linear-gradient(180deg,#f8fbff,#eef5ff);
+    border-radius:16px;
+    padding:14px;
+  }
+  .skip-trade-top{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:12px;
+  }
+  .skip-trade-title{
+    font-size:14px;
+    font-weight:900;
+    color:var(--cb-blue);
+  }
+  .skip-trade-copy{
+    margin-top:6px;
+    font-size:13px;
+    color:var(--cb-muted);
+    line-height:1.5;
+  }
+  .skip-trade-link{
+    margin-top:12px;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 12px;
+    border-radius:12px;
+    border:1px solid #cfe0ff;
+    background:#fff;
+    color:var(--cb-blue);
+    font-size:13px;
+    font-weight:800;
+    cursor:pointer;
+  }
+  .skip-trade-link:hover{
+    background:#f7fbff;
+  }
+  .promo-info-card{
+    border:1px solid var(--cb-line);
+    border-radius:16px;
+    background:#fff;
+    padding:14px;
+  }
+  .promo-info-card.best{
+    border-color:#7db7ff;
+    box-shadow:0 0 0 1px rgba(10,79,179,.12) inset;
+    background:linear-gradient(180deg,#ffffff,#f7fbff);
+  }
+  .promo-header{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    align-items:flex-start;
+  }
+  .promo-badge{
+    display:inline-flex;
+    align-items:center;
+    padding:6px 10px;
+    border-radius:999px;
+    background:#eef5ff;
+    color:var(--cb-blue);
+    font-size:11px;
+    font-weight:900;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    white-space:nowrap;
+  }
+  .promo-bullets{
+    margin:10px 0 0 18px;
+    padding:0;
+    color:var(--cb-muted);
+    font-size:13px;
+    line-height:1.55;
+  }
+  .promo-bullets li{margin:6px 0}
+  .promo-link{
+    display:inline-flex;
+    align-items:center;
+    margin-top:10px;
+    color:var(--cb-blue);
+    font-size:13px;
+    font-weight:800;
+    text-decoration:none;
+  }
 
-.modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.40);display:flex;align-items:center;justify-content:center;padding:20px;z-index:1000}
-.modal-card{width:min(760px,100%);background:#f5f7fb;border:1px solid #cfd8e6;border-radius:16px;box-shadow:0 18px 40px rgba(15,23,42,.14);padding:22px}
-.modal-header{display:flex;gap:14px;align-items:flex-start}
-.modal-icon{width:42px;height:42px;border-radius:12px;background:#103a8f;color:#fff;display:grid;place-items:center;font-size:20px;font-weight:900}
-.modal-title{font-size:18px;font-weight:900;margin:0;color:#24364d}
-.modal-sub{font-size:14px;color:#66758d;margin-top:2px}
-.modal-info{margin-top:14px;background:#fff;border:1px solid #dde5f0;border-radius:12px;padding:16px}
-.modal-info-title{font-size:14px;font-weight:800;margin-bottom:10px;color:#24364d}
-.modal-bullets{display:grid;gap:12px}
-.modal-bullet{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.5;color:#30435d}
-.modal-confirm-label{margin-top:20px;font-size:14px;font-weight:800;color:#24364d}
-.confirm-list{display:grid;gap:12px;margin-top:12px}
-.confirm-item{display:flex;gap:12px;align-items:flex-start;padding:16px;border:1px solid #86e0bf;background:#effbf6;border-radius:12px}
-.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
-.success-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
-.success-card{width:min(760px,100%);background:#fff;border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);padding:40px;text-align:center}
-.success-badge{width:72px;height:72px;border-radius:999px;background:#dcfce7;color:#047857;display:grid;place-items:center;font-size:34px;font-weight:900;margin:0 auto 18px}
-.success-title{font-size:34px;font-weight:900;margin:0}
-.success-sub{margin-top:10px;color:var(--muted);font-size:16px}
-.success-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:26px}
-.asurion-wrap{padding:20px 0 36px}
-.asurion-grid{display:grid;grid-template-columns:320px minmax(0,1fr);gap:22px}
-.as-side,.as-main{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
-.as-side{padding:20px;position:sticky;top:18px;height:fit-content}
-.as-main{padding:20px}
-.as-title{font-size:20px;font-weight:900;margin:0}
-.as-sub{margin-top:6px;color:var(--muted);font-size:14px}
-.pool-grid{display:grid;gap:12px;margin-top:16px}
-.pool-card{border:1px solid var(--line);border-radius:14px;background:var(--soft);padding:14px}
-.pool-card .label{font-size:11px;text-transform:uppercase;color:var(--muted);font-weight:800}
-.pool-card .value{font-size:26px;font-weight:900;margin-top:6px}
-.line-grid{display:grid;gap:16px}
-.line-card{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fff}
-.line-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:12px}
-.line-name{font-size:18px;font-weight:900}
-.line-status{padding:6px 10px;border-radius:999px;font-size:12px;font-weight:800;background:#eef2ff;color:#3730a3}
-.line-layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-@media (max-width:1100px){
-  .catalog-canvas,.catalog-filter-bar,.catalog-filters-row2,.catalog-grid,.layout,.review-grid,.asurion-grid{width:100%;grid-template-columns:1fr}
-  .summary,.as-side{position:static}
-  .catalog-footer-grid{grid-template-columns:1fr 1fr}
+
+  .review-shell{padding:24px 0 40px}
+  .review-layout{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:22px}
+  .section-title{
+    font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--cb-muted);font-weight:900;margin-bottom:10px
+  }
+  .cart-banner{
+    padding:14px 16px;border-radius:16px;border:1px solid var(--cb-line);background:linear-gradient(180deg,#fff,#f8fbff)
+  }
+  .cart-grid{display:grid;gap:14px}
+  .cart-item{
+    border:1px solid var(--cb-line);border-radius:18px;background:#fff;padding:16px
+  }
+  .cart-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+  .cart-name{font-size:18px;font-weight:900}
+  .cart-meta{font-size:13px;color:var(--cb-muted);margin-top:4px}
+  .cart-pill{
+    padding:6px 10px;border-radius:999px;background:#eef5ff;color:var(--cb-blue);font-size:12px;font-weight:900;white-space:nowrap
+  }
+  .cart-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}
+  .cart-metric{
+    border:1px solid var(--cb-line);border-radius:12px;background:#f8fbff;padding:12px
+  }
+  .cart-metric .k{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--cb-muted);font-weight:800}
+  .cart-metric .v{font-size:18px;font-weight:900;margin-top:4px}
+  .cart-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
+  .cart-detail{border:1px solid var(--cb-line);border-radius:12px;background:#fff;padding:11px 12px;font-size:13px}
+  .review-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+  .modal-backdrop{
+    position:fixed;inset:0;background:rgba(15,23,42,.42);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50
+  }
+  .modal-card{
+    width:min(760px,100%);background:#f5f7fb;border:1px solid #cfd8e6;border-radius:18px;box-shadow:0 18px 40px rgba(15,23,42,.14);padding:22px
+  }
+  .modal-header{display:flex;gap:14px;align-items:flex-start}
+  .modal-icon{
+    width:42px;height:42px;border-radius:12px;background:#103a8f;color:#fff;display:grid;place-items:center;font-size:20px;font-weight:900
+  }
+  .modal-title{font-size:19px;font-weight:900;margin:0;color:#24364d}
+  .modal-sub{font-size:14px;color:#66758d;margin-top:4px}
+  .modal-info{margin-top:14px;background:#fff;border:1px solid #dde5f0;border-radius:14px;padding:16px}
+  .modal-info-title{font-size:14px;font-weight:800;margin-bottom:10px;color:#24364d}
+  .modal-bullets{display:grid;gap:12px}
+  .modal-bullet{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.5;color:#30435d}
+  .modal-confirm-label{margin-top:20px;font-size:14px;font-weight:800;color:#24364d}
+  .confirm-list{display:grid;gap:12px;margin-top:12px}
+  .confirm-item{display:flex;gap:12px;align-items:flex-start;padding:16px;border:1px solid #86e0bf;background:#effbf6;border-radius:12px}
+  .modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
+  .success-shell{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+  .success-card{
+    width:min(760px,100%);background:#fff;border:1px solid var(--cb-line);border-radius:24px;box-shadow:var(--cb-shadow);padding:40px;text-align:center
+  }
+  .success-badge{
+    width:72px;height:72px;border-radius:999px;background:#dcfce7;color:#047857;display:grid;place-items:center;font-size:34px;font-weight:900;margin:0 auto 18px
+  }
+  .success-title{font-size:34px;font-weight:900;margin:0}
+  .success-sub{margin-top:10px;color:var(--cb-muted);font-size:16px}
+  .success-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+  .asurion-shell{padding:24px 0 40px}
+  .asurion-layout{display:grid;grid-template-columns:320px minmax(0,1fr);gap:22px}
+  .sticky-side{position:sticky;top:86px}
+  .pool-grid{display:grid;gap:12px;margin-top:16px}
+  .pool-card{border:1px solid var(--cb-line);border-radius:14px;background:#f8fbff;padding:14px}
+  .pool-card .k{font-size:11px;text-transform:uppercase;color:var(--cb-muted);font-weight:800}
+  .pool-card .v{font-size:26px;font-weight:900;margin-top:6px}
+  .line-grid{display:grid;gap:16px}
+  .line-card{border:1px solid var(--cb-line);border-radius:16px;padding:16px;background:#fff}
+  .line-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:12px}
+  .line-name{font-size:18px;font-weight:900}
+  .line-status{padding:6px 10px;border-radius:999px;font-size:12px;font-weight:800;background:#eef2ff;color:#3730a3}
+  .line-layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .line-name-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .line-edit-btn{
+    width:32px;height:32px;border-radius:999px;border:1px solid var(--cb-line);background:#fff;
+    color:var(--cb-blue);font-size:16px;font-weight:900;cursor:pointer;display:grid;place-items:center
+  }
+  .line-edit-btn:hover{background:#f7fbff}
+  .line-inline-edit{
+    height:38px;min-width:220px;border:1px solid #cbd5e1;border-radius:10px;padding:0 12px;background:#fff
+  }
+
+  @media (max-width:1100px){
+    .catalog-grid,.config-layout,.review-layout,.asurion-layout{grid-template-columns:1fr}
+    .summary-sticky,.sticky-side{position:static}
+  }
+  @media (max-width:760px){
+    .catalog-grid,.grid-2,.grid-3,.plan-grid,.cart-metrics,.cart-detail-grid,.line-layout{grid-template-columns:1fr}
+    .actions{grid-template-columns:1fr}
+  }
+
+/* Footer refresh override */
+.catalog-footer-override{
+  margin-top: 36px !important;
+  background: #001489 !important;
+  color: #ffffff !important;
+  padding: 56px 0 28px !important;
 }
+.catalog-footer-override .footer-grid{
+  display: grid !important;
+  grid-template-columns: 1.05fr 1fr 1fr 1fr 1.15fr 1.15fr !important;
+  gap: 42px !important;
+  align-items: start !important;
+}
+.catalog-footer-override .footer-brand{
+  font-size: 28px !important;
+  font-weight: 900 !important;
+  line-height: 0.95 !important;
+  letter-spacing: 0.04em !important;
+}
+.catalog-footer-override .footer-col-title{
+  margin: 0 0 18px !important;
+  font-size: 13px !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+}
+.catalog-footer-override .footer-links{
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: grid !important;
+  gap: 14px !important;
+  font-size: 12px !important;
+  line-height: 1.45 !important;
+}
+.catalog-footer-override .footer-links li{
+  color: #ffffff !important;
+  opacity: 0.98 !important;
+}
+.catalog-footer-override .footer-legal{
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 34px !important;
+  align-items: center !important;
+  padding-top: 34px !important;
+  margin-top: 42px !important;
+  border-top: 1px solid rgba(255,255,255,0.8) !important;
+  font-size: 12px !important;
+}
+.catalog-footer-override .footer-bottom{
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 18px !important;
+  margin-top: 18px !important;
+}
+.catalog-footer-override .footer-copy{
+  font-size: 12px !important;
+  color: #ffffff !important;
+}
+.catalog-footer-override .footer-social{
+  display: flex !important;
+  gap: 16px !important;
+  align-items: center !important;
+}
+.catalog-footer-override .footer-social-icon{
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 999px !important;
+  background: #ffffff !important;
+  color: #001489 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+}
+.catalog-cookie-hide{display:none !important;}
+@media (max-width: 1100px){
+  .catalog-footer-override .footer-grid{
+    grid-template-columns: 1fr 1fr !important;
+    gap: 28px !important;
+  }
+}
+
 </style>
 </head>
 <body>
-
-<div id="catalogView" class="page-shell">
-  <div class="topbar"><div class="container topbar-inner"><div class="brand">Comcast Business</div><div>⌕</div></div></div>
-  <div class="container catalog-body">
-    <div class="catalog-canvas">
-      <h1 class="catalog-title">Shop devices</h1>
-      <div class="device-type-tabs">
-        <button class="device-type-tab active" data-category="phones">Phones</button>
-        <button class="device-type-tab" data-category="tablets">Tablets</button>
-        <button class="device-type-tab" data-category="watches">Watches</button>
-      </div>
-      <div id="catalogBanner" class="banner hidden"></div>
-      <div>
-        <div class="catalog-filter-label">Filter</div>
-        <div class="catalog-filter-bar"><div class="catalog-brand-tabs" id="brandTabs"></div></div>
-      </div>
-      <div style="width:1090px">
-        <div class="catalog-filters-row2">
-          <div class="catalog-sort"><div class="catalog-sort-label">Sort by</div><div class="catalog-sort-text"><span>Featured</span><span style="color:#0D62FF">⌄</span></div></div>
-          <div class="catalog-term-toggle"><div class="catalog-term-text">Show prices with trade-in</div><div class="catalog-switch"></div></div>
-        </div>
-        <div class="catalog-grid" id="catalogGrid"></div>
-        <div class="catalog-page-nav"><div style="opacity:.35">‹</div><div style="display:flex;align-items:center;gap:8px"><div class="catalog-page-box">1</div><div style="font-family:Lato,Arial,sans-serif;font-size:14px">of 4</div></div><div style="color:#0D62FF">›</div></div>
+  <div class="topbar">
+    <div class="container topbar-inner">
+      <div class="brand">Comcast Business</div>
+      <div class="topbar-actions">
+        <button class="ghost-top-btn hidden" id="topBackBtn">Back</button>
       </div>
     </div>
   </div>
-  <div class="catalog-disclaimer"><div class="container"><div>1. Based on average battery life under typical usage conditions. Average expected performance based on typical use. Actual battery life depends on factors such as network, features selected, frequency of calls, and data usage patterns.</div><div style="margin-top:8px">2. Charger not included. Use only approved chargers and accessories. Screen images simulated. Appearance of products may vary.</div></div></div>
-  <div class="catalog-footer"><div class="container"><div class="catalog-footer-grid"><div><div style="font-size:22px;font-weight:900;line-height:1.1">COMCAST<br>BUSINESS</div></div><div><h4>SMALL BUSINESS</h4><ul><li>Plans and Pricing</li><li>Business Internet</li><li>Mobile</li><li>Phone</li><li>Cloud Apps</li></ul></div><div><h4>SUPPORT</h4><ul><li>Get Support</li><li>Forums</li><li>Find an Xfinity Store</li></ul></div><div><h4>MY ACCOUNT</h4><ul><li>Sign In</li><li>Cloud Solutions</li></ul></div><div><h4>ABOUT US</h4><ul><li>Why Comcast</li><li>Our Network</li><li>Careers</li><li>Awards and Recognition</li></ul></div><div><h4>PARTNERS AND REFERRALS</h4><ul><li>Customer Referrals</li><li>Authorized Connectors</li><li>Solution Advisors</li></ul></div></div><div class="catalog-footer-bottom"><div>Contact Us &nbsp;&nbsp; Privacy Policy &nbsp;&nbsp; Terms & Conditions &nbsp;&nbsp; Sitemap</div><div>©2024 Comcast Corporation. All Rights Reserved</div></div></div></div>
-  <div class="catalog-bottom">Cookie Settings</div>
-</div>
 
-<div id="configuratorView" class="hidden">
-  <div class="container review-wrap">
-    <div class="layout">
-      <div class="stack">
-        <div class="panel">
-          <div class="panel-head"><div class="panel-title-wrap"><div class="step">1</div><div><h2 id="qtyTitle">Purchase quantity</h2><div class="sub" id="qtySub">Enter how many devices the customer wants to buy.</div></div></div><div class="badge">Maximum 20</div></div>
-          <div class="panel-body">
-            <div class="grid-2">
-              <div class="field"><label id="qtyLabel">Devices being purchased</label><div class="counter"><button id="qtyMinus">−</button><div class="value" id="qtyValue">0</div><button id="qtyPlus">+</button></div></div>
-              <div class="info"><div class="info-title">Base device total</div><div class="info-big" id="baseTotal">$0</div></div>
+  <div id="catalogView" class="page page-shell">
+    <div class="container catalog-shell">
+      <h1 class="page-title">Shop devices</h1>
+      <div class="page-sub">Choose phones, tablets, or watches, then configure each device group before sending the cart to Asurion.</div>
+
+      <div class="type-tabs" id="typeTabs"></div>
+      <div class="catalog-banner hidden" id="catalogBanner"></div>
+      <div class="filter-chip-row" id="brandChips"></div>
+      <div class="catalog-grid" id="catalogGrid"></div>
+    </div>
+
+    
+    
+    
+    </div>
+    </div>
+
+
+
+  </div>
+
+  <div id="configuratorView" class="page hidden">
+    <div class="container config-shell">
+      <div class="config-layout">
+        <div class="config-main">
+          <div class="card">
+            <div class="card-head">
+              <div class="card-head-left">
+                <div class="step-dot">1</div>
+                <div>
+                  <h2 class="card-title" id="qtyTitle">Purchase quantity</h2>
+                  <div class="card-sub" id="qtySub">Enter how many devices the customer wants to buy.</div>
+                </div>
+              </div>
+              <div class="section-title">Max 20</div>
             </div>
-            <div id="qtyBanner" class="banner warn hidden" style="margin-top:12px"></div>
+            <div class="card-body">
+              <div class="grid-2">
+                <div class="field">
+                  <label id="qtyLabel">Devices being purchased</label>
+                  <div class="counter"><button id="qtyMinus">−</button><div class="value" id="qtyValue">0</div><button id="qtyPlus">+</button></div>
+                </div>
+                <div class="info-tile">
+                  <div class="info-k">Base device total</div>
+                  <div class="info-v" id="baseTotal">$0</div>
+                </div>
+              </div>
+              <div class="warn-banner hidden" id="qtyBanner" style="margin-top:14px"></div>
+            </div>
           </div>
-        </div>
 
-        <div class="panel" id="attrPanel">
-          <div class="panel-head"><div class="panel-title-wrap"><div class="step">2</div><div><h2>Device attributes</h2><div class="sub">Choose the applicable attributes.</div></div></div></div>
-          <div class="panel-body">
-            <div class="grid-3">
-              <div class="field"><label>Color</label><select id="colorSelect"></select></div>
-              <div class="field"><label id="storageLabel">Storage</label><select id="storageSelect"></select></div>
-              <div class="field"><label id="thirdAttrLabel">SIM Type</label><select id="simSelect"></select></div>
+          <div class="card" id="attrPanel">
+            <div class="card-head">
+              <div class="card-head-left">
+                <div class="step-dot" id="attrStep">2</div>
+                <div>
+                  <h2 class="card-title">Device attributes</h2>
+                  <div class="card-sub" id="attrSub">Choose the applicable device attributes.</div>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="grid-3">
+                <div class="field"><label>Color</label><select id="colorSelect"></select></div>
+                <div class="field"><label id="storageLabel">Storage</label><select id="storageSelect"></select></div>
+                <div class="field"><label>SIM Type</label><select id="simSelect"></select></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" id="promoPanel">
+            <div class="card-head">
+              <div class="card-head-left">
+                <div class="step-dot" id="promoStep">3</div>
+                <div>
+                  <h2 class="card-title">Available promos</h2>
+                  <div class="card-sub">View available promotions for this device. The best eligible promo will be identified automatically.</div>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="promo-list" id="promoList"></div>
+              <div class="card hidden" id="promoResultCard" style="margin-top:14px;box-shadow:none">
+                <div class="card-body">
+                  <div class="promo-title" id="promoAppliedTitle">No promo applied</div>
+                  <div class="promo-desc" id="promoAppliedMeta">Choose a promo and complete the required configuration to see the applied credit.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" id="paymentPanel">
+            <div class="card-head">
+              <div class="card-head-left">
+                <div class="step-dot" id="paymentStep">4</div>
+                <div>
+                  <h2 class="card-title">Payment type</h2>
+                  <div class="card-sub" id="paymentSub">Split the quantity between Monthly and Full Price.</div>
+                </div>
+              </div>
+              <div class="section-title" id="paymentBadge">Needs adjustment</div>
+            </div>
+            <div class="card-body">
+              <div class="grid-2" id="paymentGrid">
+                <div class="info-tile">
+                  <div class="info-k" id="monthlyLabel">Monthly</div>
+                  <div class="counter" style="margin-top:10px"><button id="monthlyMinus">−</button><div class="value" id="monthlyValue">0</div><button id="monthlyPlus">+</button></div>
+                </div>
+                <div class="info-tile">
+                  <div class="info-k" id="retailLabel">Full Price</div>
+                  <div class="counter" style="margin-top:10px"><button id="retailMinus">−</button><div class="value" id="retailValue">0</div><button id="retailPlus">+</button></div>
+                </div>
+              </div>
+              <div class="warn-banner" id="paymentStatus" style="margin-top:14px">Set the payment mix to match the selected quantity.</div>
+            </div>
+          </div>
+
+          <div class="card hidden" id="connectivityPanel">
+            <div class="card-head">
+              <div class="card-head-left">
+                <div class="step-dot" id="connectivityStep">4</div>
+                <div>
+                  <h2 class="card-title">Device connectivity</h2>
+                  <div class="card-sub">Choose whether the watch is standalone or paired with the host line.</div>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="field"><label>Connectivity</label><select id="connectivitySelect"></select></div>
+              <div class="catalog-banner" style="margin-top:14px">Business rules and conditions for Standalone and Paired with the host line remain aligned with the current BAU flow.</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div class="card-head-left">
+                <div class="step-dot" id="planStep">5</div>
+                <div>
+                  <h2 class="card-title" id="planHeading">Plan type</h2>
+                  <div class="card-sub" id="planSub">Choose Standard or Pro.</div>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="plan-grid">
+                <div class="plan-card" id="planStandard">
+                  <div class="plan-name">Standard</div>
+                  <div class="plan-copy">Standard plan with optional XMC.</div>
+                </div>
+                <div class="plan-card" id="planPro">
+                  <div class="plan-name">Pro</div>
+                  <div class="plan-copy">XMC Plus is included automatically.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div class="card-head-left">
+                <div class="step-dot" id="protectionStep">6</div>
+                <div>
+                  <h2 class="card-title">Device protection</h2>
+                  <div class="card-sub">Choose whether to add XMC device protection.</div>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="status-banner hidden" id="proIncludedBanner"></div>
+              <div id="protectionBlock">
+                <div class="grid-2">
+                  <div class="field">
+                    <label>Buying device protection today?</label>
+                    <div class="toggle" id="protectionToggle">
+                      <button data-value="yes">Yes</button>
+                      <button data-value="no">No</button>
+                    </div>
+                  </div>
+                  <div class="field hidden" id="protectionCountWrap">
+                    <label>Devices with protection</label>
+                    <div class="counter"><button id="protectionMinus">−</button><div class="value" id="protectionValue">0</div><button id="protectionPlus">+</button></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" id="portPanel">
+            <div class="card-head">
+              <div class="card-head-left">
+                <div class="step-dot" id="portStep">7</div>
+                <div>
+                  <h2 class="card-title">Port-in intent</h2>
+                  <div class="card-sub">If Yes, capture the number of MDNs to port in.</div>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="grid-2">
+                <div class="field">
+                  <label>Are you porting in?</label>
+                  <div class="toggle" id="portToggle">
+                    <button data-value="yes">Yes</button>
+                    <button data-value="no">No</button>
+                  </div>
+                </div>
+                <div class="field hidden" id="portCountWrap">
+                  <label>Number of MDNs to port in</label>
+                  <div class="counter"><button id="portMinus">−</button><div class="value" id="portValue">0</div><button id="portPlus">+</button></div>
+                  <div class="card-sub">Cannot be greater than the selected quantity.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" id="tradePanel">
+            <div class="card-head">
+              <div class="card-head-left">
+                <div class="step-dot" id="tradeStep">8</div>
+                <div>
+                  <h2 class="card-title" id="tradeHeading">Trade-in intent</h2>
+                  <div class="card-sub" id="tradeSub">Capture trade-in quantity and trade-in device details.</div>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="grid-2">
+                <div class="field">
+                  <label>Trade-in required?</label>
+                  <div class="toggle" id="tradeToggle">
+                    <button data-value="yes">Yes</button>
+                    <button data-value="no">No</button>
+                  </div>
+                </div>
+                <div class="field hidden" id="tradeCountWrap">
+                  <label>Number of devices to trade in</label>
+                  <div class="counter"><button id="tradeMinus">−</button><div class="value" id="tradeValue">0</div><button id="tradePlus">+</button></div>
+                  <div class="card-sub">Cannot be greater than the selected quantity.</div>
+                </div>
+              </div>
+              <div class="trade-list" id="tradeRows"></div>
+              
+              <div class="skip-trade-card hidden" id="tradeSkipCard">
+                <div class="skip-trade-top">
+                  <div>
+                    <div class="skip-trade-title">Need to continue without trade-in details?</div>
+                    <div class="skip-trade-copy">You can skip the make, model, and storage details for now and continue building the order. Trade-in value will not be estimated until those details are provided.</div>
+                  </div>
+                </div>
+                <button type="button" class="skip-trade-link" id="tradeSkipHint">Skip trade-in details</button>
+              </div>
+              <div class="warn-banner hidden" id="tradeSkipBanner" style="margin-top:12px">Trade-in value cannot be estimated without the required details. The customer can still provide them during checkout.</div>
             </div>
           </div>
         </div>
 
-        <div class="panel" id="promoPanel">
-          <div class="panel-head"><div class="panel-title-wrap"><div class="step">3</div><div><h2>Available promos</h2><div class="sub">Select one or more promos. The best eligible promo will be applied automatically.</div></div></div></div>
-          <div class="panel-body"><div id="promoList" class="promo-list"></div><div id="promoResult" class="promo-result hidden"><div class="applied" id="promoAppliedTitle">No promo applied</div><div class="meta" id="promoAppliedMeta">Choose a promo and complete the required configuration to see the applied credit.</div></div></div>
-        </div>
+        <div class="summary-sticky">
+          <div class="card">
+            <div class="card-body">
+              <h2 class="card-title">Current configuration</h2>
+              <div class="card-sub">Build one device group at a time, then add it to the cart.</div>
 
-        <div class="panel">
-          <div class="panel-head"><div class="panel-title-wrap"><div class="step" id="paymentStep">4</div><div><h2 id="paymentHeading">Payment type</h2><div class="sub" id="paymentSub">Split the quantity between Monthly and Full Price.</div></div></div><div class="badge" id="paymentBadge">Needs adjustment</div></div>
-          <div class="panel-body">
-            <div class="grid-2" id="paymentGrid">
-              <div class="info"><div class="info-title" id="monthlyLabel">Monthly</div><div class="counter" style="margin-top:10px"><button id="monthlyMinus">−</button><div class="value" id="monthlyValue">0</div><button id="monthlyPlus">+</button></div></div>
-              <div class="info"><div class="info-title" id="retailLabel">Full Price</div><div class="counter" style="margin-top:10px"><button id="retailMinus">−</button><div class="value" id="retailValue">0</div><button id="retailPlus">+</button></div></div>
+              <div class="selected-product" style="margin-top:14px">
+                <div class="thumb-shell" id="selectedThumb"></div>
+                <div>
+                  <div class="section-title" style="margin-bottom:6px">Selected from catalog</div>
+                  <div style="font-size:17px;font-weight:900" id="selectedName">No device selected</div>
+                  <div class="card-sub" id="selectedMeta">Choose a device from the catalog.</div>
+                </div>
+              </div>
+
+              <div class="status-banner" id="summaryStatusBanner" style="margin-top:14px">In progress</div>
+
+              <div class="summary-cards">
+                <div class="summary-card"><div class="k">Total Device Cost</div><div class="v" id="sumTotal">$0</div></div>
+                <div class="summary-card"><div class="k">Due Today</div><div class="v" id="sumDueToday">$0</div></div>
+                <div class="summary-card"><div class="k">Monthly Due</div><div class="v" id="sumMonthly">$0</div></div>
+                <div class="summary-card"><div class="k">Trade-In Estimate</div><div class="v" id="sumTrade">$0</div></div>
+                <div class="summary-card"><div class="k">Applied Promo</div><div class="v" id="sumPromo">$0</div></div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="backToCatalogBtn">Back to Catalog</button>
+                <button class="btn primary" id="continueBtn">Add to Cart</button>
+              </div>
             </div>
-            <div class="status bad" id="paymentStatus">Set the payment mix to match the selected quantity.</div>
-          </div>
-        </div>
-
-        <div class="panel hidden" id="dataPanel">
-          <div class="panel-head"><div class="panel-title-wrap"><div class="step">5</div><div><h2>Data option</h2><div class="sub">Choose the applicable data option for the tablet.</div></div></div></div>
-          <div class="panel-body"><div class="field"><label>Data option</label><select id="dataOptionSelect"></select></div></div>
-        </div>
-
-        <div class="panel hidden" id="connectivityPanel">
-          <div class="panel-head"><div class="panel-title-wrap"><div class="step">5</div><div><h2>Device connectivity</h2><div class="sub">Choose whether the watch is standalone or paired with the host line.</div></div></div></div>
-          <div class="panel-body">
-            <div class="field"><label>Connectivity</label><select id="connectivitySelect"></select></div>
-            <div class="banner" style="margin-top:12px">Business rules and conditions for Standalone and Paired with the host line remain aligned with the current BAU flow.</div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-head"><div class="panel-title-wrap"><div class="step" id="planStep">5</div><div><h2 id="planHeading">Plan type</h2><div class="sub" id="planSub">Choose Standard or Pro.</div></div></div></div>
-          <div class="panel-body"><div class="plan-grid"><div class="plan-card" id="planStandard"><div class="plan-title">Standard</div><div class="plan-desc">Standard plan with optional XMC.</div></div><div class="plan-card" id="planPro"><div class="plan-title">Pro</div><div class="plan-desc">XMC Plus is included automatically.</div></div></div></div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-head"><div class="panel-title-wrap"><div class="step" id="protectionStep">6</div><div><h2>Device protection</h2><div class="sub">Choose whether to add XMC device protection.</div></div></div></div>
-          <div class="panel-body">
-            <div id="proIncludedBanner" class="info hidden"><div class="info-big">XMC Plus is included automatically with Pro plan.</div></div>
-            <div id="protectionBlock"><div class="grid-2"><div class="field"><label>Buying device protection today?</label><div class="toggle" id="protectionToggle"><button data-value="yes">Yes</button><button data-value="no">No</button></div></div><div class="field hidden" id="protectionCountWrap"><label>Devices with protection</label><div class="counter"><button id="protectionMinus">−</button><div class="value" id="protectionValue">0</div><button id="protectionPlus">+</button></div></div></div></div>
-          </div>
-        </div>
-
-        <div class="panel" id="portPanel">
-          <div class="panel-head"><div class="panel-title-wrap"><div class="step" id="portStep">7</div><div><h2>Port-in intent</h2><div class="sub">If Yes, capture the number of MDNs to port in.</div></div></div></div>
-          <div class="panel-body"><div class="grid-2"><div class="field"><label>Are you porting in?</label><div class="toggle" id="portToggle"><button data-value="yes">Yes</button><button data-value="no">No</button></div></div><div class="field hidden" id="portCountWrap"><label>Number of MDNs to port in</label><div class="counter"><button id="portMinus">−</button><div class="value" id="portValue">0</div><button id="portPlus">+</button></div><div class="hint">Cannot be greater than the selected quantity.</div></div></div></div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-head"><div class="panel-title-wrap"><div class="step" id="tradeStep">8</div><div><h2 id="tradeHeading">Trade-in intent</h2><div class="sub" id="tradeSub">Capture trade-in quantity and device details.</div></div></div></div>
-          <div class="panel-body">
-            <div class="grid-2"><div class="field"><label>Trade-in required?</label><div class="toggle" id="tradeToggle"><button data-value="yes">Yes</button><button data-value="no">No</button></div></div><div class="field hidden" id="tradeCountWrap"><label>Number of devices to trade in</label><div class="counter"><button id="tradeMinus">−</button><div class="value" id="tradeValue">0</div><button id="tradePlus">+</button></div><div class="hint">Cannot be greater than the selected quantity.</div></div></div>
-            <div id="tradeRows" class="trade-list hidden"></div>
-            <div id="tradeSkipHint" class="hint-link hidden">Skip trade-in details for now</div>
-            <div id="tradeSkipBanner" class="banner hidden" style="margin-top:12px">Trade-in value cannot be estimated without the required details. The customer can still provide them during checkout.</div>
           </div>
         </div>
       </div>
-
-      <div class="summary">
-        <div class="panel"><div class="summary-section">
-          <h3 class="summary-title">Configurator summary</h3>
-          <div class="summary-sub">Add to Cart becomes available once the configuration is ready.</div>
-          <div class="selected-card"><div class="selected-thumb" id="selectedThumb"></div><div><div class="small" style="font-weight:800;text-transform:uppercase">Selected from catalog</div><div style="font-size:16px;font-weight:900;margin-top:4px" id="selectedName">No device selected</div><div style="font-size:13px;color:var(--muted);margin-top:4px" id="selectedMeta">Choose a device from the catalog.</div></div></div>
-          <div class="summary-banner"><strong id="summaryStatus">In progress</strong></div>
-          <div class="summary-cards">
-            <div class="summary-card"><div class="label">Total Device Cost</div><div class="value" id="sumTotal">$0</div></div>
-            <div class="summary-card"><div class="label">Due Today</div><div class="value" id="sumDueToday">$0</div></div>
-            <div class="summary-card"><div class="label">Monthly Due</div><div class="value" id="sumMonthly">$0</div></div>
-            <div class="summary-card"><div class="label">Trade-In Estimate</div><div class="value" id="sumTrade">$0</div></div>
-            <div class="summary-card"><div class="label">Applied Promo</div><div class="value" id="sumPromo">$0</div></div>
-          </div>
-          <div class="actions"><button class="btn" id="backToCatalogBtn">Back to Catalog</button><button class="btn primary" id="continueBtn">Add to Cart</button></div>
-        </div></div>
-      </div>
     </div>
   </div>
-</div>
 
-<div id="reviewView" class="hidden">
-  <div class="topbar"><div class="container topbar-inner"><div class="brand">Comcast Business</div><div>Review Device Configuration</div></div></div>
-  <div class="container review-wrap">
-    <div class="review-grid">
-      <div class="review-card">
-        <h3>Cart review</h3>
-        <div class="cart-summary-banner" id="cartSummaryBanner"></div>
-        <div class="review-section" id="cartSection"><div class="review-section-title">Devices in cart</div><div class="cart-grid" id="cartItemsList"></div></div>
-        <h3 style="margin-top:16px">Latest device added</h3>
-        <div class="review-section"><div class="review-section-title">Selected device</div><div class="review-list">
-          <div class="review-row"><span>Product</span><strong id="reviewProduct">—</strong></div>
-          <div class="review-row"><span>Quantity</span><strong id="reviewQty">0</strong></div>
-          <div class="review-row"><span>Color</span><strong id="reviewColor">—</strong></div>
-          <div class="review-row"><span>Storage</span><strong id="reviewStorage">—</strong></div>
-          <div class="review-row"><span>SIM</span><strong id="reviewSim">—</strong></div>
-          <div class="review-row"><span>Data / Connectivity</span><strong id="reviewDataOption">—</strong></div>
-        </div></div>
-        <div class="review-section"><div class="review-section-title">Setup details</div><div class="review-list">
-          <div class="review-row"><span>Plan</span><strong id="reviewPlan">—</strong></div>
-          <div class="review-row"><span>Protection</span><strong id="reviewProtection">—</strong></div>
-          <div class="review-row"><span>Port-in MDNs</span><strong id="reviewPort">0</strong></div>
-          <div class="review-row"><span>Trade-in devices</span><strong id="reviewTrade">0</strong></div>
-          <div class="review-row"><span>Trade-in details</span><strong id="reviewTradeModels">—</strong></div>
-        </div></div>
-        <div class="review-actions">
-          <button class="btn dashed" id="addMoreDeviceBtn">Add More Device</button>
-          <button class="btn" id="addMoreLinesBtn">Add More Lines</button>
-          <button class="btn" id="backToEditBtn">Edit Configuration</button>
-          <button class="btn" id="saveQuoteBtn">Save Quote</button>
-          <button class="btn" id="moveToConciergeBtn">Move to Concierge</button>
+  <div id="reviewView" class="page hidden">
+    <div class="container review-shell">
+      <div class="review-layout">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="card-title">Cart review</h2>
+            <div class="card-sub">Review all configured device groups before moving to concierge.</div>
+
+            <div class="cart-banner" id="cartSummaryBanner" style="margin-top:14px"></div>
+            <div class="cart-grid" id="cartItemsList" style="margin-top:14px"></div>
+
+            <div class="review-actions">
+              <button class="btn dashed" id="addMoreDeviceBtn">Add More Device</button>
+              <button class="btn" id="backToEditBtn">Edit Latest Device</button>
+              <button class="btn" id="saveQuoteBtn">Save Quote</button>
+              <button class="btn" id="moveToConciergeBtn">Move to Concierge</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <h2 class="card-title">Order totals</h2>
+            <div class="summary-cards" style="margin-top:14px">
+              <div class="summary-card"><div class="k">Total Device Cost</div><div class="v" id="orderTotal">$0</div></div>
+              <div class="summary-card"><div class="k">Monthly Before Promo</div><div class="v" id="orderMonthly">$0</div></div>
+              <div class="summary-card"><div class="k">Trade-In Estimate</div><div class="v" id="orderTrade">$0</div></div>
+              <div class="summary-card"><div class="k">Promo Total</div><div class="v" id="orderPromo">$0</div></div>
+            </div>
+            <div class="status-banner" style="margin-top:14px" id="reviewReadyBanner">Ready to move to concierge</div>
+          </div>
         </div>
       </div>
-      <div class="review-card"><h3>Pricing summary</h3><div class="review-section"><div class="review-list">
-        <div class="review-row"><span>Total device cost</span><strong id="reviewTotal">$0</strong></div>
-        <div class="review-row"><span>Due today</span><strong id="reviewDueToday">$0</strong></div>
-        <div class="review-row"><span>Monthly due</span><strong id="reviewMonthly">$0</strong></div>
-        <div class="review-row"><span>Total trade-in estimate</span><strong id="reviewTradeTotal">$0</strong></div>
-        <div class="review-row"><span>Applied promo</span><strong id="reviewPromoTotal">$0</strong></div>
-        <div class="review-row"><span>Net monthly after promo</span><strong id="reviewNetMonthly">$0</strong></div>
-      </div></div></div>
     </div>
   </div>
-</div>
 
-<div id="conciergeModal" class="modal-backdrop hidden">
-  <div class="modal-card">
-    <div class="modal-header"><div class="modal-icon">◌</div><div><h2 class="modal-title">Customer Verbal Confirmation</h2><div class="modal-sub">Read the following to the customer and confirm their acknowledgment.</div></div></div>
-    <div class="modal-info"><div class="modal-info-title">Please let the customer know:</div><div class="modal-bullets"><div class="modal-bullet"><span>☑</span><span>They will receive an order confirmation email with a summary of today's order and next steps.</span></div><div class="modal-bullet"><span>☏</span><span>A Comcast Business representative will follow up to complete the remaining steps, including payment collection, consent confirmation, and activation.</span></div><div class="modal-bullet"><span>⌘</span><span>No charges will be applied until the follow-up process is complete and the customer has provided final authorization.</span></div></div></div>
-    <div class="modal-confirm-label">Seller: confirm the customer has verbally acknowledged the following.</div>
-    <div class="confirm-list"><div class="confirm-item"><input type="checkbox" id="confirm1"><label for="confirm1">The customer understands they will receive an order confirmation email with a summary and next steps.</label></div><div class="confirm-item"><input type="checkbox" id="confirm2"><label for="confirm2">The customer understands a representative will contact them to finalize payment, consent, and activation details.</label></div><div class="confirm-item"><input type="checkbox" id="confirm3"><label for="confirm3">The customer has given verbal authorization to proceed with this order.</label></div></div>
-    <div id="confirmTimestamp" class="hint hidden"></div>
-    <div class="modal-actions"><button class="btn" id="cancelConciergeBtn">Cancel</button><button class="btn primary hidden" id="proceedConciergeBtn">Proceed</button></div>
-  </div>
-</div>
+  <div id="conciergeModal" class="modal-backdrop hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-icon">◌</div>
+        <div>
+          <h2 class="modal-title">Customer Verbal Confirmation</h2>
+          <div class="modal-sub">Read the following to the customer and confirm their acknowledgment.</div>
+        </div>
+      </div>
 
-<div id="successView" class="hidden"><div class="success-screen"><div class="success-card"><div class="success-badge">✓</div><h1 class="success-title">Congratulations</h1><div class="success-sub">Your order has been sent to Asurion.</div><div class="success-actions"><button class="btn" id="exitSuccessBtn">Exit</button><button class="btn" id="goToAsurionBtn">Go to Asurion</button><button class="btn primary" id="configureAnotherBtn">Start New Quote</button></div></div></div></div>
+      <div class="modal-info">
+        <div class="modal-info-title">Please let the customer know:</div>
+        <div class="modal-bullets">
+          <div class="modal-bullet"><span>☑</span><span>They will receive an order confirmation email with a summary of today's order and next steps.</span></div>
+          <div class="modal-bullet"><span>☏</span><span>A Comcast Business representative will follow up to complete payment collection, consent confirmation, and activation details.</span></div>
+          <div class="modal-bullet"><span>⌘</span><span>No charges will be applied until the follow-up process is complete and the customer has provided final authorization.</span></div>
+        </div>
+      </div>
 
-<div id="asurionView" class="hidden">
-  <div class="topbar"><div class="container topbar-inner"><div class="brand">Comcast Business</div><div>Asurion Line Configuration</div></div></div>
-  <div class="container asurion-wrap">
-    <div class="asurion-grid">
-      <div class="as-side"><h3 class="as-title">Order pools</h3><div class="as-sub">Allocate the quote-level totals across individual lines.</div><div class="pool-grid"><div class="pool-card"><div class="label">Total Lines</div><div class="value" id="poolLines">0</div></div><div class="pool-card"><div class="label">Port-In Available</div><div class="value" id="poolPort">0</div></div><div class="pool-card"><div class="label">Trade-In Available</div><div class="value" id="poolTrade">0</div></div></div><div class="actions" style="grid-template-columns:1fr;margin-top:16px"><button class="btn" id="autoAssignBtn">Auto-Configure Lines</button><button class="btn" id="backToReviewBtn">Back to Review</button><button class="btn primary" id="completeAsurionBtn">Complete Line Configuration</button></div></div>
-      <div class="as-main"><h3 class="as-title">Line configuration</h3><div class="as-sub">Assign nickname, number type, and plan for each line.</div><div class="line-grid" id="lineGrid" style="margin-top:18px"></div></div>
+      <div class="modal-confirm-label">Seller: confirm the customer has verbally acknowledged the following.</div>
+      <div class="confirm-list">
+        <div class="confirm-item"><input type="checkbox" id="confirm1"><label for="confirm1">The customer understands they will receive an order confirmation email with a summary and next steps.</label></div>
+        <div class="confirm-item"><input type="checkbox" id="confirm2"><label for="confirm2">The customer understands a representative will contact them to finalize payment, consent, and activation details.</label></div>
+        <div class="confirm-item"><input type="checkbox" id="confirm3"><label for="confirm3">The customer has given verbal authorization to proceed with this order.</label></div>
+      </div>
+
+      <div class="card-sub hidden" id="confirmTimestamp" style="margin-top:12px"></div>
+      <div class="modal-actions">
+        <button class="btn" id="cancelConciergeBtn">Cancel</button>
+        <button class="btn primary hidden" id="proceedConciergeBtn">Proceed</button>
+      </div>
     </div>
   </div>
-</div>
+
+  <div id="successView" class="page hidden">
+    <div class="success-shell">
+      <div class="success-card">
+        <div class="success-badge">✓</div>
+        <h1 class="success-title">Congratulations</h1>
+        <div class="success-sub">Your order has been sent to Asurion.</div>
+        <div class="success-actions">
+          <button class="btn" id="exitSuccessBtn">Exit</button>
+          <button class="btn" id="goToAsurionBtn">Go to Asurion</button>
+          <button class="btn primary" id="configureAnotherBtn">Start New Quote</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="asurionView" class="page hidden">
+    <div class="container asurion-shell">
+      <div class="asurion-layout">
+        <div class="sticky-side">
+          <div class="card">
+            <div class="card-body">
+              <h2 class="card-title">Order pools</h2>
+              <div class="card-sub">Allocate the quote-level totals across individual lines.</div>
+              <div class="pool-grid">
+                <div class="pool-card"><div class="k">Total Lines</div><div class="v" id="poolLines">0</div></div>
+                <div class="pool-card"><div class="k">Port-In Available</div><div class="v" id="poolPort">0</div></div>
+                <div class="pool-card"><div class="k">Trade-In Available</div><div class="v" id="poolTrade">0</div></div>
+              </div>
+              <div class="actions" style="grid-template-columns:1fr;margin-top:16px">
+                <button class="btn" id="autoAssignBtn">Auto-Configure Lines</button>
+                <button class="btn" id="backToReviewBtn">Back to Review</button>
+                <button class="btn primary" id="completeAsurionBtn">Complete Line Configuration</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <h2 class="card-title">Line configuration</h2>
+            <div class="card-sub">Assign nickname, number type, and plan for each line.</div>
+            <div class="line-grid" id="lineGrid" style="margin-top:18px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 <script>
 const $ = id => document.getElementById(id);
 
 const phoneSvg = (a,b,label,id) => `
-<svg width="48" height="78" viewBox="0 0 88 150" xmlns="http://www.w3.org/2000/svg" aria-label="${label}">
+<svg width="52" height="82" viewBox="0 0 88 150" xmlns="http://www.w3.org/2000/svg" aria-label="${label}">
   <defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${a}"/><stop offset="100%" stop-color="${b}"/></linearGradient></defs>
-  <rect x="14" y="4" rx="18" ry="18" width="60" height="142" fill="#111827"/><rect x="18" y="8" rx="15" ry="15" width="52" height="134" fill="url(#${id})"/><rect x="32" y="14" rx="4" ry="4" width="24" height="6" fill="rgba(17,24,39,0.82)"/><circle cx="44" cy="132" r="2.5" fill="rgba(255,255,255,0.45)"/>
+  <rect x="14" y="4" rx="18" ry="18" width="60" height="142" fill="#111827"/>
+  <rect x="18" y="8" rx="15" ry="15" width="52" height="134" fill="url(#${id})"/>
+  <rect x="32" y="14" rx="4" ry="4" width="24" height="6" fill="rgba(17,24,39,0.82)"/>
+  <circle cx="44" cy="132" r="2.5" fill="rgba(255,255,255,0.45)"/>
 </svg>`;
 const tabletSvg = (a,b,label,id) => `
-<svg width="88" height="66" viewBox="0 0 176 132" xmlns="http://www.w3.org/2000/svg" aria-label="${label}">
+<svg width="96" height="72" viewBox="0 0 176 132" xmlns="http://www.w3.org/2000/svg" aria-label="${label}">
   <defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="${a}"/><stop offset="100%" stop-color="${b}"/></linearGradient></defs>
-  <rect x="6" y="6" rx="14" ry="14" width="164" height="120" fill="#111827"/><rect x="12" y="12" rx="10" ry="10" width="152" height="108" fill="url(#${id})"/><circle cx="88" cy="120" r="2.2" fill="rgba(255,255,255,0.45)"/>
+  <rect x="6" y="6" rx="14" ry="14" width="164" height="120" fill="#111827"/>
+  <rect x="12" y="12" rx="10" ry="10" width="152" height="108" fill="url(#${id})"/>
+  <circle cx="88" cy="120" r="2.2" fill="rgba(255,255,255,0.45)"/>
 </svg>`;
 const watchSvg = (a,b,label,id) => `
-<svg width="64" height="84" viewBox="0 0 128 168" xmlns="http://www.w3.org/2000/svg" aria-label="${label}">
+<svg width="68" height="88" viewBox="0 0 128 168" xmlns="http://www.w3.org/2000/svg" aria-label="${label}">
   <defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${a}"/><stop offset="100%" stop-color="${b}"/></linearGradient></defs>
   <rect x="44" y="0" width="40" height="24" rx="12" fill="#1f2937"/>
   <rect x="44" y="144" width="40" height="24" rx="12" fill="#1f2937"/>
@@ -433,6 +891,7 @@ const CATALOG = {
   watches: {
     brands:["All brands","Apple","Samsung","Google"],
     items:[
+      {id:"byow", brand:"BYO", type:"byod", name:"Bring your watch", price:"$0.00", strike:"", finance:"Only pay for service", promo:"", thumb:watchSvg("#1f2937","#64748b","BYOW","byow")},
       {id:"watch-apple", brand:"Apple", type:"purchase", name:"Apple Watch Ultra", price:"$13.88", strike:"$16.66/mo", finance:"For 36 months, 0% APR. Full Price $499.99", promo:"Smartwatch financing available", thumb:watchSvg("#111827","#fb923c","Apple Watch","aw")},
       {id:"watch-samsung", brand:"Samsung", type:"purchase", name:"Galaxy Watch Ultra", price:"$12.49", strike:"$15.27/mo", finance:"For 36 months, 0% APR. Full Price $449.99", promo:"Smartwatch financing available", thumb:watchSvg("#111827","#a78bfa","Galaxy Watch","gw")},
       {id:"watch-google", brand:"Google", type:"purchase", name:"Pixel Watch", price:"$9.72", strike:"$11.11/mo", finance:"For 36 months, 0% APR. Full Price $349.99", promo:"Wearable financing available", thumb:watchSvg("#334155","#93c5fd","Pixel Watch","pw")}
@@ -446,14 +905,15 @@ const DEVICES = {
   "pixel-10": {category:"phones", brand:"Google", name:"Pixel 10 Pro XL", sku:"GGL-P10XL", basePrice:1199, thumb:phoneSvg("#64748b","#93c5fd","Pixel","pixeltiny"), colors:["Obsidian","Porcelain","Blue"], storages:["128 GB","256 GB"], sims:["eSIM","Physical SIM"]},
   "byod": {category:"phones", brand:"BYO", name:"Bring your phone", sku:"BYOD", basePrice:0, thumb:phoneSvg("#0a4fb3","#2563eb","BYOD","byodtiny"), colors:["Customer Device"], storages:["Customer Device"], sims:["eSIM","Physical SIM"]},
 
-  "ipad-pro": {category:"tablets", brand:"Apple", name:"iPad Pro 13", sku:"APL-IPAD13", basePrice:1199, thumb:tabletSvg("#d4d4d8","#71717a","iPad","ipadtiny"), colors:["Silver","Space Black"], storages:["128 GB","256 GB","512 GB","1 TB","2 TB"], sims:["eSIM","Physical SIM"], dataOptions:["Unlimited Tablet","Shared Data","Standalone Tablet"]},
-  "galaxy-tab-ultra": {category:"tablets", brand:"Samsung", name:"Galaxy Tab Ultra", sku:"SMS-TABU", basePrice:1099, thumb:tabletSvg("#111827","#9ca3af","Tab","tabtiny"), colors:["Graphite","Silver"], storages:["128 GB","256 GB","512 GB","1 TB","2 TB"], sims:["eSIM","Physical SIM"], dataOptions:["Unlimited Tablet","Shared Data","Standalone Tablet"]},
-  "pixel-tablet": {category:"tablets", brand:"Google", name:"Pixel Tablet", sku:"GGL-TAB", basePrice:499, thumb:tabletSvg("#94a3b8","#e2e8f0","Pixel Tablet","pttiny"), colors:["Porcelain","Hazel"], storages:["128 GB","256 GB","512 GB"], sims:["eSIM","Physical SIM"], dataOptions:["Unlimited Tablet","Shared Data","Standalone Tablet"]},
-  "byot": {category:"tablets", brand:"BYO", name:"Bring your tablet", sku:"BYOT", basePrice:0, thumb:tabletSvg("#1f4ed8","#60a5fa","BYOT","byottiny"), colors:["Customer Device"], storages:["Customer Device"], sims:["eSIM","Physical SIM"], dataOptions:["Unlimited Tablet","Shared Data","Standalone Tablet"]},
+  "ipad-pro": {category:"tablets", brand:"Apple", name:"iPad Pro 13", sku:"APL-IPAD13", basePrice:1199, thumb:tabletSvg("#d4d4d8","#71717a","iPad","ipadtiny"), colors:["Silver","Space Black"], storages:["128 GB","256 GB","512 GB","1 TB","2 TB"], sims:["eSIM","Physical SIM"]},
+  "galaxy-tab-ultra": {category:"tablets", brand:"Samsung", name:"Galaxy Tab Ultra", sku:"SMS-TABU", basePrice:1099, thumb:tabletSvg("#111827","#9ca3af","Tab","tabtiny"), colors:["Graphite","Silver"], storages:["128 GB","256 GB","512 GB","1 TB","2 TB"], sims:["eSIM","Physical SIM"]},
+  "pixel-tablet": {category:"tablets", brand:"Google", name:"Pixel Tablet", sku:"GGL-TAB", basePrice:499, thumb:tabletSvg("#94a3b8","#e2e8f0","Pixel Tablet","pttiny"), colors:["Porcelain","Hazel"], storages:["128 GB","256 GB","512 GB"], sims:["eSIM","Physical SIM"]},
+  "byot": {category:"tablets", brand:"BYO", name:"Bring your tablet", sku:"BYOT", basePrice:0, thumb:tabletSvg("#1f4ed8","#60a5fa","BYOT","byottiny"), colors:["Customer Device"], storages:["Customer Device"], sims:["eSIM","Physical SIM"]},
 
   "watch-apple": {category:"watches", brand:"Apple", name:"Apple Watch Ultra", sku:"APL-WATCH", basePrice:499, thumb:watchSvg("#111827","#fb923c","Watch","awtiny"), colors:["Black","Blue","Natural"], storages:["Wearable Device"], sims:["eSIM"], connectivity:["Standalone","Paired with host line"]},
   "watch-samsung": {category:"watches", brand:"Samsung", name:"Galaxy Watch Ultra", sku:"SMS-WATCH", basePrice:449, thumb:watchSvg("#111827","#a78bfa","Watch","gwtiny"), colors:["Titanium Silver","Gray","Black"], storages:["Wearable Device"], sims:["eSIM"], connectivity:["Standalone","Paired with host line"]},
-  "watch-google": {category:"watches", brand:"Google", name:"Pixel Watch", sku:"GGL-WATCH", basePrice:349, thumb:watchSvg("#334155","#93c5fd","Watch","pwtiny"), colors:["Black","Champagne","Silver"], storages:["Wearable Device"], sims:["eSIM"], connectivity:["Standalone","Paired with host line"]}
+  "watch-google": {category:"watches", brand:"Google", name:"Pixel Watch", sku:"GGL-WATCH", basePrice:349, thumb:watchSvg("#334155","#93c5fd","Watch","pwtiny"), colors:["Black","Champagne","Silver"], storages:["Wearable Device"], sims:["eSIM"], connectivity:["Standalone","Paired with host line"]},
+  "byow": {category:"watches", brand:"BYO", name:"Bring your watch", sku:"BYOW", basePrice:0, thumb:watchSvg("#1f2937","#64748b","BYOW","byowtiny"), colors:["Customer Device"], storages:["Wearable Device"], sims:["eSIM"], connectivity:["Standalone","Paired with host line"]}
 };
 
 const PHONE_TRADE_CATALOG = {
@@ -501,19 +961,50 @@ const STORAGE_OPTIONS = ["","128GB","256GB","512GB","1TB","2TB"];
 
 const PROMOS = {
   "iphone-17": [
-    {id:"ip500", title:"iPhone $500 promo credit", desc:"Eligible when the device is on monthly payment and the order includes both port-in and trade-in.", totalCredit:500, eligible:(s)=> s.monthly > 0 && s.portDecision==='yes' && s.portCount > 0 && s.tradeDecision==='yes' && s.tradeCount > 0},
-    {id:"ip200", title:"iPhone $200 off", desc:"Eligible when at least one selected iPhone is on monthly payment.", totalCredit:200, eligible:(s)=> s.monthly > 0}
+    {id:"ip500", title:"Best value: Save up to $500 over 36 months via monthly credits", details:[
+      "Savings will appear as monthly promo credits when the customer pays over 36 months and trades in an eligible device.",
+      "Customer must also complete a qualifying port-in.",
+      "Offer dependent on device condition."
+    ], totalCredit:500, eligible:(s)=> s.monthly > 0 && s.portDecision==='yes' && s.portCount > 0 && s.tradeDecision==='yes' && s.tradeCount > 0},
+    {id:"ip200", title:"Save up to $200 off iPhone on monthly payments", details:[
+      "Available when at least one selected iPhone is placed on monthly device payments.",
+      "Credits are applied over the installment term.",
+      "Offer dependent on device eligibility and account qualification."
+    ], totalCredit:200, eligible:(s)=> s.monthly > 0}
   ],
   "galaxy-s26": [
-    {id:"ss400", title:"Samsung $400 promo credit", desc:"Eligible when the device is on monthly payment and includes trade-in.", totalCredit:400, eligible:(s)=> s.monthly > 0 && s.tradeDecision==='yes' && s.tradeCount > 0},
-    {id:"ss150", title:"Samsung $150 off", desc:"Eligible when at least one selected Samsung device is on monthly payment.", totalCredit:150, eligible:(s)=> s.monthly > 0}
+    {id:"ss500", title:"Best value: Save up to $500 off new Samsung phone with an eligible trade-in", details:[
+      "Savings will appear as monthly trade-in promo credits when the customer pays over 36 months and trades in an eligible device.",
+      "Customer needs a qualifying unlimited data plan.",
+      "Trade-in credits cannot exceed the cost of a new device.",
+      "Offer dependent on device condition."
+    ], totalCredit:500, eligible:(s)=> s.monthly > 0 && s.tradeDecision==='yes' && s.tradeCount > 0},
+    {id:"ss500npi", title:"Save up to $500 on select Samsung NPI", details:[
+      "Offer available on select new Samsung devices.",
+      "Monthly installment eligibility may be required.",
+      "Additional account conditions may apply."
+    ], totalCredit:500, eligible:(s)=> s.monthly > 0},
+    {id:"ss200unl", title:"Save up to $200 on select Samsung NPI UNL Intro", details:[
+      "Offer available on qualifying Samsung devices with an eligible unlimited plan.",
+      "Credits may apply across the device payment term."
+    ], totalCredit:200, eligible:(s)=> s.monthly > 0}
   ],
   "pixel-10": [
-    {id:"px300", title:"Pixel $300 promo credit", desc:"Eligible when the device is on monthly payment and includes port-in.", totalCredit:300, eligible:(s)=> s.monthly > 0 && s.portDecision==='yes' && s.portCount > 0},
-    {id:"px125", title:"Pixel $125 off", desc:"Eligible when at least one selected Pixel device is on monthly payment.", totalCredit:125, eligible:(s)=> s.monthly > 0}
+    {id:"px300", title:"Best value: Save up to $300 over 36 months via monthly credits", details:[
+      "Available when the device is on monthly payments and includes a qualifying port-in.",
+      "Credits apply across the installment term.",
+      "Offer dependent on device and account eligibility."
+    ], totalCredit:300, eligible:(s)=> s.monthly > 0 && s.portDecision==='yes' && s.portCount > 0},
+    {id:"px125", title:"Save up to $125 off Pixel on monthly payments", details:[
+      "Available when at least one selected Pixel device is placed on monthly payments.",
+      "Offer dependent on device and account qualification."
+    ], totalCredit:125, eligible:(s)=> s.monthly > 0}
   ],
   "byod": [
-    {id:"by50", title:"BYOD activation credit", desc:"Example BYOD promo for customer-owned device activation with port-in.", totalCredit:50, eligible:(s)=> s.portDecision==='yes' && s.portCount > 0}
+    {id:"by50", title:"Bring your own device activation credit", details:[
+      "Example BYOD credit shown for informational purposes.",
+      "Can apply when the customer brings their own device and completes a qualifying port-in."
+    ], totalCredit:50, eligible:(s)=> s.portDecision==='yes' && s.portCount > 0}
   ]
 };
 
@@ -528,7 +1019,6 @@ const initialState = () => ({
   color:"",
   storage:"",
   sim:"",
-  dataOption:"",
   connectivity:"",
   plan:"",
   protectionDecision:null,
@@ -541,9 +1031,11 @@ const initialState = () => ({
   selectedPromoIds:[],
   _cartId:null
 });
+
 let state = initialState();
-let asurionLines = [];
 let cart = [];
+let asurionLines = [];
+let screenHistory = ["catalogView"];
 
 function currentDevice(){ return DEVICES[state.deviceId] || null; }
 function isPhone(){ return state.category === "phones"; }
@@ -552,6 +1044,28 @@ function isWatch(){ return state.category === "watches"; }
 function isByod(){ return state.orderType === "byod"; }
 function money(n){ return "$" + Number(n || 0).toFixed(0); }
 function hasProPhoneOnAccount(){ return true; }
+
+function setVisibleView(viewId){
+  ["catalogView","configuratorView","reviewView","successView","asurionView"].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.classList.toggle("hidden", id !== viewId);
+  });
+  $("topBackBtn").classList.toggle("hidden", viewId === "catalogView");
+}
+function showOnly(viewId, push=true){
+  setVisibleView(viewId);
+  if(push){
+    if(screenHistory[screenHistory.length-1] !== viewId) screenHistory.push(viewId);
+    try { history.pushState({viewId}, "", "#" + viewId); } catch(e) {}
+  }
+}
+function goBackScreen(){
+  if(screenHistory.length > 1){
+    screenHistory.pop();
+    const prev = screenHistory[screenHistory.length-1];
+    setVisibleView(prev);
+  }
+}
 
 function getTradeCatalog(){
   if(isTablet()) return TABLET_TRADE_CATALOG;
@@ -568,26 +1082,25 @@ function getTradeValue(make, model){
   const values = getTradeValues();
   return values[make] && values[make][model] !== undefined ? values[make][model] : 0;
 }
-function tradeTotal(){
-  return state.tradeRows.reduce((s,r)=>s + (getTradeValue(r.make, r.model) || 0), 0);
-}
-function availablePromos(){ return PROMOS[state.deviceId] || []; }
-function selectedPromos(){ return availablePromos().filter(p => state.selectedPromoIds.includes(p.id)); }
-function appliedPromo(){
-  const elig = selectedPromos().filter(p => p.eligible(state));
-  return elig.length ? elig.sort((a,b)=>b.totalCredit-a.totalCredit)[0] : null;
-}
-function appliedPromoMonthlyCredit(){ const p = appliedPromo(); return p ? p.totalCredit / 36 : 0; }
-function ensureStateCartId(){
-  if(!state._cartId) state._cartId = "cart_" + Date.now() + "_" + Math.random().toString(36).slice(2,7);
-}
-function getSnapshotTradeTotal(snapshot){
-  const values = snapshot.category === "tablets" ? TABLET_TRADE_VALUES : snapshot.category === "watches" ? WATCH_TRADE_VALUES : PHONE_TRADE_VALUES;
-  return (snapshot.tradeRows || []).reduce((sum, row) => {
+function tradeTotalFromSnapshot(snapshot){
+  const values = snapshot.category==="tablets" ? TABLET_TRADE_VALUES : snapshot.category==="watches" ? WATCH_TRADE_VALUES : PHONE_TRADE_VALUES;
+  return (snapshot.tradeRows || []).reduce((sum,row)=>{
     if(!row.make || !row.model) return sum;
     const v = values[row.make] && values[row.make][row.model] !== undefined ? values[row.make][row.model] : 0;
     return sum + v;
-  }, 0);
+  },0);
+}
+function tradeTotal(){ return tradeTotalFromSnapshot(state); }
+function availablePromos(){ return PROMOS[state.deviceId] || []; }
+function selectedPromos(){ return availablePromos(); }
+function appliedPromo(){
+  const elig = availablePromos().filter(p => p.eligible(state));
+  return elig.length ? elig.sort((a,b)=>b.totalCredit-a.totalCredit)[0] : null;
+}
+function appliedPromoMonthlyCredit(){ const p = appliedPromo(); return p ? p.totalCredit / 36 : 0; }
+
+function ensureStateCartId(){
+  if(!state._cartId) state._cartId = "cart_" + Date.now() + "_" + Math.random().toString(36).slice(2,7);
 }
 function snapshotCurrentState(){
   ensureStateCartId();
@@ -600,108 +1113,40 @@ function upsertCartFromState(){
   if(idx >= 0) cart[idx] = snap;
   else cart.push(snap);
 }
-function resetForNewDevice(){
-  const keepCategory = state.category;
+function resetForNewDevice(categoryOverride=null){
+  const keepCategory = categoryOverride || state.category;
   state = initialState();
   state.category = keepCategory;
 }
-function renderCartItems(){
-  const wrap = $("cartItemsList");
-  const banner = $("cartSummaryBanner");
-  if(!wrap) return;
-  if(!cart.length){
-    wrap.innerHTML = '<div class="cart-item-card"><div class="cart-item-title">No devices added yet</div><div class="cart-item-meta">Add a phone, tablet, or watch from the catalog to start building the cart.</div></div>';
-    banner.innerHTML = '<strong>Cart is empty.</strong> Add a device to see pricing, setup, and category details here.';
-    return;
-  }
 
-  const totals = cart.reduce((acc, item) => {
-    const d = DEVICES[item.deviceId] || {};
-    const total = (d.basePrice || 0) * (item.quantity || 0);
-    const monthly = item.monthly ? ((d.basePrice || 0) * item.monthly) / 36 : 0;
-    const promoValue = item.category === "phones" ? (() => {
-      const promos = (PROMOS[item.deviceId] || []).filter(p => (item.selectedPromoIds || []).includes(p.id) && p.eligible(item));
-      const best = promos.sort((a,b)=>b.totalCredit-a.totalCredit)[0];
-      return best ? best.totalCredit : 0;
-    })() : 0;
-    acc.total += total;
-    acc.monthly += monthly;
-    acc.promo += promoValue;
-    acc.lines += item.quantity || 0;
-    return acc;
-  }, {total:0, monthly:0, promo:0, lines:0});
-
-  banner.innerHTML = `<strong>${cart.length} device group(s)</strong> in cart • ${totals.lines} total device(s) • ${money(totals.total)} total device value • ${money(totals.monthly)} monthly before promo • ${money(totals.promo)} total promo`;
-
-  wrap.innerHTML = cart.map((item, idx) => {
-    const d = DEVICES[item.deviceId] || {};
-    const monthlyBase = item.monthly ? ((d.basePrice || 0) * item.monthly) / 36 : 0;
-    const promoValue = item.category === "phones" ? (() => {
-      const promos = (PROMOS[item.deviceId] || []).filter(p => (item.selectedPromoIds || []).includes(p.id) && p.eligible(item));
-      const best = promos.sort((a,b)=>b.totalCredit-a.totalCredit)[0];
-      return best ? best.totalCredit : 0;
-    })() : 0;
-    const tradeEstimate = getSnapshotTradeTotal(item);
-    const secondary = item.category === "tablets" ? (item.dataOption || "—") : item.category === "watches" ? (item.connectivity || "—") : (item.portDecision === "yes" ? item.portCount + " port-in" : "No port-in");
-    return `
-      <div class="cart-item-card">
-        <div class="cart-item-top">
-          <div>
-            <div class="cart-item-title">${idx+1}. ${d.name || "Device"}</div>
-            <div class="cart-item-meta">${item.category} • ${item.orderType === "byod" ? "BYOD" : "Purchase"} • Qty ${item.quantity}</div>
-          </div>
-          <div class="cart-pill">${item.plan || "No plan"}</div>
-        </div>
-
-        <div class="cart-metrics">
-          <div class="cart-metric"><div class="k">Total</div><div class="v">${money((d.basePrice||0)*(item.quantity||0))}</div></div>
-          <div class="cart-metric"><div class="k">Monthly</div><div class="v">${money(monthlyBase)}</div></div>
-          <div class="cart-metric"><div class="k">Promo</div><div class="v">${money(promoValue)}</div></div>
-        </div>
-
-        <div class="cart-detail-grid">
-          <div class="cart-detail"><strong>Color:</strong> ${item.color || "—"}</div>
-          <div class="cart-detail"><strong>Storage:</strong> ${item.storage || "—"}</div>
-          <div class="cart-detail"><strong>SIM:</strong> ${item.sim || "—"}</div>
-          <div class="cart-detail"><strong>Data / Connectivity:</strong> ${secondary}</div>
-          <div class="cart-detail"><strong>Protection:</strong> ${item.protectionDecision === "yes" ? item.protectionCount + " device(s)" : ((item.category !== "phones" && hasProPhoneOnAccount()) || item.plan==="Pro" ? "Included" : "No")}</div>
-          <div class="cart-detail"><strong>Trade-in estimate:</strong> ${money(tradeEstimate)}</div>
-        </div>
-      </div>`;
-  }).join("");
-}
-
-function setVisibleView(viewId){
-  ["catalogView","configuratorView","reviewView","successView","asurionView"].forEach(id=>{
-    const el = document.getElementById(id);
-    if(!el) return;
-    el.classList.toggle("hidden", id !== viewId);
-  });
-}
-function showOnly(viewId, pushStateEntry=true){
-  setVisibleView(viewId);
-  if(pushStateEntry){
-    try { history.pushState({viewId}, "", "#" + viewId); } catch(e) {}
-  }
-}
-
-function renderBrandTabs(){
-  const brands = CATALOG[state.category].brands;
-  $("brandTabs").innerHTML = brands.map(b => `<div class="catalog-brand-tab ${state.brandFilter===b?'active':''}" data-brand="${b}">${b}</div>`).join("");
-  document.querySelectorAll(".catalog-brand-tab").forEach(tab => {
-    tab.onclick = ()=>{ state.brandFilter = tab.dataset.brand; renderCatalog(); };
-  });
-}
-
-function renderCatalog(){
-  document.querySelectorAll(".device-type-tab").forEach(btn=>{
-    btn.classList.toggle("active", btn.dataset.category === state.category);
+function renderTypeTabs(){
+  const defs = [
+    {id:"phones", label:"Phones"},
+    {id:"tablets", label:"Tablets"},
+    {id:"watches", label:"Watches"}
+  ];
+  $("typeTabs").innerHTML = defs.map(d => `<button class="type-tab ${state.category===d.id?'active':''}" data-category="${d.id}">${d.label}</button>`).join("");
+  document.querySelectorAll(".type-tab").forEach(btn=>{
     btn.onclick = ()=>{
       state.category = btn.dataset.category;
       state.brandFilter = "All brands";
       renderCatalog();
     };
   });
+}
+function renderBrandChips(){
+  const brands = CATALOG[state.category].brands;
+  $("brandChips").innerHTML = brands.map(b => `<button class="filter-chip ${state.brandFilter===b?'active':''}" data-brand="${b}">${b}</button>`).join("");
+  document.querySelectorAll(".filter-chip").forEach(btn=>{
+    btn.onclick = ()=>{
+      state.brandFilter = btn.dataset.brand;
+      renderCatalog();
+    };
+  });
+}
+function renderCatalog(){
+  renderTypeTabs();
+  renderBrandChips();
 
   const banner = $("catalogBanner");
   if(isTablet()){
@@ -709,51 +1154,46 @@ function renderCatalog(){
     banner.textContent = "Select a tablet or choose Bring your tablet to continue.";
   } else if(isWatch()){
     banner.classList.remove("hidden");
-    banner.textContent = "Select a watch to configure purchase quantity, payment type, connectivity, trade-in, and protection.";
+    banner.textContent = "Select a watch to configure payment, connectivity, trade-in, and protection.";
   } else {
     banner.classList.add("hidden");
     banner.textContent = "";
   }
 
-  renderBrandTabs();
   let items = CATALOG[state.category].items;
-  if(state.brandFilter !== "All brands"){
-    items = items.filter(i => i.brand === state.brandFilter);
-  }
+  if(state.brandFilter !== "All brands") items = items.filter(i => i.brand === state.brandFilter);
 
   $("catalogGrid").innerHTML = items.map(item => `
     <div class="catalog-card" data-id="${item.id}" data-type="${item.type}">
-      <div class="catalog-card-inner">
+      <div class="catalog-card-body">
         <div class="catalog-media">
           <div class="catalog-brand">${item.brand}</div>
           <div class="catalog-name">${item.name}</div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
-            <div style="width:160px;height:160px;display:flex;align-items:center;justify-content:center">${item.thumb}</div>
-            <div style="display:flex;gap:5px;min-height:8px">
-              <span style="width:8px;height:8px;border-radius:50%;background:#2E3034;display:inline-block"></span>
-              <span style="width:8px;height:8px;border-radius:50%;background:#D7D7D7;display:inline-block"></span>
-              <span style="width:8px;height:8px;border-radius:50%;background:#CFBEA8;display:inline-block"></span>
-            </div>
+          <div style="width:160px;height:160px;display:flex;align-items:center;justify-content:center">${item.thumb}</div>
+          <div class="swatches">
+            <span class="swatch" style="background:#2E3034"></span>
+            <span class="swatch" style="background:#D7D7D7"></span>
+            <span class="swatch" style="background:#CFBEA8"></span>
           </div>
-          ${item.promo ? `<div class="promo-pill">${item.promo}</div>` : ``}
+          ${item.promo ? `<div class="offer-pill">${item.promo}</div>` : ``}
         </div>
-        <div class="catalog-body-card">
-          <div class="small">Starting at</div>
-          ${item.strike ? `<div class="strike">${item.strike}</div>` : ``}
-          <div class="main-price">${item.price}${item.price!=="—" ? `<span>/mo</span>` : ``}</div>
-          <div class="small">with $0.00 down</div>
-          <div class="small" style="margin-top:10px">${item.finance}</div>
+        <div class="catalog-pricing">
+          <div class="catalog-small">Starting at</div>
+          ${item.strike ? `<div class="catalog-strike">${item.strike}</div>` : ``}
+          <div class="catalog-price">${item.price}${item.price!=="—" ? `<span>/mo</span>` : ``}</div>
+          <div class="catalog-small">with $0.00 down</div>
+          <div class="catalog-small" style="margin-top:10px">${item.finance}</div>
         </div>
       </div>
     </div>
   `).join("");
 
-  document.querySelectorAll(".catalog-card").forEach(card => {
+  document.querySelectorAll(".catalog-card").forEach(card=>{
     card.onclick = ()=>{
       const id = card.dataset.id;
       const type = card.dataset.type;
       state = initialState();
-      state.category = document.querySelector(".device-type-tab.active").dataset.category;
+      state.category = document.querySelector(".type-tab.active").dataset.category;
       state.brandFilter = "All brands";
       state.deviceId = id;
       state.orderType = type;
@@ -761,7 +1201,6 @@ function renderCatalog(){
       state.color = d.colors[0] || "";
       state.storage = d.storages[0] || "";
       state.sim = d.sims[0] || "";
-      state.dataOption = d.dataOptions ? d.dataOptions[0] : "";
       state.connectivity = d.connectivity ? d.connectivity[0] : "";
       showOnly("configuratorView");
       renderConfigurator();
@@ -771,23 +1210,29 @@ function renderCatalog(){
 }
 
 function syncTradeRows(){
-  if(isByod()){ state.tradeRows = []; state.tradeDecision = "no"; state.tradeCount = 0; return; }
+  if(isByod()){
+    state.tradeRows = [];
+    state.tradeDecision = "no";
+    state.tradeCount = 0;
+    return;
+  }
   if(state.tradeDecision !== "yes"){ state.tradeRows = []; return; }
   const rows = [];
   for(let i=0;i<state.tradeCount;i++){
-    if(isPhone() || isTablet()) rows.push(state.tradeRows[i] || {make:"", model:"", storage:""});
-    else rows.push(state.tradeRows[i] || {make:"", model:""});
+    if(isWatch()) rows.push(state.tradeRows[i] || {make:"", model:""});
+    else rows.push(state.tradeRows[i] || {make:"", model:"", storage:""});
   }
   state.tradeRows = rows;
 }
 
 function updatePlanUi(){
   $("planStandard").classList.toggle("active", state.plan==="Standard");
-  $("planPro").classList.toggle("active", state.plan==="Pro" || state.plan==="Tablet Plan");
+  $("planPro").classList.toggle("active", state.plan==="Pro" || state.plan==="Tablet Plan" || state.plan==="Watch Plan ($10)");
 }
 function updateToggle(id, value){
   [...$(id).querySelectorAll("button")].forEach(btn=>btn.classList.toggle("active", btn.dataset.value===value));
 }
+function setStep(id, value){ const el = $(id); if(el) el.textContent = String(value); }
 
 function renderPromoSection(){
   if(!isPhone()){
@@ -797,41 +1242,41 @@ function renderPromoSection(){
   $("promoPanel").classList.remove("hidden");
   const promos = availablePromos();
   if(!promos.length){
-    $("promoList").innerHTML = '<div class="info">No promo structure is defined for this device.</div>';
-    $("promoResult").classList.add("hidden");
+    $("promoList").innerHTML = '<div class="promo-info-card"><div class="promo-title">No promotional offers are currently listed for this device.</div></div>';
+    $("promoResultCard").classList.add("hidden");
     return;
   }
-  $("promoList").innerHTML = promos.map(p => {
-    const checked = state.selectedPromoIds.includes(p.id) ? 'checked' : '';
-    const eligible = p.eligible(state);
-    return `<label class="promo-option">
-      <input type="checkbox" data-promo-id="${p.id}" ${checked}>
-      <div><div class="promo-title">${p.title}</div><div class="promo-desc">${p.desc}</div><div class="hint" style="margin-top:6px">${eligible ? 'Currently eligible' : 'Not yet eligible with current configuration'}</div></div>
-    </label>`;
+
+  const eligible = promos.filter(p => p.eligible(state)).sort((a,b)=>b.totalCredit-a.totalCredit);
+  const bestEligible = eligible[0] || null;
+
+  $("promoList").innerHTML = promos.map((p, idx) => {
+    const isBest = bestEligible ? bestEligible.id === p.id : idx === 0;
+    const badge = bestEligible
+      ? (isBest ? '<div class="promo-badge">Best eligible</div>' : '<div class="promo-badge">Available offer</div>')
+      : (idx === 0 ? '<div class="promo-badge">Best value</div>' : '<div class="promo-badge">Available offer</div>');
+    return `
+      <div class="promo-info-card ${isBest ? "best" : ""}">
+        <div class="promo-header">
+          <div class="promo-title">${p.title}</div>
+          ${badge}
+        </div>
+        <ul class="promo-bullets">
+          ${(p.details || []).map(line => `<li>${line}</li>`).join("")}
+        </ul>
+        <a href="javascript:void(0)" class="promo-link">Promo details</a>
+      </div>
+    `;
   }).join("");
-  document.querySelectorAll("#promoList input[type=checkbox]").forEach(cb=>{
-    cb.onchange = ()=>{
-      const id = cb.dataset.promoId;
-      if(cb.checked){
-        if(!state.selectedPromoIds.includes(id)) state.selectedPromoIds.push(id);
-      } else {
-        state.selectedPromoIds = state.selectedPromoIds.filter(x => x !== id);
-      }
-      renderConfigurator();
-    };
-  });
-  if(state.selectedPromoIds.length){
-    const p = appliedPromo();
-    $("promoResult").classList.remove("hidden");
-    if(p){
-      $("promoAppliedTitle").textContent = `${p.title} applied`;
-      $("promoAppliedMeta").textContent = `Best eligible promo selected automatically. Total credit ${money(p.totalCredit)} across 36 months (${money(appliedPromoMonthlyCredit())}/mo).`;
-    } else {
-      $("promoAppliedTitle").textContent = "No selected promo is currently eligible";
-      $("promoAppliedMeta").textContent = "Select the required payment, port-in, and trade-in configuration to qualify for the chosen promo.";
-    }
+
+  $("promoResultCard").classList.remove("hidden");
+  if(bestEligible){
+    $("promoAppliedTitle").textContent = "Best eligible promotion identified automatically";
+    $("promoAppliedMeta").textContent = `${bestEligible.title}. Estimated value ${money(bestEligible.totalCredit)} across 36 months (${money(bestEligible.totalCredit/36)}/mo).`;
   } else {
-    $("promoResult").classList.add("hidden");
+    const reference = promos[0];
+    $("promoAppliedTitle").textContent = "Promotions shown for reference";
+    $("promoAppliedMeta").textContent = `${reference.title}. Update payment, port-in, and trade-in details to see whether the device becomes eligible.`;
   }
 }
 
@@ -839,21 +1284,18 @@ function renderTradeRows(){
   syncTradeRows();
   const wrap = $("tradeRows");
   if(state.tradeDecision !== "yes" || state.tradeCount===0){
-    wrap.classList.add("hidden");
     wrap.innerHTML = "";
     return;
   }
-  wrap.classList.remove("hidden");
   const tradeCatalog = getTradeCatalog();
   wrap.innerHTML = state.tradeRows.map((row, idx)=>{
     const models = tradeCatalog[row.make] || [""];
     const val = getTradeValue(row.make, row.model);
-    const isWatchRow = isWatch();
     return `
-      <div class="trade-row">
-        <div class="trade-row-title">${isWatch() ? "Watch trade-in device" : "Trade-in device"} ${idx+1}</div>
-        <div class="hint" style="margin-bottom:10px">Estimated value: ${val===null ? "—" : "$"+val}</div>
-        <div class="${isWatchRow ? 'grid-2' : 'grid-3'}">
+      <div class="trade-card">
+        <div class="trade-title">${isWatch() ? "Watch trade-in device" : "Trade-in device"} ${idx+1}</div>
+        <div class="trade-copy">Estimated value: ${val===null ? "—" : "$"+val}</div>
+        <div class="${isWatch() ? 'grid-2' : 'grid-3'}" style="margin-top:12px">
           <div class="field">
             <label>Make</label>
             <select data-trade-idx="${idx}" data-trade-field="make">
@@ -866,14 +1308,15 @@ function renderTradeRows(){
               ${models.map(model=>`<option value="${model}" ${row.model===model?"selected":""}>${model || "Select model"}</option>`).join("")}
             </select>
           </div>
-          ${isWatchRow ? `` : `<div class="field">
+          ${isWatch() ? "" : `<div class="field">
             <label>Storage</label>
             <select data-trade-idx="${idx}" data-trade-field="storage">
               ${STORAGE_OPTIONS.map(storage=>`<option value="${storage}" ${row.storage===storage?"selected":""}>${storage || "Select storage"}</option>`).join("")}
             </select>
           </div>`}
         </div>
-      </div>`;
+      </div>
+    `;
   }).join("");
 
   wrap.querySelectorAll("select").forEach(sel=>{
@@ -901,23 +1344,50 @@ function renderConfigurator(){
   $("selectedName").textContent = d ? d.name : "No device selected";
   $("selectedMeta").textContent = d ? `${d.brand} • ${d.sku}` : "Choose a device from the catalog.";
 
-  $("qtyTitle").textContent = isTablet() ? (isByod() ? "How many tablets are you bringing?" : "Tablet quantity") : isWatch() ? "Watch quantity" : isByod() ? "How many devices are you bringing?" : "Purchase quantity";
+  $("qtyTitle").textContent = isTablet() ? (isByod() ? "How many tablets are you bringing?" : "Tablet quantity") : isWatch() ? (isByod() ? "How many watches are you bringing?" : "Watch quantity") : isByod() ? "How many devices are you bringing?" : "Purchase quantity";
   $("qtySub").textContent = isTablet() ? "Enter how many tablets the customer wants to buy." : isWatch() ? "Enter how many watches the customer wants to buy." : isByod() ? "Capture the number of customer-owned devices that will be activated." : "Enter how many devices the customer wants to buy.";
-  $("qtyLabel").textContent = isTablet() ? (isByod() ? "BYOT quantity" : "Tablets being purchased") : isWatch() ? "Watches being purchased" : (isByod() ? "BYOD quantity" : "Devices being purchased");
+  $("qtyLabel").textContent = isTablet() ? (isByod() ? "BYOT quantity" : "Tablets being purchased") : isWatch() ? (isByod() ? "BYOW quantity" : "Watches being purchased") : (isByod() ? "BYOD quantity" : "Devices being purchased");
   $("qtyValue").textContent = state.quantity;
   $("baseTotal").textContent = money((d?.basePrice || 0) * state.quantity);
 
-  $("attrPanel").classList.toggle("hidden", isByod() && !isTablet());
-  $("dataPanel").classList.toggle("hidden", !isTablet());
+  const isPhoneByod = isPhone() && isByod();
+  $("attrPanel").classList.toggle("hidden", isPhoneByod);
+  $("paymentPanel").classList.toggle("hidden", isPhoneByod);
   $("connectivityPanel").classList.toggle("hidden", !isWatch());
   $("portPanel").classList.toggle("hidden", !isPhone());
-  $("promoPanel").classList.toggle("hidden", !isPhone());
-  const hideTradeForByod = isByod();
-  $("tradeStep").closest(".panel").classList.toggle("hidden", hideTradeForByod);
+  $("tradePanel").classList.toggle("hidden", isByod());
+
+  if(isPhoneByod){
+    setStep("promoStep",2);
+    setStep("planStep",3);
+    setStep("protectionStep",4);
+    setStep("portStep",5);
+  } else if(isPhone()){
+    setStep("attrStep",2);
+    setStep("promoStep",3);
+    setStep("paymentStep",4);
+    setStep("planStep",5);
+    setStep("protectionStep",6);
+    setStep("portStep",7);
+    setStep("tradeStep",8);
+  } else if(isTablet()){
+    setStep("attrStep",2);
+    setStep("paymentStep",3);
+    setStep("planStep",4);
+    setStep("protectionStep",5);
+    setStep("tradeStep",6);
+  } else if(isWatch()){
+    setStep("attrStep",2);
+    setStep("paymentStep",3);
+    setStep("connectivityStep",4);
+    setStep("planStep",5);
+    setStep("protectionStep",6);
+    setStep("tradeStep",7);
+  }
 
   $("storageLabel").textContent = isWatch() ? "Watch type" : "Storage";
-  $("thirdAttrLabel").textContent = isWatch() ? "SIM Type" : "SIM Type";
-  $("paymentHeading").textContent = "Payment type";
+  $("attrSub").textContent = isWatch() ? "Choose the watch color, watch type, and SIM type." : "Choose the applicable device attributes.";
+
   $("paymentSub").textContent = isWatch() ? "Split the quantity between Monthly and Paid in full." : "Split the quantity between Monthly and Full Price.";
   $("monthlyLabel").textContent = "Monthly";
   $("retailLabel").textContent = isWatch() ? "Paid in full" : "Full Price";
@@ -925,7 +1395,6 @@ function renderConfigurator(){
   $("colorSelect").innerHTML = (d?.colors || []).map(v=>`<option value="${v}" ${state.color===v?"selected":""}>${v}</option>`).join("");
   $("storageSelect").innerHTML = (d?.storages || []).map(v=>`<option value="${v}" ${state.storage===v?"selected":""}>${v}</option>`).join("");
   $("simSelect").innerHTML = (d?.sims || []).map(v=>`<option value="${v}" ${state.sim===v?"selected":""}>${v}</option>`).join("");
-  $("dataOptionSelect").innerHTML = ((d?.dataOptions || []).map(v=>`<option value="${v}" ${state.dataOption===v?"selected":""}>${v}</option>`).join(""));
   $("connectivitySelect").innerHTML = ((d?.connectivity || []).map(v=>`<option value="${v}" ${state.connectivity===v?"selected":""}>${v}</option>`).join(""));
 
   $("monthlyValue").textContent = state.monthly;
@@ -933,37 +1402,37 @@ function renderConfigurator(){
   const payOk = isByod() ? true : (state.monthly + state.retail === state.quantity && state.quantity>0);
   $("paymentBadge").textContent = isByod() ? "BYOD" : (payOk ? "Balanced" : "Needs adjustment");
   $("paymentGrid").style.display = isByod() ? "none" : "grid";
-  $("paymentStatus").className = "status " + (payOk ? "good" : "bad");
-  $("paymentStatus").textContent = isByod() ? (isTablet() ? "BYOT does not require device financing selection." : "BYOD does not require a device payment split.") : `Monthly (${state.monthly}) + ${isWatch() ? "Paid in full" : "Full Price"} (${state.retail}) = ${state.monthly+state.retail} of ${state.quantity} devices.`;
+  $("paymentStatus").className = payOk ? "status-banner" : "warn-banner";
+  $("paymentStatus").textContent = isByod() ? (isTablet() ? "BYOT does not require device financing selection." : isWatch() ? "BYOW does not require device financing selection." : "BYOD does not require a device payment split.") : `Monthly (${state.monthly}) + ${isWatch() ? "Paid in full" : "Full Price"} (${state.retail}) = ${state.monthly+state.retail} of ${state.quantity} devices.`;
 
   updatePlanUi();
   if(isTablet()){
     $("planHeading").textContent = "Tablet plan";
     $("planSub").textContent = "Only one tablet plan applies for this configuration.";
-    $("planStandard").style.display = "none";
-    $("planPro").style.display = "block";
-    $("planPro").querySelector(".plan-title").textContent = "Tablet Plan";
-    $("planPro").querySelector(".plan-desc").textContent = "Single applicable tablet plan for this configuration.";
+    $("planStandard").classList.add("hidden");
+    $("planPro").classList.remove("hidden");
+    $("planPro").querySelector(".plan-name").textContent = "Tablet Plan";
+    $("planPro").querySelector(".plan-copy").textContent = "Single applicable tablet plan for this configuration.";
     state.plan = "Tablet Plan";
     $("planPro").classList.add("active");
   } else if(isWatch()){
     $("planHeading").textContent = "Watch plan";
     $("planSub").textContent = "Only one watch plan applies for this configuration.";
-    $("planStandard").style.display = "none";
-    $("planPro").style.display = "block";
-    $("planPro").querySelector(".plan-title").textContent = "Watch Plan";
-    $("planPro").querySelector(".plan-desc").textContent = "$10 watch plan for each selected watch.";
+    $("planStandard").classList.add("hidden");
+    $("planPro").classList.remove("hidden");
+    $("planPro").querySelector(".plan-name").textContent = "Watch Plan";
+    $("planPro").querySelector(".plan-copy").textContent = "$10 watch plan for each selected watch.";
     state.plan = "Watch Plan ($10)";
     $("planPro").classList.add("active");
   } else {
     $("planHeading").textContent = "Plan type";
     $("planSub").textContent = "Choose Standard or Pro.";
-    $("planStandard").style.display = "block";
-    $("planPro").style.display = "block";
-    $("planStandard").querySelector(".plan-title").textContent = "Standard";
-    $("planStandard").querySelector(".plan-desc").textContent = "Standard plan with optional XMC.";
-    $("planPro").querySelector(".plan-title").textContent = "Pro";
-    $("planPro").querySelector(".plan-desc").textContent = "XMC Plus is included automatically.";
+    $("planStandard").classList.remove("hidden");
+    $("planPro").classList.remove("hidden");
+    $("planStandard").querySelector(".plan-name").textContent = "Standard";
+    $("planStandard").querySelector(".plan-copy").textContent = "Standard plan with optional XMC.";
+    $("planPro").querySelector(".plan-name").textContent = "Pro";
+    $("planPro").querySelector(".plan-copy").textContent = "XMC Plus is included automatically.";
   }
 
   const qtyBanner = $("qtyBanner");
@@ -977,10 +1446,11 @@ function renderConfigurator(){
 
   const protectionIncluded = (isTablet() || isWatch()) ? hasProPhoneOnAccount() : state.plan==="Pro";
   $("proIncludedBanner").classList.toggle("hidden", !protectionIncluded);
-  $("proIncludedBanner").innerHTML = `<div class="info-big">${(isTablet() || isWatch()) ? "Device protection is included because a phone on the account is on the Pro plan." : "XMC Plus is included automatically with Pro plan."}</div>`;
+  $("proIncludedBanner").textContent = (isTablet() || isWatch()) ? "Device protection is included because a phone on the account is on the Pro plan." : "XMC Plus is included automatically with Pro plan.";
   $("protectionBlock").classList.toggle("hidden", protectionIncluded);
   updateToggle("protectionToggle", state.protectionDecision);
   $("protectionCountWrap").classList.toggle("hidden", state.protectionDecision!=="yes");
+  $("protectionValue").textContent = state.protectionCount;
 
   updateToggle("portToggle", state.portDecision);
   $("portCountWrap").classList.toggle("hidden", state.portDecision!=="yes");
@@ -989,14 +1459,13 @@ function renderConfigurator(){
   updateToggle("tradeToggle", state.tradeDecision);
   $("tradeCountWrap").classList.toggle("hidden", state.tradeDecision!=="yes");
   $("tradeValue").textContent = state.tradeCount;
-
   $("tradeHeading").textContent = isTablet() ? "Tablet trade-in intent" : isWatch() ? "Watch trade-in intent" : "Trade-in intent";
   $("tradeSub").textContent = isTablet() ? "Capture tablet trade-in quantity and tablet make, model, and storage details." : isWatch() ? "Capture watch trade-in quantity and watch make and model details." : "Capture trade-in quantity and device make, model, and storage details.";
 
   renderTradeRows();
   renderPromoSection();
 
-  $("tradeSkipHint").classList.toggle("hidden", isByod() || !(state.tradeDecision==="yes" && state.tradeCount>0));
+  $("tradeSkipCard").classList.toggle("hidden", isByod() || !(state.tradeDecision==="yes" && state.tradeCount>0));
   $("tradeSkipBanner").classList.add("hidden");
 
   const monthlyBase = state.monthly ? ((d?.basePrice || 0) * state.monthly)/36 : 0;
@@ -1009,41 +1478,86 @@ function renderConfigurator(){
   const tradeOk = isByod() ? true : (state.tradeDecision!==null && (state.tradeDecision==="no" || state.tradeCount<=state.quantity));
   const protectionOk = protectionIncluded ? true : (state.protectionDecision!==null && (state.protectionDecision==="no" || state.protectionCount<=state.quantity));
   const portOk = !isPhone() ? true : (state.portDecision!==null && (state.portDecision==="no" || state.portCount<=state.quantity));
-  const dataOk = !isTablet() || !!state.dataOption;
   const connectivityOk = !isWatch() || !!state.connectivity;
-  const ready = state.quantity>0 && !!state.plan && payOk && tradeOk && protectionOk && portOk && dataOk && connectivityOk;
-  $("summaryStatus").textContent = ready ? "Ready for review" : "In progress";
+  const ready = state.quantity>0 && !!state.plan && payOk && tradeOk && protectionOk && portOk && connectivityOk;
+  $("summaryStatusBanner").textContent = ready ? "Ready for review" : "In progress";
   $("continueBtn").disabled = !ready;
   $("continueBtn").style.opacity = ready ? "1" : ".55";
+}
+
+function promoValueForSnapshot(item){
+  if(item.category !== "phones") return 0;
+  const promos = (PROMOS[item.deviceId] || []).filter(p => p.eligible(item));
+  const best = promos.sort((a,b)=>b.totalCredit-a.totalCredit)[0];
+  return best ? best.totalCredit : 0;
+}
+
+function renderCartItems(){
+  const wrap = $("cartItemsList");
+  const banner = $("cartSummaryBanner");
+  if(!cart.length){
+    banner.innerHTML = "<strong>Cart is empty.</strong> Add a phone, tablet, or watch from the catalog to start building the cart.";
+    wrap.innerHTML = `<div class="cart-item"><div class="cart-name">No devices added yet</div><div class="cart-meta">Build a device group in the configurator, then add it to the cart.</div></div>`;
+    return;
+  }
+
+  const totals = cart.reduce((acc,item)=>{
+    const d = DEVICES[item.deviceId] || {};
+    acc.total += (d.basePrice || 0) * (item.quantity || 0);
+    acc.monthly += item.monthly ? ((d.basePrice || 0) * item.monthly)/36 : 0;
+    acc.trade += tradeTotalFromSnapshot(item);
+    acc.promo += promoValueForSnapshot(item);
+    acc.lines += item.quantity || 0;
+    return acc;
+  }, {total:0, monthly:0, trade:0, promo:0, lines:0});
+
+  banner.innerHTML = `<strong>${cart.length} device group(s)</strong> in cart • ${totals.lines} total device(s) • ${money(totals.total)} total value • ${money(totals.monthly)} monthly before promo • ${money(totals.promo)} promo`;
+
+  wrap.innerHTML = cart.map((item, idx)=>{
+    const d = DEVICES[item.deviceId] || {};
+    const monthlyBase = item.monthly ? ((d.basePrice || 0) * item.monthly)/36 : 0;
+    const promoValue = promoValueForSnapshot(item);
+    const tradeEstimate = tradeTotalFromSnapshot(item);
+    const detailValue = item.category==="watches" ? (item.connectivity || "—") : "N/A";
+    const protectionIncluded = (item.category==="tablets" || item.category==="watches") ? hasProPhoneOnAccount() : item.plan==="Pro";
+
+    return `
+      <div class="cart-item">
+        <div class="cart-top">
+          <div>
+            <div class="cart-name">${idx+1}. ${d.name || "Device"}</div>
+            <div class="cart-meta">${item.category} • ${item.orderType==="byod" ? "BYOD" : "Purchase"} • Qty ${item.quantity}</div>
+          </div>
+          <div class="cart-pill">${item.plan || "No plan"}</div>
+        </div>
+
+        <div class="cart-metrics">
+          <div class="cart-metric"><div class="k">Total</div><div class="v">${money((d.basePrice || 0) * (item.quantity || 0))}</div></div>
+          <div class="cart-metric"><div class="k">Monthly</div><div class="v">${money(monthlyBase)}</div></div>
+          <div class="cart-metric"><div class="k">Promo</div><div class="v">${money(promoValue)}</div></div>
+        </div>
+
+        <div class="cart-detail-grid">
+          <div class="cart-detail"><strong>Color:</strong> ${item.color || "—"}</div>
+          <div class="cart-detail"><strong>Storage / Type:</strong> ${item.storage || "—"}</div>
+          <div class="cart-detail"><strong>SIM:</strong> ${item.sim || "—"}</div>
+          <div class="cart-detail"><strong>Connectivity / Details:</strong> ${detailValue}</div>
+          <div class="cart-detail"><strong>Protection:</strong> ${protectionIncluded ? "Included" : (item.protectionDecision==="yes" ? item.protectionCount + " device(s)" : "No")}</div>
+          <div class="cart-detail"><strong>Trade-in estimate:</strong> ${money(tradeEstimate)}</div>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  $("orderTotal").textContent = money(totals.total);
+  $("orderMonthly").textContent = money(totals.monthly);
+  $("orderTrade").textContent = money(totals.trade);
+  $("orderPromo").textContent = money(totals.promo);
 }
 
 function renderReview(){
   upsertCartFromState();
   renderCartItems();
-  const d = currentDevice();
-  $("reviewProduct").textContent = d ? d.name : "—";
-  $("reviewQty").textContent = state.quantity;
-  $("reviewColor").textContent = state.color || "—";
-  $("reviewStorage").textContent = state.storage || "—";
-  $("reviewSim").textContent = state.sim || "—";
-  $("reviewDataOption").textContent = isTablet() ? (state.dataOption || "—") : isWatch() ? (state.connectivity || "—") : "N/A";
-  $("reviewPlan").textContent = state.plan || "—";
-  const protectionIncluded = (isTablet() || isWatch()) ? hasProPhoneOnAccount() : state.plan==="Pro";
-  $("reviewProtection").textContent = protectionIncluded ? "XMC Included Automatically" : (state.protectionDecision==="yes" ? `${state.protectionCount} line(s)` : "No");
-  $("reviewPort").textContent = isPhone() ? (state.portDecision==="yes" ? state.portCount : 0) : "N/A";
-  $("reviewTrade").textContent = state.tradeDecision==="yes" ? state.tradeCount : 0;
-  $("reviewTradeModels").textContent = state.tradeRows.length ? state.tradeRows.map(r=>{
-    if(isWatch()) return r.make && r.model ? `${r.make} ${r.model}` : "Not selected";
-    return r.make && r.model ? `${r.make} ${r.model}${r.storage ? " • " + r.storage : ""}` : "Not selected";
-  }).join(", ") : "—";
-  const dcost = (d?.basePrice || 0) * state.quantity;
-  const baseMonthly = state.monthly ? ((d?.basePrice || 0) * state.monthly)/36 : 0;
-  $("reviewTotal").textContent = money(dcost);
-  $("reviewDueToday").textContent = money((d?.basePrice || 0) * state.retail);
-  $("reviewMonthly").textContent = money(baseMonthly);
-  $("reviewTradeTotal").textContent = money(tradeTotal());
-  $("reviewPromoTotal").textContent = money(isPhone() && appliedPromo() ? appliedPromo().totalCredit : 0);
-  $("reviewNetMonthly").textContent = money(baseMonthly - (isPhone() ? appliedPromoMonthlyCredit() : 0));
 }
 
 function showConciergeModal(){
@@ -1059,7 +1573,7 @@ function updateProceed(){
   $("proceedConciergeBtn").classList.toggle("hidden", !all);
   if(all){
     $("confirmTimestamp").classList.remove("hidden");
-    $("confirmTimestamp").textContent = "◌ Verbal confirmation recorded";
+    $("confirmTimestamp").textContent = "Verbal confirmation recorded";
   } else {
     $("confirmTimestamp").classList.add("hidden");
     $("confirmTimestamp").textContent = "";
@@ -1067,41 +1581,100 @@ function updateProceed(){
 }
 
 function initAsurionLines(){
-  asurionLines = Array.from({length: state.quantity}, (_,i)=>({
-    label:`Line ${i+1}`,
-    nickname:"",
-    product: currentDevice()?.name || "Selected Device",
-    numberType: (isPhone() && state.portDecision==="yes" && i < state.portCount) ? "port" : "new",
-    mdn: (isPhone() && state.portDecision==="yes" && i < state.portCount) ? `Port-In ${i+1}` : "",
-    tradeIn: state.tradeDecision==="yes" && i < state.tradeCount,
-    plan: state.plan || "Standard"
-  }));
+  const totalLines = cart.reduce((sum,item)=>sum + (item.quantity || 0), 0);
+  const portLines = cart.filter(item => item.category==="phones").reduce((sum,item)=> sum + (item.portDecision==="yes" ? (item.portCount || 0) : 0), 0);
+  const tradeLines = cart.reduce((sum,item)=> sum + (item.tradeDecision==="yes" ? (item.tradeCount || 0) : 0), 0);
+
+  $("poolLines").textContent = totalLines;
+  $("poolPort").textContent = portLines;
+  $("poolTrade").textContent = tradeLines;
+
+  asurionLines = [];
+  let lineIndex = 1;
+  cart.forEach(item => {
+    const d = DEVICES[item.deviceId] || {};
+    for(let i=0;i<(item.quantity || 0);i++){
+      const isPhoneItem = item.category==="phones";
+      const isPort = isPhoneItem && item.portDecision==="yes" && i < (item.portCount || 0);
+      const tradeIn = item.tradeDecision==="yes" && i < (item.tradeCount || 0);
+      asurionLines.push({
+        label:`Line ${lineIndex++}`,
+        isEditingName:false,
+        product:d.name || "Selected Device",
+        numberType:isPort ? "port" : "new",
+        mdn:isPort ? `Port-In ${i+1}` : "",
+        tradeIn,
+        plan:item.plan || "Standard"
+      });
+    }
+  });
 }
+
 function renderAsurion(){
-  $("poolLines").textContent = state.quantity;
-  $("poolPort").textContent = isPhone() && state.portDecision==="yes" ? state.portCount : 0;
-  $("poolTrade").textContent = state.tradeDecision==="yes" ? state.tradeCount : 0;
   $("lineGrid").innerHTML = asurionLines.map((line, idx)=>`
     <div class="line-card">
-      <div class="line-head"><div><div class="line-name">${line.label}</div><div class="small">${line.nickname ? "Nickname: "+line.nickname : "No nickname added"}</div></div><div class="line-status">${line.numberType==="port" ? "Port-In Line" : "New Number Line"}</div></div>
+      <div class="line-head">
+        <div>
+          <div class="line-name-row">
+            <div class="line-name">${line.label}</div>
+            <button type="button" class="line-edit-btn" data-line="${idx}" data-action="edit-name" title="Edit line name">✎</button>
+            ${line.isEditingName ? `<input class="line-inline-edit" data-line="${idx}" data-action="name-input" type="text" value="${line.label}" placeholder="Enter line name" />` : ``}
+          </div>
+          <div class="card-sub">${line.label.startsWith("Line ") ? "Default line name" : "Custom line name applied"}</div>
+        </div>
+        <div class="line-status">${line.numberType==="port" ? "Port-In Line" : "New Number Line"}</div>
+      </div>
       <div class="line-layout">
-        <div class="field"><label>Line nickname</label><input type="text" data-line="${idx}" data-field="nickname" value="${line.nickname}" placeholder="Enter line nickname" /></div>
         <div class="field"><label>Assigned product</label><select data-line="${idx}" data-field="product"><option selected>${line.product}</option></select></div>
-        <div class="field"><label>Number setup</label><select data-line="${idx}" data-field="numberType" ${!isPhone()?"disabled":""}><option value="port" ${line.numberType==="port"?"selected":""}>Port-In Number</option><option value="new" ${line.numberType==="new"?"selected":""}>New Number</option></select></div>
-        <div class="field"><label>Port-In MDN</label><input type="text" data-line="${idx}" data-field="mdn" value="${line.mdn}" placeholder="Enter MDN or reference" ${(line.numberType==="new" || !isPhone())?"disabled":""} /></div>
+        <div class="field"><label>Number setup</label><select data-line="${idx}" data-field="numberType"><option value="port" ${line.numberType==="port"?"selected":""}>Port-In Number</option><option value="new" ${line.numberType==="new"?"selected":""}>New Number</option></select></div>
+        <div class="field"><label>Port-In MDN</label><input type="text" data-line="${idx}" data-field="mdn" value="${line.mdn}" placeholder="Enter MDN or reference" ${line.numberType==="new"?"disabled":""} /></div>
         <div class="field"><label>Trade-In</label><select data-line="${idx}" data-field="tradeIn"><option value="yes" ${line.tradeIn?"selected":""}>Yes</option><option value="no" ${!line.tradeIn?"selected":""}>No</option></select></div>
         <div class="field"><label>Plan</label><select data-line="${idx}" data-field="plan"><option selected>${line.plan}</option></select></div>
       </div>
     </div>
   `).join("");
+
   $("lineGrid").querySelectorAll("select,input").forEach(el=>{
     el.onchange = ()=>{
       const idx = Number(el.dataset.line);
       const field = el.dataset.field;
-      if(field==="tradeIn") asurionLines[idx][field] = el.value==="yes";
-      else asurionLines[idx][field] = el.value;
-      if(field==="numberType" && el.value==="new") asurionLines[idx].mdn = "";
+      if(field){
+        if(field==="tradeIn") asurionLines[idx][field] = el.value==="yes";
+        else asurionLines[idx][field] = el.value;
+        if(field==="numberType" && el.value==="new") asurionLines[idx].mdn = "";
+      } else if(el.dataset.action === "name-input"){
+        asurionLines[idx].label = el.value.trim() || `Line ${idx+1}`;
+        asurionLines[idx].isEditingName = false;
+      }
       renderAsurion();
+    };
+  });
+
+  $("lineGrid").querySelectorAll('[data-action="edit-name"]').forEach(btn=>{
+    btn.onclick = ()=>{
+      const idx = Number(btn.dataset.line);
+      asurionLines[idx].isEditingName = !asurionLines[idx].isEditingName;
+      renderAsurion();
+      const input = $("lineGrid").querySelector(`[data-line="${idx}"][data-action="name-input"]`);
+      if(input){
+        input.focus();
+        input.select();
+        input.onkeydown = (e)=>{
+          if(e.key === "Enter"){
+            asurionLines[idx].label = input.value.trim() || `Line ${idx+1}`;
+            asurionLines[idx].isEditingName = false;
+            renderAsurion();
+          } else if(e.key === "Escape"){
+            asurionLines[idx].isEditingName = false;
+            renderAsurion();
+          }
+        };
+        input.onblur = ()=>{
+          asurionLines[idx].label = input.value.trim() || `Line ${idx+1}`;
+          asurionLines[idx].isEditingName = false;
+          renderAsurion();
+        };
+      }
     };
   });
 }
@@ -1113,21 +1686,23 @@ function bindCounter(minus, plus, get, set, maxFn){
 
 function init(){
   try { history.replaceState({viewId:"catalogView"}, "", "#catalogView"); } catch(e) {}
-  window.onpopstate = (event) => {
+  window.onpopstate = (event)=>{
     const viewId = event.state && event.state.viewId ? event.state.viewId : "catalogView";
     setVisibleView(viewId);
   };
+  $("topBackBtn").onclick = ()=> goBackScreen();
+
   renderCatalog();
 
   bindCounter("qtyMinus","qtyPlus", ()=>state.quantity, v=>{
-    state.quantity=v;
-    if(state.monthly+state.retail>v) state.retail=Math.max(0,v-state.monthly);
-    if(state.portCount>v) state.portCount=v;
-    if(state.tradeCount>v) state.tradeCount=v;
-    if(state.protectionCount>v) state.protectionCount=v;
+    state.quantity = v;
+    if(state.monthly + state.retail > v) state.retail = Math.max(0, v - state.monthly);
+    if(state.portCount > v) state.portCount = v;
+    if(state.tradeCount > v) state.tradeCount = v;
+    if(state.protectionCount > v) state.protectionCount = v;
   }, ()=>20);
-  bindCounter("monthlyMinus","monthlyPlus", ()=>state.monthly, v=>state.monthly=v, ()=>Math.max(0, state.quantity-state.retail));
-  bindCounter("retailMinus","retailPlus", ()=>state.retail, v=>state.retail=v, ()=>Math.max(0, state.quantity-state.monthly));
+  bindCounter("monthlyMinus","monthlyPlus", ()=>state.monthly, v=>state.monthly=v, ()=>Math.max(0, state.quantity - state.retail));
+  bindCounter("retailMinus","retailPlus", ()=>state.retail, v=>state.retail=v, ()=>Math.max(0, state.quantity - state.monthly));
   bindCounter("portMinus","portPlus", ()=>state.portCount, v=>state.portCount=v, ()=>state.quantity);
   bindCounter("tradeMinus","tradePlus", ()=>state.tradeCount, v=>state.tradeCount=v, ()=>state.quantity);
   bindCounter("protectionMinus","protectionPlus", ()=>state.protectionCount, v=>state.protectionCount=v, ()=>state.quantity);
@@ -1135,7 +1710,6 @@ function init(){
   $("colorSelect").onchange = e=>{ state.color=e.target.value; renderConfigurator(); };
   $("storageSelect").onchange = e=>{ state.storage=e.target.value; renderConfigurator(); };
   $("simSelect").onchange = e=>{ state.sim=e.target.value; renderConfigurator(); };
-  $("dataOptionSelect").onchange = e=>{ state.dataOption=e.target.value; renderConfigurator(); };
   $("connectivitySelect").onchange = e=>{ state.connectivity=e.target.value; renderConfigurator(); };
 
   $("planStandard").onclick = ()=>{ if(isTablet() || isWatch()) return; state.plan="Standard"; renderConfigurator(); };
@@ -1149,8 +1723,7 @@ function init(){
   $("backToCatalogBtn").onclick = ()=> showOnly("catalogView");
   $("continueBtn").onclick = ()=>{ renderReview(); showOnly("reviewView"); window.scrollTo({top:0,behavior:"smooth"}); };
   $("backToEditBtn").onclick = ()=>{ showOnly("configuratorView"); renderConfigurator(); };
-  $("addMoreLinesBtn").onclick = ()=>{ showOnly("configuratorView"); renderConfigurator(); };
-  $("addMoreDeviceBtn").onclick = ()=>{ resetForNewDevice(); showOnly("catalogView"); renderCatalog(); };
+  $("addMoreDeviceBtn").onclick = ()=>{ resetForNewDevice(state.category); showOnly("catalogView"); renderCatalog(); };
   $("saveQuoteBtn").onclick = ()=> alert("Quote saved successfully for this demo.");
   $("moveToConciergeBtn").onclick = ()=> showConciergeModal();
 
@@ -1168,5 +1741,91 @@ function init(){
 }
 init();
 </script>
+
+    <div class="catalog-footer-override">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">COMCAST<br>BUSINESS</div>
+
+          <div>
+            <div class="footer-col-title">Small Business</div>
+            <ul class="footer-links">
+              <li>Plans and Pricing</li>
+              <li>Business Internet</li>
+              <li>Mobile</li>
+              <li>Phone</li>
+              <li>Business TV</li>
+              <li>Cloud Apps</li>
+            </ul>
+          </div>
+
+          <div>
+            <div class="footer-col-title">Support</div>
+            <ul class="footer-links">
+              <li>Comcast Business Support</li>
+              <li>Forums</li>
+              <li>Find an Xfinity Store</li>
+            </ul>
+          </div>
+
+          <div>
+            <div class="footer-col-title">My Account</div>
+            <ul class="footer-links">
+              <li>Sign In</li>
+              <li>Cloud Solutions</li>
+            </ul>
+          </div>
+
+          <div>
+            <div class="footer-col-title">About Us</div>
+            <ul class="footer-links">
+              <li>Why Comcast</li>
+              <li>Our Network</li>
+              <li>Press Releases</li>
+              <li>Advertising</li>
+              <li>Comcast Business Promise</li>
+              <li>Careers</li>
+              <li>Awards and Recognition</li>
+              <li>Comcast Impact</li>
+              <li>Comcast RISE</li>
+            </ul>
+          </div>
+
+          <div>
+            <div class="footer-col-title">Partners and Referrals</div>
+            <ul class="footer-links">
+              <li>Customer Referrals</li>
+              <li>Authorized Connectors</li>
+              <li>Solutions Advisors</li>
+              <li>Alliance Associations</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-legal">
+          <div>Contact Us</div>
+          <div>Resources</div>
+          <div>Privacy Policy</div>
+          <div>Your Privacy Choices</div>
+          <div>Notice at Collection</div>
+          <div>Visitor Agreement</div>
+          <div>Terms & Conditions</div>
+          <div>Sitemap</div>
+          <div>Open Source</div>
+          <div>Broadband Labels</div>
+        </div>
+
+        <div class="footer-bottom">
+          <div class="footer-copy">©2026 Comcast Corporation. All Rights Reserved</div>
+          <div class="footer-social">
+            <div class="footer-social-icon">f</div>
+            <div class="footer-social-icon">in</div>
+            <div class="footer-social-icon">x</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="catalog-cookie-hide">Cookie Settings</div>
+
 </body>
 </html>
