@@ -738,6 +738,7 @@
               <button class="btn dashed" id="addMoreDeviceBtn">Add More Device</button>
               <button class="btn" id="backToEditBtn">Edit Latest Device</button>
               <button class="btn" id="saveQuoteBtn">Save Quote</button>
+              <button class="btn" id="scheduleAppointmentBtn">Schedule Appointment</button>
               <button class="btn" id="moveToConciergeBtn">Move to Concierge</button>
             </div>
           </div>
@@ -1773,6 +1774,7 @@ function init(){
   $("backToEditBtn").onclick = ()=>{ showOnly("configuratorView"); renderConfigurator(); };
   $("addMoreDeviceBtn").onclick = ()=>{ resetForNewDevice(state.category); showOnly("catalogView"); renderCatalog(); };
   $("saveQuoteBtn").onclick = ()=> alert("Quote saved successfully for this demo.");
+  $("scheduleAppointmentBtn").onclick = ()=> alert("Appointment scheduling flow can be added here.");
   $("moveToConciergeBtn").onclick = ()=> showConciergeModal();
 
   $("cancelConciergeBtn").onclick = ()=> hideConciergeModal();
