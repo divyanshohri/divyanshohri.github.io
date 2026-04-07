@@ -455,14 +455,23 @@
   <div id="configuratorView" class="page hidden">
     <div class="container config-shell">
       <div class="config-layout">
-        <div class="config-main">
-          <div class="card">
+        <div class="config-main" id="configMain">
+          <div class="card" id="attrPanel">
             <div class="card-head">
               <div class="card-head-left">
-                <div class="step-dot">1</div>
+                <div class="step-dot" id="attrStep">1</div>
                 <div>
-                  <h2 class="card-title" id="qtyTitle">Purchase quantity</h2>
-                  <div class="card-sub" id="qtySub">Enter how many devices the customer wants to buy.</div>
+                  <h2 class="card-title">Device attributes</h2>
+                  <div class="card-sub" id="attrSub">Choose the applicable device attributes. Inventory is checked after the configuration is selected.</div>
+                </div>
+
+          <div class="card" id="qtyPanel">
+            <div class="card-head">
+              <div class="card-head-left">
+                <div class="step-dot" id="qtyStep">2</div>
+                <div>
+                  <h2 class="card-title" id="qtyTitle">Choose quantity</h2>
+                  <div class="card-sub" id="qtySub">Now that the device options are selected, choose the requested quantity for this exact configuration.</div>
                 </div>
               </div>
               <div class="section-title">Max 20</div>
@@ -481,15 +490,6 @@
               <div class="warn-banner hidden" id="qtyBanner" style="margin-top:14px"></div>
             </div>
           </div>
-
-          <div class="card" id="attrPanel">
-            <div class="card-head">
-              <div class="card-head-left">
-                <div class="step-dot" id="attrStep">2</div>
-                <div>
-                  <h2 class="card-title">Device attributes</h2>
-                  <div class="card-sub" id="attrSub">Choose the applicable device attributes.</div>
-                </div>
               </div>
             </div>
             <div class="card-body">
@@ -1345,7 +1345,7 @@ function renderConfigurator(){
   $("selectedMeta").textContent = d ? `${d.brand} • ${d.sku}` : "Choose a device from the catalog.";
 
   $("qtyTitle").textContent = isTablet() ? (isByod() ? "How many tablets are you bringing?" : "Tablet quantity") : isWatch() ? (isByod() ? "How many watches are you bringing?" : "Watch quantity") : isByod() ? "How many devices are you bringing?" : "Purchase quantity";
-  $("qtySub").textContent = isTablet() ? "Enter how many tablets the customer wants to buy." : isWatch() ? "Enter how many watches the customer wants to buy." : isByod() ? "Capture the number of customer-owned devices that will be activated." : "Enter how many devices the customer wants to buy.";
+  $("qtySub").textContent = isByod() ? (isTablet() ? "Start by capturing how many customer-owned tablets will be activated." : isWatch() ? "Start by capturing how many customer-owned watches will be activated." : "Capture the number of customer-owned devices that will be activated.") : (isTablet() ? "Choose the quantity after selecting the tablet attributes for this configuration." : isWatch() ? "Choose the quantity after selecting the watch attributes for this configuration." : "Choose the quantity after selecting the device attributes for this configuration.");
   $("qtyLabel").textContent = isTablet() ? (isByod() ? "BYOT quantity" : "Tablets being purchased") : isWatch() ? (isByod() ? "BYOW quantity" : "Watches being purchased") : (isByod() ? "BYOD quantity" : "Devices being purchased");
   $("qtyValue").textContent = state.quantity;
   $("baseTotal").textContent = money((d?.basePrice || 0) * state.quantity);
@@ -1357,13 +1357,40 @@ function renderConfigurator(){
   $("portPanel").classList.toggle("hidden", !isPhone());
   $("tradePanel").classList.toggle("hidden", isByod());
 
+  // Reorder the first visible steps by flow type
+  const configMain = $("configMain");
+  const attrPanel = $("attrPanel");
+  const qtyPanel = $("qtyPanel");
+  if(configMain && attrPanel && qtyPanel){
+    if(isByod()){
+      if(configMain.firstElementChild !== qtyPanel){
+        configMain.insertBefore(qtyPanel, configMain.firstElementChild);
+      }
+      if(!isPhoneByod){
+        const afterQty = qtyPanel.nextElementSibling;
+        if(afterQty !== attrPanel){
+          configMain.insertBefore(attrPanel, afterQty);
+        }
+      }
+    } else {
+      if(configMain.firstElementChild !== attrPanel){
+        configMain.insertBefore(attrPanel, configMain.firstElementChild);
+      }
+      if(attrPanel.nextElementSibling !== qtyPanel){
+        configMain.insertBefore(qtyPanel, attrPanel.nextElementSibling);
+      }
+    }
+  }
+
   if(isPhoneByod){
+    setStep("qtyStep",1);
     setStep("promoStep",2);
     setStep("planStep",3);
     setStep("protectionStep",4);
     setStep("portStep",5);
   } else if(isPhone()){
-    setStep("attrStep",2);
+    setStep("attrStep",1);
+    setStep("qtyStep",2);
     setStep("promoStep",3);
     setStep("paymentStep",4);
     setStep("planStep",5);
@@ -1371,18 +1398,36 @@ function renderConfigurator(){
     setStep("portStep",7);
     setStep("tradeStep",8);
   } else if(isTablet()){
-    setStep("attrStep",2);
-    setStep("paymentStep",3);
-    setStep("planStep",4);
-    setStep("protectionStep",5);
-    setStep("tradeStep",6);
+    if(isByod()){
+      setStep("qtyStep",1);
+      setStep("attrStep",2);
+      setStep("paymentStep",3);
+      setStep("planStep",4);
+      setStep("protectionStep",5);
+    } else {
+      setStep("attrStep",1);
+      setStep("qtyStep",2);
+      setStep("paymentStep",3);
+      setStep("planStep",4);
+      setStep("protectionStep",5);
+      setStep("tradeStep",6);
+    }
   } else if(isWatch()){
-    setStep("attrStep",2);
-    setStep("paymentStep",3);
-    setStep("connectivityStep",4);
-    setStep("planStep",5);
-    setStep("protectionStep",6);
-    setStep("tradeStep",7);
+    if(isByod()){
+      setStep("qtyStep",1);
+      setStep("attrStep",2);
+      setStep("connectivityStep",3);
+      setStep("planStep",4);
+      setStep("protectionStep",5);
+    } else {
+      setStep("attrStep",1);
+      setStep("qtyStep",2);
+      setStep("paymentStep",3);
+      setStep("connectivityStep",4);
+      setStep("planStep",5);
+      setStep("protectionStep",6);
+      setStep("tradeStep",7);
+    }
   }
 
   $("storageLabel").textContent = isWatch() ? "Watch type" : "Storage";
@@ -1436,7 +1481,10 @@ function renderConfigurator(){
   }
 
   const qtyBanner = $("qtyBanner");
-  if(isTablet() && state.quantity > 6){
+  if(state.quantity >= 11){
+    qtyBanner.classList.remove("hidden");
+    qtyBanner.textContent = "Only a limited quantity is available for this configuration right now. Please reduce the quantity below 11 or choose a different device setup to continue.";
+  } else if(isTablet() && state.quantity > 6){
     qtyBanner.classList.remove("hidden");
     qtyBanner.textContent = "Requested quantity is not available for this configuration. Reduce the quantity or choose a different device configuration.";
   } else {
