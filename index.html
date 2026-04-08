@@ -336,6 +336,35 @@
   .line-name{font-size:18px;font-weight:900}
   .line-status{padding:6px 10px;border-radius:999px;font-size:12px;font-weight:800;background:#eef2ff;color:#3730a3}
   .line-layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .line-actions{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-left:auto;
+  }
+  .line-remove-btn{
+    height:32px;
+    padding:0 10px;
+    border-radius:999px;
+    border:1px solid #f5cba7;
+    background:#fff7ed;
+    color:#9a3412;
+    font-size:12px;
+    font-weight:800;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .checkout-status{
+    margin-top:14px;
+    padding:12px 14px;
+    border-radius:12px;
+    border:1px solid #cfe0ff;
+    background:#eef5ff;
+    color:var(--cb-blue);
+    font-size:13px;
+    line-height:1.5;
+  }
+
   .readonly-note{
     min-height:46px;
     border:1px solid var(--cb-line);
@@ -1066,9 +1095,9 @@
               </div>
               <div class="actions" style="grid-template-columns:1fr;margin-top:16px">
                 <button class="btn" id="autoAssignBtn">Auto-Configure Lines</button>
-                <button class="btn" id="backToReviewBtn">Back to Review</button>
-                <button class="btn primary" id="completeAsurionBtn">Complete Line Configuration</button>
+                <button class="btn primary" id="completeAsurionBtn">Move to Checkout</button>
               </div>
+              <div class="checkout-status hidden" id="checkoutStatus"></div>
             </div>
           </div>
         </div>
@@ -1958,7 +1987,10 @@ function renderAsurion(){
           </div>
           <div class="card-sub">${line.label.startsWith("Line ") ? "Default line name" : "Custom line name applied"}</div>
         </div>
-        <div class="line-status">${line.numberType==="port" ? "Port-In Line" : "New Number Line"}</div>
+        <div class="line-actions">
+          <div class="line-status">${line.numberType==="port" ? "Port-In Line" : "New Number Line"}</div>
+          <button type="button" class="line-remove-btn" data-line="${idx}" data-action="remove-line">Remove line</button>
+        </div>
       </div>
 
       <div class="line-layout">
@@ -2058,7 +2090,7 @@ function renderAsurion(){
               <div class="trade-q-item">
                 <label>Trade-in device's IMEI (15 digits)</label>
                 <div class="imei-row">
-                  <input type="text" data-line="${idx}" data-field="imei" value="${line.imei || "123456789012345"}" placeholder="Enter IMEI" />
+                  <input type="text" data-line="${idx}" data-field="imei" data-action="clear-on-focus" value="${line.imei || "123456789012345"}" placeholder="Enter IMEI" />
                   <button type="button" class="imei-check-btn" data-line="${idx}" data-action="check-imei">Check IMEI</button>
                 </div>
                 ${line.imeiStatus ? `<div class="imei-status ${line.imeiStatus==="checking" ? "pending" : ""}">${line.imeiStatus==="checking" ? "Checking IMEI..." : `IMEI is valid. Attached device: ${line.imeiDevice || "iPhone 13 128 GB"}.`}</div>` : ``}
@@ -2141,6 +2173,28 @@ function renderAsurion(){
         asurionLines[idx].imeiDevice = "iPhone 13 128 GB";
         renderAsurion();
       }, 700);
+    };
+  });
+
+  $("lineGrid").querySelectorAll('input[data-action="clear-on-focus"]').forEach(input=>{
+    input.onfocus = ()=>{
+      if(input.value === "123456789012345"){
+        input.value = "";
+        const idx = Number(input.dataset.line);
+        asurionLines[idx].imei = "";
+      }
+    };
+    input.oninput = ()=>{
+      const idx = Number(input.dataset.line);
+      asurionLines[idx].imei = input.value;
+    };
+  });
+
+  $("lineGrid").querySelectorAll('[data-action="remove-line"]').forEach(btn=>{
+    btn.onclick = ()=>{
+      const idx = Number(btn.dataset.line);
+      asurionLines.splice(idx, 1);
+      renderAsurion();
     };
   });
 
@@ -2245,8 +2299,29 @@ function init(){
   $("goToAsurionBtn").onclick = ()=>{ initAsurionLines(); renderAsurion(); showOnly("asurionView"); window.scrollTo({top:0,behavior:"smooth"}); };
 
   $("autoAssignBtn").onclick = ()=>{ initAsurionLines(); renderAsurion(); };
-  $("backToReviewBtn").onclick = ()=>{ renderReview(); showOnly("reviewView"); };
-  $("completeAsurionBtn").onclick = ()=> alert("Line configuration completed for this conceptual demo.");
+  $("completeAsurionBtn").onclick = ()=>{
+    const status = $("checkoutStatus");
+    const totalExpectedLines = cart.reduce((sum,item)=>sum + (item.quantity || 0), 0);
+    const expectedPort = cart.filter(item => item.category==="phones").reduce((sum,item)=> sum + (item.portDecision==="yes" ? (item.portCount || 0) : 0), 0);
+    const expectedTrade = cart.reduce((sum,item)=> sum + (item.tradeDecision==="yes" ? (item.tradeCount || 0) : 0), 0);
+
+    const actualLines = asurionLines.length;
+    const actualPort = asurionLines.filter(line => line.numberType==="port").length;
+    const actualTrade = asurionLines.filter(line => line.tradeIn).length;
+
+    const lineInputsReady = asurionLines.every(line => {
+      const numberReady = line.numberType === "new" ? true : (!!(line.mdn || "").trim() && !!(line.currentCarrier || "").trim());
+      const tradeReady = !line.tradeIn ? true : (!!line.majorDamage && !!line.screenDamage && !!line.liquidDamage && !!line.powersOn && line.imeiStatus === "valid");
+      return numberReady && tradeReady;
+    });
+
+    status.classList.remove("hidden");
+    if(actualLines === totalExpectedLines && actualPort === expectedPort && actualTrade === expectedTrade && lineInputsReady){
+      status.textContent = "All line configurations match the order pools. Moving to checkout.";
+    } else {
+      status.textContent = "The line configuration does not fully match the order pools yet. We would be updating the cart before checkout.";
+    }
+  };
 }
 init();
 </script>
