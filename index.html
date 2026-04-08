@@ -1941,6 +1941,10 @@ function initAsurionLines(){
         label:`Line ${lineIndex++}`,
         isEditingName:false,
         product:d.name || "Selected Device",
+        color:item.color || "",
+        storage:item.storage || "",
+        colorOptions:(DEVICES[item.deviceId]?.colors || []).slice(),
+        storageOptions:(DEVICES[item.deviceId]?.storages || []).slice(),
         numberType:isPort ? "port" : "new",
         mdn:"",
         currentCarrier:"",
@@ -2005,6 +2009,20 @@ function renderAsurion(){
         </div>
 
         <div class="field">
+          <label>Color</label>
+          <select data-line="${idx}" data-field="color">
+            ${(line.colorOptions && line.colorOptions.length ? line.colorOptions : [line.color || "Not captured"]).map(option => `<option value="${option}" ${line.color===option?"selected":""}>${option}</option>`).join("")}
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Storage</label>
+          <select data-line="${idx}" data-field="storage">
+            ${(line.storageOptions && line.storageOptions.length ? line.storageOptions : [line.storage || "Not captured"]).map(option => `<option value="${option}" ${line.storage===option?"selected":""}>${option}</option>`).join("")}
+          </select>
+        </div>
+
+        <div class="field">
           <label>Number setup</label>
           <select data-line="${idx}" data-field="numberType">
             <option value="port" ${line.numberType==="port"?"selected":""}>Port-In Number</option>
@@ -2015,7 +2033,7 @@ function renderAsurion(){
         ${line.numberType==="port" ? `
         <div class="field">
           <label>Port-In MDN</label>
-          <input type="text" data-line="${idx}" data-field="mdn" value="${line.mdn || ""}" placeholder="Enter the number" />
+          <input type="text" data-line="${idx}" data-field="mdn" value="${line.mdn || ""}" />
         </div>
 
         <div class="field">
