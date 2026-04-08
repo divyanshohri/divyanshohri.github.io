@@ -495,6 +495,22 @@
     background:#eef5ff;
     color:var(--cb-blue);
   }
+  .eligibility-status{
+    margin-top:10px;
+    border:1px solid #bfe6de;
+    background:var(--cb-good-bg);
+    color:var(--cb-good);
+    border-radius:12px;
+    padding:10px 12px;
+    font-size:13px;
+    line-height:1.5;
+  }
+  .eligibility-status.pending{
+    border-color:#cfe0ff;
+    background:#eef5ff;
+    color:var(--cb-blue);
+  }
+
 
 
 
@@ -1929,10 +1945,11 @@ function initAsurionLines(){
   let lineIndex = 1;
   cart.forEach(item => {
     const d = DEVICES[item.deviceId] || {};
+    const isByodItem = ["byod","byot","byow"].includes(item.deviceId);
     for(let i=0;i<(item.quantity || 0);i++){
       const isPhoneItem = item.category==="phones";
       const isPort = isPhoneItem && item.portDecision==="yes" && i < (item.portCount || 0);
-      const tradeIn = item.tradeDecision==="yes" && i < (item.tradeCount || 0);
+      const tradeIn = !isByodItem && item.tradeDecision==="yes" && i < (item.tradeCount || 0);
       const tradeRow = tradeIn ? (item.tradeRows?.[i] || null) : null;
       const protectionIncluded = (item.category==="tablets" || item.category==="watches") ? hasProPhoneOnAccount() : item.plan==="Pro";
       const protectionValue = protectionIncluded ? "Included" : (item.protectionDecision==="yes" && i < (item.protectionCount || 0) ? "Yes" : "No");
@@ -1940,11 +1957,16 @@ function initAsurionLines(){
       asurionLines.push({
         label:`Line ${lineIndex++}`,
         isEditingName:false,
+        isByodLine:isByodItem,
         product:d.name || "Selected Device",
         color:item.color || "",
         storage:item.storage || "",
         colorOptions:(DEVICES[item.deviceId]?.colors || []).slice(),
         storageOptions:(DEVICES[item.deviceId]?.storages || []).slice(),
+        byodImei:"123456789012345",
+        byodEligibilityStatus:"",
+        byodEligibilityMessage:"",
+        byodDetectedDevice:"",
         numberType:isPort ? "port" : "new",
         mdn:"",
         currentCarrier:"",
@@ -1974,7 +1996,8 @@ function renderAsurion(){
   `;
 
   $("lineGrid").innerHTML = asurionLines.map((line, idx)=>{
-    const showMajor = line.tradeIn;
+    const byod = !!line.isByodLine;
+    const showMajor = !byod && line.tradeIn;
     const showScreen = showMajor && !!line.majorDamage;
     const showLiquid = showScreen && !!line.screenDamage;
     const showPower = showLiquid && !!line.liquidDamage;
@@ -1998,28 +2021,40 @@ function renderAsurion(){
       </div>
 
       <div class="line-layout">
-        <div class="field">
-          <label>Assigned product</label>
-          <select data-line="${idx}" data-field="product"><option selected>${line.product}</option></select>
-        </div>
+        ${byod ? `
+          <div class="field">
+            <label>Enter IMEI</label>
+            <div class="imei-row">
+              <input type="text" data-line="${idx}" data-field="byodImei" data-action="clear-byod-imei-on-focus" value="${line.byodImei || "123456789012345"}" />
+              <button type="button" class="imei-check-btn" data-line="${idx}" data-action="check-byod-imei">Check IMEI</button>
+            </div>
+            ${line.byodEligibilityStatus ? `<div class="eligibility-status ${line.byodEligibilityStatus==="checking" ? "pending" : ""}">${line.byodEligibilityStatus==="checking" ? "Checking device compatibility..." : (line.byodEligibilityMessage || "This device is eligible to be used on the Comcast Business network.")}</div>` : ``}
+            ${line.byodDetectedDevice ? `<div class="byod-detected">Detected device: ${line.byodDetectedDevice}</div>` : ``}
+          </div>
+        ` : `
+          <div class="field">
+            <label>Assigned product</label>
+            <select data-line="${idx}" data-field="product"><option selected>${line.product}</option></select>
+          </div>
+
+          <div class="field">
+            <label>Color</label>
+            <select data-line="${idx}" data-field="color">
+              ${(line.colorOptions && line.colorOptions.length ? line.colorOptions : [line.color || "Not captured"]).map(option => `<option value="${option}" ${line.color===option?"selected":""}>${option}</option>`).join("")}
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Storage</label>
+            <select data-line="${idx}" data-field="storage">
+              ${(line.storageOptions && line.storageOptions.length ? line.storageOptions : [line.storage || "Not captured"]).map(option => `<option value="${option}" ${line.storage===option?"selected":""}>${option}</option>`).join("")}
+            </select>
+          </div>
+        `}
 
         <div class="field">
           <label>Plan</label>
           <select data-line="${idx}" data-field="plan"><option selected>${line.plan}</option></select>
-        </div>
-
-        <div class="field">
-          <label>Color</label>
-          <select data-line="${idx}" data-field="color">
-            ${(line.colorOptions && line.colorOptions.length ? line.colorOptions : [line.color || "Not captured"]).map(option => `<option value="${option}" ${line.color===option?"selected":""}>${option}</option>`).join("")}
-          </select>
-        </div>
-
-        <div class="field">
-          <label>Storage</label>
-          <select data-line="${idx}" data-field="storage">
-            ${(line.storageOptions && line.storageOptions.length ? line.storageOptions : [line.storage || "Not captured"]).map(option => `<option value="${option}" ${line.storage===option?"selected":""}>${option}</option>`).join("")}
-          </select>
         </div>
 
         <div class="field">
@@ -2031,22 +2066,23 @@ function renderAsurion(){
         </div>
 
         ${line.numberType==="port" ? `
-        <div class="field">
-          <label>Port-In MDN</label>
-          <input type="text" data-line="${idx}" data-field="mdn" value="${line.mdn || ""}" />
-        </div>
+          <div class="field">
+            <label>Port-In MDN</label>
+            <input type="text" data-line="${idx}" data-field="mdn" value="${line.mdn || ""}" />
+          </div>
 
-        <div class="field">
-          <label>Current carrier</label>
-          <select data-line="${idx}" data-field="currentCarrier">
-            <option value="" ${!line.currentCarrier?"selected":""}>Select current carrier</option>
-            <option value="AT&T" ${line.currentCarrier==="AT&T"?"selected":""}>AT&T</option>
-            <option value="Verizon" ${line.currentCarrier==="Verizon"?"selected":""}>Verizon</option>
-            <option value="T-Mobile" ${line.currentCarrier==="T-Mobile"?"selected":""}>T-Mobile</option>
-            <option value="Xfinity Mobile" ${line.currentCarrier==="Xfinity Mobile"?"selected":""}>Xfinity Mobile</option>
-            <option value="Other" ${line.currentCarrier==="Other"?"selected":""}>Other</option>
-          </select>
-        </div>` : ``}
+          <div class="field">
+            <label>Current carrier</label>
+            <select data-line="${idx}" data-field="currentCarrier">
+              <option value="" ${!line.currentCarrier?"selected":""}>Select current carrier</option>
+              <option value="AT&T" ${line.currentCarrier==="AT&T"?"selected":""}>AT&T</option>
+              <option value="Verizon" ${line.currentCarrier==="Verizon"?"selected":""}>Verizon</option>
+              <option value="T-Mobile" ${line.currentCarrier==="T-Mobile"?"selected":""}>T-Mobile</option>
+              <option value="Xfinity Mobile" ${line.currentCarrier==="Xfinity Mobile"?"selected":""}>Xfinity Mobile</option>
+              <option value="Other" ${line.currentCarrier==="Other"?"selected":""}>Other</option>
+            </select>
+          </div>
+        ` : ``}
 
         <div class="field">
           <label>Device protection</label>
@@ -2057,68 +2093,70 @@ function renderAsurion(){
           </select>
         </div>
 
-        <div class="field">
-          <label>Trade-In</label>
-          <select data-line="${idx}" data-field="tradeIn">
-            <option value="yes" ${line.tradeIn?"selected":""}>Yes</option>
-            <option value="no" ${!line.tradeIn?"selected":""}>No</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>${line.tradeDevice ? "Trade-in device" : "Device trade-in details"}</label>
-          ${line.tradeIn
-            ? `<div class="trade-summary">${line.tradeDevice || "Trade-in selected. Capture the trade-in details below."}</div>`
-            : `<div class="readonly-note">No trade-in attached to this line.</div>`}
-        </div>
-
-        ${line.tradeIn ? `
-          <div class="trade-checklist">
-            <div class="trade-checklist-head">
-              <div class="trade-checklist-title">Device trade-in details</div>
-              <a href="javascript:void(0)" class="trade-checklist-link">How trade-ins work</a>
-            </div>
-
-            <div class="trade-q-list">
-              ${showMajor ? `
-              <div class="trade-q-item">
-                <label>Is the device free of major physical damage?</label>
-                ${ynButtons(idx, "majorDamage", line.majorDamage)}
-              </div>` : ``}
-
-              ${showScreen ? `
-              <div class="trade-q-item">
-                <label>Does the device have a functional screen that is free of cracks and other damage?</label>
-                ${ynButtons(idx, "screenDamage", line.screenDamage)}
-              </div>` : ``}
-
-              ${showLiquid ? `
-              <div class="trade-q-item">
-                <label>Is the device free from liquid damage?</label>
-                ${ynButtons(idx, "liquidDamage", line.liquidDamage)}
-              </div>` : ``}
-
-              ${showPower ? `
-              <div class="trade-q-item">
-                <label>Does the device power on?</label>
-                ${ynButtons(idx, "powersOn", line.powersOn)}
-              </div>` : ``}
-
-              ${showImei ? `
-              <div class="trade-q-item">
-                <label>Trade-in device's IMEI (15 digits)</label>
-                <div class="imei-row">
-                  <input type="text" data-line="${idx}" data-field="imei" data-action="clear-on-focus" value="${line.imei || "123456789012345"}" placeholder="Enter IMEI" />
-                  <button type="button" class="imei-check-btn" data-line="${idx}" data-action="check-imei">Check IMEI</button>
-                </div>
-                ${line.imeiStatus ? `<div class="imei-status ${line.imeiStatus==="checking" ? "pending" : ""}">${line.imeiStatus==="checking" ? "Checking IMEI..." : `IMEI is valid. Attached device: ${line.imeiDevice || "iPhone 13 128 GB"}.`}</div>` : ``}
-              </div>` : ``}
-            </div>
+        ${byod ? `` : `
+          <div class="field">
+            <label>Trade-In</label>
+            <select data-line="${idx}" data-field="tradeIn">
+              <option value="yes" ${line.tradeIn?"selected":""}>Yes</option>
+              <option value="no" ${!line.tradeIn?"selected":""}>No</option>
+            </select>
           </div>
-        ` : ``}
+
+          <div class="field">
+            <label>${line.tradeDevice ? "Trade-in device" : "Device trade-in details"}</label>
+            ${line.tradeIn
+              ? `<div class="trade-summary">${line.tradeDevice || "Trade-in selected. Capture the trade-in details below."}</div>`
+              : `<div class="readonly-note">No trade-in attached to this line.</div>`}
+          </div>
+
+          ${line.tradeIn ? `
+            <div class="trade-checklist">
+              <div class="trade-checklist-head">
+                <div class="trade-checklist-title">Device trade-in details</div>
+                <a href="javascript:void(0)" class="trade-checklist-link">How trade-ins work</a>
+              </div>
+
+              <div class="trade-q-list">
+                ${showMajor ? `
+                <div class="trade-q-item">
+                  <label>Is the device free of major physical damage?</label>
+                  ${ynButtons(idx, "majorDamage", line.majorDamage)}
+                </div>` : ``}
+
+                ${showScreen ? `
+                <div class="trade-q-item">
+                  <label>Does the device have a functional screen that is free of cracks and other damage?</label>
+                  ${ynButtons(idx, "screenDamage", line.screenDamage)}
+                </div>` : ``}
+
+                ${showLiquid ? `
+                <div class="trade-q-item">
+                  <label>Is the device free from liquid damage?</label>
+                  ${ynButtons(idx, "liquidDamage", line.liquidDamage)}
+                </div>` : ``}
+
+                ${showPower ? `
+                <div class="trade-q-item">
+                  <label>Does the device power on?</label>
+                  ${ynButtons(idx, "powersOn", line.powersOn)}
+                </div>` : ``}
+
+                ${showImei ? `
+                <div class="trade-q-item">
+                  <label>Trade-in device's IMEI (15 digits)</label>
+                  <div class="imei-row">
+                    <input type="text" data-line="${idx}" data-field="imei" data-action="clear-on-focus" value="${line.imei || "123456789012345"}" placeholder="Enter IMEI" />
+                    <button type="button" class="imei-check-btn" data-line="${idx}" data-action="check-imei">Check IMEI</button>
+                  </div>
+                  ${line.imeiStatus ? `<div class="imei-status ${line.imeiStatus==="checking" ? "pending" : ""}">${line.imeiStatus==="checking" ? "Checking IMEI..." : `IMEI is valid. Attached device: ${line.imeiDevice || "iPhone 13 128 GB"}.`}</div>` : ``}
+                </div>` : ``}
+              </div>
+            </div>
+          ` : ``}
+        `}
       </div>
     </div>
-  `;
+    `;
   }).join("");
 
   $("lineGrid").querySelectorAll("select,input").forEach(el=>{
@@ -2128,9 +2166,15 @@ function renderAsurion(){
       if(field){
         if(field==="tradeIn") asurionLines[idx][field] = el.value==="yes";
         else asurionLines[idx][field] = el.value;
+
         if(field==="imei"){
           asurionLines[idx].imeiStatus = "";
           asurionLines[idx].imeiDevice = "";
+        }
+        if(field==="byodImei"){
+          asurionLines[idx].byodEligibilityStatus = "";
+          asurionLines[idx].byodEligibilityMessage = "";
+          asurionLines[idx].byodDetectedDevice = "";
         }
         if(field==="numberType" && el.value==="new"){
           asurionLines[idx].mdn = "";
@@ -2164,18 +2208,61 @@ function renderAsurion(){
         asurionLines[idx].screenDamage = "";
         asurionLines[idx].liquidDamage = "";
         asurionLines[idx].powersOn = "";
-        asurionLines[idx].imei = "";
+        asurionLines[idx].imeiStatus = "";
+        asurionLines[idx].imeiDevice = "";
       } else if(field === "screenDamage"){
         asurionLines[idx].liquidDamage = "";
         asurionLines[idx].powersOn = "";
-        asurionLines[idx].imei = "";
+        asurionLines[idx].imeiStatus = "";
+        asurionLines[idx].imeiDevice = "";
       } else if(field === "liquidDamage"){
         asurionLines[idx].powersOn = "";
-        asurionLines[idx].imei = "";
+        asurionLines[idx].imeiStatus = "";
+        asurionLines[idx].imeiDevice = "";
       } else if(field === "powersOn"){
-        asurionLines[idx].imei = "";
+        asurionLines[idx].imeiStatus = "";
+        asurionLines[idx].imeiDevice = "";
       }
 
+      renderAsurion();
+    };
+  });
+
+  $("lineGrid").querySelectorAll('input[data-action="clear-on-focus"]').forEach(input=>{
+    input.onfocus = ()=>{
+      if(input.value === "123456789012345"){
+        input.value = "";
+        const idx = Number(input.dataset.line);
+        asurionLines[idx].imei = "";
+      }
+    };
+    input.oninput = ()=>{
+      const idx = Number(input.dataset.line);
+      asurionLines[idx].imei = input.value;
+    };
+  });
+
+  $("lineGrid").querySelectorAll('input[data-action="clear-byod-imei-on-focus"]').forEach(input=>{
+    input.onfocus = ()=>{
+      if(input.value === "123456789012345"){
+        input.value = "";
+        const idx = Number(input.dataset.line);
+        asurionLines[idx].byodImei = "";
+      }
+    };
+    input.oninput = ()=>{
+      const idx = Number(input.dataset.line);
+      asurionLines[idx].byodImei = input.value;
+      asurionLines[idx].byodEligibilityStatus = "";
+      asurionLines[idx].byodEligibilityMessage = "";
+      asurionLines[idx].byodDetectedDevice = "";
+    };
+  });
+
+  $("lineGrid").querySelectorAll('[data-action="remove-line"]').forEach(btn=>{
+    btn.onclick = ()=>{
+      const idx = Number(btn.dataset.line);
+      asurionLines.splice(idx, 1);
       renderAsurion();
     };
   });
@@ -2194,25 +2281,19 @@ function renderAsurion(){
     };
   });
 
-  $("lineGrid").querySelectorAll('input[data-action="clear-on-focus"]').forEach(input=>{
-    input.onfocus = ()=>{
-      if(input.value === "123456789012345"){
-        input.value = "";
-        const idx = Number(input.dataset.line);
-        asurionLines[idx].imei = "";
-      }
-    };
-    input.oninput = ()=>{
-      const idx = Number(input.dataset.line);
-      asurionLines[idx].imei = input.value;
-    };
-  });
-
-  $("lineGrid").querySelectorAll('[data-action="remove-line"]').forEach(btn=>{
+  $("lineGrid").querySelectorAll('[data-action="check-byod-imei"]').forEach(btn=>{
     btn.onclick = ()=>{
       const idx = Number(btn.dataset.line);
-      asurionLines.splice(idx, 1);
+      asurionLines[idx].byodEligibilityStatus = "checking";
+      asurionLines[idx].byodEligibilityMessage = "";
+      asurionLines[idx].byodDetectedDevice = "";
       renderAsurion();
+      setTimeout(()=>{
+        asurionLines[idx].byodEligibilityStatus = "valid";
+        asurionLines[idx].byodEligibilityMessage = "This device is eligible to be used on the Comcast Business network.";
+        asurionLines[idx].byodDetectedDevice = "iPhone 13 Pro Max 256GB";
+        renderAsurion();
+      }, 700);
     };
   });
 
@@ -2328,9 +2409,11 @@ function init(){
     const actualTrade = asurionLines.filter(line => line.tradeIn).length;
 
     const lineInputsReady = asurionLines.every(line => {
+      const byod = !!line.isByodLine;
       const numberReady = line.numberType === "new" ? true : (!!(line.mdn || "").trim() && !!(line.currentCarrier || "").trim());
-      const tradeReady = !line.tradeIn ? true : (!!line.majorDamage && !!line.screenDamage && !!line.liquidDamage && !!line.powersOn && line.imeiStatus === "valid");
-      return numberReady && tradeReady;
+      const byodReady = !byod ? true : (line.byodEligibilityStatus === "valid");
+      const tradeReady = byod ? true : (!line.tradeIn ? true : (!!line.majorDamage && !!line.screenDamage && !!line.liquidDamage && !!line.powersOn && line.imeiStatus === "valid"));
+      return numberReady && byodReady && tradeReady;
     });
 
     status.classList.remove("hidden");
