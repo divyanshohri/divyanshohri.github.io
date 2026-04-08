@@ -271,6 +271,27 @@
   .cart-metric .v{font-size:18px;font-weight:900;margin-top:4px}
   .cart-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
   .cart-detail{border:1px solid var(--cb-line);border-radius:12px;background:#fff;padding:11px 12px;font-size:13px}
+  .cart-item-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    margin-top:14px;
+  }
+  .cart-item-edit{
+    height:36px;
+    padding:0 12px;
+    border-radius:10px;
+    border:1px solid var(--cb-line);
+    background:#fff;
+    color:var(--cb-blue);
+    font-size:13px;
+    font-weight:800;
+    cursor:pointer;
+  }
+  .cart-item-edit:hover{
+    background:#f7fbff;
+  }
+
   .review-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
   .modal-backdrop{
     position:fixed;inset:0;background:rgba(15,23,42,.42);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50
@@ -418,6 +439,37 @@
     gap: 28px !important;
   }
 }
+
+
+  .handoff-shell{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+  .handoff-card{
+    width:min(980px,100%);
+    background:#fff;
+    border:1px solid var(--cb-line);
+    border-radius:24px;
+    box-shadow:var(--cb-shadow);
+    padding:34px;
+  }
+  .handoff-title{font-size:32px;font-weight:900;margin:0}
+  .handoff-sub{margin-top:10px;color:var(--cb-muted);font-size:16px}
+  .handoff-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:24px}
+  .handoff-option{
+    border:1px solid var(--cb-line);
+    border-radius:20px;
+    padding:22px;
+    background:linear-gradient(180deg,#fff,#f8fbff);
+  }
+  .handoff-option-title{font-size:20px;font-weight:900}
+  .handoff-option-copy{margin-top:8px;color:var(--cb-muted);font-size:14px;line-height:1.6}
+  .handoff-list{margin:14px 0 0 18px;padding:0;color:var(--cb-muted);font-size:14px;line-height:1.6}
+  .handoff-actions{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}
+  .appt-panel{
+    margin-top:22px;
+    border:1px solid var(--cb-line);
+    border-radius:18px;
+    padding:18px;
+    background:#f8fbff;
+  }
 
 </style>
 </head>
@@ -736,9 +788,7 @@
 
             <div class="review-actions">
               <button class="btn dashed" id="addMoreDeviceBtn">Add More Device</button>
-              <button class="btn" id="backToEditBtn">Edit Latest Device</button>
               <button class="btn" id="saveQuoteBtn">Save Quote</button>
-              <button class="btn" id="scheduleAppointmentBtn">Schedule Appointment</button>
               <button class="btn" id="moveToConciergeBtn">Move to Concierge</button>
             </div>
           </div>
@@ -794,7 +844,66 @@
     </div>
   </div>
 
-  <div id="successView" class="page hidden">
+  
+  <div id="handoffDecisionView" class="page hidden">
+    <div class="handoff-shell">
+      <div class="handoff-card">
+        <h1 class="handoff-title">Choose the handoff path</h1>
+        <div class="handoff-sub">Verbal consent is complete. Decide whether the order should be transferred to Asurion now or scheduled for a later appointment.</div>
+
+        <div class="handoff-grid">
+          <div class="handoff-option">
+            <div class="handoff-option-title">Transfer to Asurion now</div>
+            <div class="handoff-option-copy">Use this when the customer is ready for the order to be handed off immediately for line configuration and next-step processing.</div>
+            <ul class="handoff-list">
+              <li>Best for ready-now handoff</li>
+              <li>Moves straight to the Asurion experience</li>
+              <li>No additional scheduling step required</li>
+            </ul>
+            <div class="handoff-actions">
+              <button class="btn primary" id="handoffNowBtn">Transfer Now</button>
+            </div>
+          </div>
+
+          <div class="handoff-option">
+            <div class="handoff-option-title">Schedule an appointment</div>
+            <div class="handoff-option-copy">Use this when the customer wants a planned follow-up time before the order is transferred to Asurion.</div>
+            <ul class="handoff-list">
+              <li>Best for delayed handoff</li>
+              <li>Captures a preferred date and time</li>
+              <li>Order stays ready for future transfer</li>
+            </ul>
+            <div class="handoff-actions">
+              <button class="btn" id="scheduleLaterBtn">Schedule Appointment</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="appt-panel hidden" id="appointmentPanel">
+          <div class="section-title">Appointment details</div>
+          <div class="grid-2">
+            <div class="field">
+              <label>Preferred date</label>
+              <input type="text" id="appointmentDate" placeholder="MM/DD/YYYY" />
+            </div>
+            <div class="field">
+              <label>Preferred time</label>
+              <input type="text" id="appointmentTime" placeholder="HH:MM AM/PM" />
+            </div>
+          </div>
+          <div class="field" style="margin-top:14px">
+            <label>Notes</label>
+            <input type="text" id="appointmentNotes" placeholder="Optional follow-up note" />
+          </div>
+          <div class="handoff-actions">
+            <button class="btn primary" id="confirmAppointmentBtn">Save Appointment</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div id="successView" class="page hidden">
     <div class="success-shell">
       <div class="success-card">
         <div class="success-badge">✓</div>
@@ -1047,7 +1156,7 @@ function money(n){ return "$" + Number(n || 0).toFixed(0); }
 function hasProPhoneOnAccount(){ return true; }
 
 function setVisibleView(viewId){
-  ["catalogView","configuratorView","reviewView","successView","asurionView"].forEach(id=>{
+  ["catalogView","configuratorView","reviewView","handoffDecisionView","successView","asurionView"].forEach(id=>{
     const el = document.getElementById(id);
     if(el) el.classList.toggle("hidden", id !== viewId);
   });
@@ -1594,9 +1703,25 @@ function renderCartItems(){
           <div class="cart-detail"><strong>Protection:</strong> ${protectionIncluded ? "Included" : (item.protectionDecision==="yes" ? item.protectionCount + " device(s)" : "No")}</div>
           <div class="cart-detail"><strong>Trade-in estimate:</strong> ${money(tradeEstimate)}</div>
         </div>
+        <div class="cart-item-actions">
+          <button class="cart-item-edit" data-cart-edit="${item._cartId}">Edit</button>
+        </div>
       </div>
     `;
   }).join("");
+
+  document.querySelectorAll("[data-cart-edit]").forEach(btn=>{
+    btn.onclick = ()=>{
+      const targetId = btn.getAttribute("data-cart-edit");
+      const found = cart.find(item => item._cartId === targetId);
+      if(found){
+        state = JSON.parse(JSON.stringify(found));
+        showOnly("configuratorView");
+        renderConfigurator();
+        window.scrollTo({top:0, behavior:"smooth"});
+      }
+    };
+  });
 
   $("orderTotal").textContent = money(totals.total);
   $("orderMonthly").textContent = money(totals.monthly);
@@ -1771,18 +1896,32 @@ function init(){
 
   $("backToCatalogBtn").onclick = ()=> showOnly("catalogView");
   $("continueBtn").onclick = ()=>{ renderReview(); showOnly("reviewView"); window.scrollTo({top:0,behavior:"smooth"}); };
-  $("backToEditBtn").onclick = ()=>{ showOnly("configuratorView"); renderConfigurator(); };
   $("addMoreDeviceBtn").onclick = ()=>{ resetForNewDevice(state.category); showOnly("catalogView"); renderCatalog(); };
   $("saveQuoteBtn").onclick = ()=> alert("Quote saved successfully for this demo.");
-  $("scheduleAppointmentBtn").onclick = ()=> alert("Appointment scheduling flow can be added here.");
   $("moveToConciergeBtn").onclick = ()=> showConciergeModal();
 
   $("cancelConciergeBtn").onclick = ()=> hideConciergeModal();
   ["confirm1","confirm2","confirm3"].forEach(id=> $(id).onchange = updateProceed);
-  $("proceedConciergeBtn").onclick = ()=>{ hideConciergeModal(); showOnly("successView"); window.scrollTo({top:0,behavior:"smooth"}); };
+  $("proceedConciergeBtn").onclick = ()=>{ hideConciergeModal(); showOnly("handoffDecisionView"); window.scrollTo({top:0,behavior:"smooth"}); };
 
-  $("exitSuccessBtn").onclick = ()=> showOnly("catalogView");
-  $("configureAnotherBtn").onclick = ()=> showOnly("catalogView");
+  $("handoffNowBtn").onclick = ()=>{
+    const successSub = document.querySelector("#successView .success-sub");
+    if(successSub) successSub.textContent = "Your order has been sent to Asurion.";
+    showOnly("successView");
+  };
+  $("scheduleLaterBtn").onclick = ()=>{ $("appointmentPanel").classList.remove("hidden"); };
+  $("confirmAppointmentBtn").onclick = ()=>{
+    const date = $("appointmentDate").value.trim();
+    const time = $("appointmentTime").value.trim();
+    const notes = $("appointmentNotes").value.trim();
+    const summary = [date || "Date TBD", time || "Time TBD", notes].filter(Boolean).join(" • ");
+    const successSub = document.querySelector("#successView .success-sub");
+    if(successSub) successSub.textContent = `Appointment scheduled for ${summary}. The order is ready for Asurion handoff at the scheduled time.`;
+    showOnly("successView");
+  };
+
+  $("exitSuccessBtn").onclick = ()=>{ const successSub = document.querySelector("#successView .success-sub"); if(successSub) successSub.textContent = "Your order has been sent to Asurion."; showOnly("catalogView"); };
+  $("configureAnotherBtn").onclick = ()=>{ const successSub = document.querySelector("#successView .success-sub"); if(successSub) successSub.textContent = "Your order has been sent to Asurion."; showOnly("catalogView"); };
   $("goToAsurionBtn").onclick = ()=>{ initAsurionLines(); renderAsurion(); showOnly("asurionView"); window.scrollTo({top:0,behavior:"smooth"}); };
 
   $("autoAssignBtn").onclick = ()=>{ initAsurionLines(); renderAsurion(); };
