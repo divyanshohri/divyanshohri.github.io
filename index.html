@@ -495,22 +495,6 @@
     background:#eef5ff;
     color:var(--cb-blue);
   }
-  .eligibility-status{
-    margin-top:10px;
-    border:1px solid #bfe6de;
-    background:var(--cb-good-bg);
-    color:var(--cb-good);
-    border-radius:12px;
-    padding:10px 12px;
-    font-size:13px;
-    line-height:1.5;
-  }
-  .eligibility-status.pending{
-    border-color:#cfe0ff;
-    background:#eef5ff;
-    color:var(--cb-blue);
-  }
-
 
 
 
@@ -647,6 +631,974 @@
     border-radius:18px;
     padding:18px;
     background:#f8fbff;
+  }
+
+
+  .asurion-shell{
+    max-width:1180px;
+  }
+  .asurion-main-card{
+    width:100%;
+  }
+  .line-summary-shell{
+    display:grid;
+    gap:24px;
+  }
+  .finance-card{
+    background:#fff;
+    border:1px solid var(--cb-line);
+    border-radius:18px;
+    box-shadow:var(--cb-shadow);
+    padding:22px 24px;
+  }
+  .finance-title{
+    font-size:18px;
+    font-weight:900;
+    color:var(--cb-ink);
+    margin-bottom:16px;
+  }
+  .finance-grid{
+    display:grid;
+    grid-template-columns:1.1fr 1fr 1fr;
+    gap:16px;
+    align-items:stretch;
+  }
+  .finance-metric{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+  }
+  .finance-icon{
+    width:34px;
+    height:34px;
+    border-radius:12px;
+    background:#f3f7ff;
+    color:var(--cb-blue);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+    flex:none;
+  }
+  .finance-metric-title{
+    font-size:14px;
+    font-weight:800;
+    color:var(--cb-ink);
+    line-height:1.4;
+  }
+  .finance-metric-sub{
+    margin-top:6px;
+    font-size:12px;
+    color:var(--cb-muted);
+  }
+  .finance-callout{
+    border:2px solid #d7d7d9;
+    border-radius:14px;
+    padding:14px 16px;
+    background:#fff;
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+  }
+  .plan-card{
+    background:#fff;
+    border:1px solid var(--cb-line);
+    border-radius:18px;
+    box-shadow:var(--cb-shadow);
+    overflow:hidden;
+  }
+  .plan-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    padding:18px 24px;
+    border-bottom:1px solid var(--cb-line);
+  }
+  .plan-title{
+    font-size:20px;
+    font-weight:900;
+    color:var(--cb-ink);
+  }
+  .plan-price{
+    font-size:14px;
+    color:var(--cb-muted);
+  }
+  .plan-row{
+    padding:18px 24px 8px;
+    font-size:14px;
+    font-weight:800;
+    color:var(--cb-ink);
+  }
+  .line-list{
+    display:grid;
+    gap:16px;
+    padding:0 24px 24px;
+  }
+  .line-card-summary{
+    border:1px solid var(--cb-line);
+    border-radius:16px;
+    padding:18px 20px;
+    display:grid;
+    grid-template-columns:72px 1fr auto;
+    gap:18px;
+    align-items:center;
+    background:#fff;
+  }
+  .line-card-icon{
+    width:56px;
+    height:56px;
+    border-radius:14px;
+    border:1px solid var(--cb-line);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--cb-muted);
+    font-size:28px;
+    background:#fbfcfe;
+  }
+  .line-card-name{
+    font-size:18px;
+    font-weight:900;
+    color:var(--cb-ink);
+  }
+  .line-card-meta{
+    margin-top:6px;
+    font-size:14px;
+    color:var(--cb-muted);
+    line-height:1.5;
+  }
+  .line-card-links{
+    margin-top:12px;
+    display:flex;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  .line-card-link{
+    color:var(--cb-blue);
+    font-size:14px;
+    font-weight:800;
+    text-decoration:none;
+    background:none;
+    border:none;
+    padding:0;
+    cursor:pointer;
+  }
+  .line-card-cta{
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+  }
+  .line-edit-summary-btn{
+    min-width:120px;
+    height:42px;
+    padding:0 18px;
+    border-radius:999px;
+    border:1px solid var(--cb-blue);
+    color:var(--cb-blue);
+    background:#fff;
+    font-size:14px;
+    font-weight:900;
+    cursor:pointer;
+  }
+  .line-actions-row{
+    display:flex;
+    justify-content:flex-end;
+    gap:12px;
+    padding:0 24px 24px;
+    flex-wrap:wrap;
+  }
+
+
+  .plan-group{
+    border-top:1px solid var(--cb-line);
+    padding-top:14px;
+    margin-top:6px;
+  }
+  .plan-group:first-of-type{
+    border-top:none;
+    padding-top:0;
+    margin-top:0;
+  }
+
+
+  .plan-modal{
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,.28);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    z-index:200;
+  }
+  .plan-modal-card{
+    width:min(1120px,96vw);
+    background:#fff;
+    border-radius:18px;
+    box-shadow:0 24px 80px rgba(15,23,42,.22);
+    overflow:hidden;
+  }
+  .plan-modal-topbar{
+    height:84px;
+    display:flex;
+    justify-content:flex-end;
+    align-items:flex-start;
+    padding:18px 22px 0;
+  }
+  .plan-modal-close{
+    border:none;
+    background:none;
+    font-size:28px;
+    line-height:1;
+    cursor:pointer;
+    color:#111827;
+  }
+  .plan-banner{
+    background:#0d62ff;
+    color:#fff;
+    font-weight:800;
+    padding:18px 28px;
+    font-size:18px;
+  }
+  .plan-modal-body{
+    padding:34px 40px 28px;
+  }
+  .plan-modal-title{
+    font-size:22px;
+    font-weight:900;
+    color:var(--cb-ink);
+    margin-bottom:28px;
+  }
+  .plan-choice-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+  }
+  .plan-choice{
+    border:2px solid #d1d5db;
+    border-radius:14px;
+    background:#fff;
+    padding:30px 28px;
+    cursor:pointer;
+    min-height:260px;
+  }
+  .plan-choice.active{
+    border-color:#0d62ff;
+    box-shadow:0 0 0 2px rgba(139,92,246,.08) inset;
+  }
+  .plan-choice-icon{
+    color:#0d62ff;
+    font-size:32px;
+    text-align:center;
+    margin-bottom:14px;
+  }
+  .plan-choice-name{
+    text-align:center;
+    font-size:20px;
+    font-weight:900;
+    color:var(--cb-ink);
+    margin-bottom:24px;
+  }
+  .plan-feature{
+    display:flex;
+    gap:12px;
+    font-size:14px;
+    color:var(--cb-ink);
+    line-height:1.5;
+    margin-bottom:12px;
+  }
+  .plan-feature-icon{
+    width:18px;
+    flex:none;
+    color:#111827;
+    text-align:center;
+  }
+  .plan-choice-price{
+    text-align:center;
+    font-size:20px;
+    font-weight:900;
+    color:var(--cb-ink);
+    margin-top:26px;
+  }
+  .plan-modal-footer{
+    padding:18px 40px 28px;
+  }
+  .plan-modal-divider{
+    border:1px solid var(--cb-line);
+    border-radius:999px;
+    height:44px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--cb-ink);
+    font-weight:800;
+    margin-bottom:22px;
+  }
+  .plan-modal-bottom{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:20px;
+  }
+  .plan-modal-price{
+    font-size:48px;
+    line-height:1;
+    font-weight:900;
+    color:var(--cb-ink);
+  }
+  .plan-modal-price small{
+    font-size:24px;
+    font-weight:800;
+  }
+  .plan-modal-copy{
+    margin-top:10px;
+    max-width:720px;
+    color:var(--cb-muted);
+    font-size:14px;
+    line-height:1.5;
+  }
+  .plan-modal-cta{
+    min-width:170px;
+    height:56px;
+    border:none;
+    border-radius:10px;
+    background:#0d62ff;
+    color:#fff;
+    font-size:16px;
+    font-weight:900;
+    cursor:pointer;
+  }
+
+
+  .plan-card{
+    background:transparent;
+    border:none;
+    box-shadow:none;
+    overflow:visible;
+  }
+  .plan-header{
+    padding:10px 0 18px;
+    border-bottom:1px solid var(--cb-line);
+    margin-bottom:18px;
+  }
+  .plan-title{
+    font-size:28px;
+    line-height:1.2;
+  }
+  .plan-group{
+    margin-top:22px;
+  }
+  .plan-group-head{
+    font-size:18px;
+    font-weight:900;
+    color:var(--cb-ink);
+    margin-bottom:14px;
+  }
+  .line-list{
+    padding:0;
+  }
+  .line-card-summary{
+    grid-template-columns:110px 1fr 170px;
+    align-items:start;
+    padding:26px 28px;
+    border-radius:18px;
+    background:#fff;
+  }
+  .line-card-icon{
+    width:84px;
+    height:84px;
+    border:none;
+    background:transparent;
+    font-size:44px;
+  }
+  .line-card-name{
+    font-size:20px;
+    line-height:1.35;
+  }
+  .line-card-meta{
+    font-size:18px;
+    color:var(--cb-ink);
+    margin-top:2px;
+  }
+  .line-card-submeta{
+    margin-top:6px;
+    font-size:18px;
+    color:var(--cb-muted);
+  }
+  .line-card-links{
+    margin-top:16px;
+    gap:22px;
+  }
+  .line-card-link{
+    font-size:18px;
+    text-decoration:underline;
+    text-underline-offset:2px;
+  }
+  .line-card-price{
+    text-align:right;
+    font-size:18px;
+    color:var(--cb-ink);
+    line-height:1.3;
+    font-weight:800;
+    padding-top:6px;
+  }
+  .line-card-price strong{
+    display:block;
+    font-size:28px;
+    line-height:1.1;
+    font-weight:900;
+  }
+  .line-card-footer{
+    grid-column:1 / -1;
+    margin-top:20px;
+    padding-top:18px;
+    border-top:1px solid var(--cb-line);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+    flex-wrap:wrap;
+  }
+  .pay-today{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    font-size:20px;
+    color:var(--cb-ink);
+  }
+  .pay-today input{
+    width:42px;
+    height:42px;
+    border-radius:8px;
+  }
+  .line-edit-inline{
+    min-width:120px;
+    height:44px;
+    padding:0 18px;
+    border-radius:999px;
+    border:1px solid var(--cb-blue);
+    color:var(--cb-blue);
+    background:#fff;
+    font-size:16px;
+    font-weight:900;
+    cursor:pointer;
+  }
+
+
+  .plan-card{
+    max-width:100%;
+  }
+  .line-list{
+    gap:12px;
+  }
+  .line-card-summary{
+    grid-template-columns:84px 1fr 150px;
+    padding:18px 20px;
+    gap:14px;
+  }
+  .line-card-icon{
+    width:64px;
+    height:64px;
+    font-size:34px;
+  }
+  .line-card-name{
+    font-size:18px;
+  }
+  .line-card-meta{
+    font-size:15px;
+  }
+  .line-card-submeta{
+    margin-top:4px;
+    font-size:15px;
+  }
+  .line-card-links{
+    margin-top:10px;
+    gap:16px;
+  }
+  .line-card-link{
+    font-size:15px;
+  }
+  .line-card-price{
+    font-size:15px;
+    padding-top:4px;
+  }
+  .line-card-price strong{
+    font-size:22px;
+  }
+  .line-card-footer{
+    margin-top:14px;
+    padding-top:14px;
+  }
+  .pay-today{
+    gap:12px;
+    font-size:16px;
+  }
+  .pay-today input{
+    width:28px;
+    height:28px;
+  }
+  .line-actions-row{
+    padding:8px 24px 28px;
+  }
+  .attention-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    margin-top:10px;
+    padding:6px 10px;
+    border-radius:999px;
+    background:#fff7ed;
+    color:#b45309;
+    border:1px solid #fed7aa;
+    font-size:12px;
+    font-weight:900;
+  }
+  .attention-badge.ok{
+    background:#ecfdf5;
+    color:#047857;
+    border-color:#a7f3d0;
+  }
+  .plan-modal-card{
+    border-radius:14px;
+  }
+  .plan-banner{
+    background:#0d62ff;
+  }
+  .plan-choice.active{
+    border-color:#0d62ff;
+    box-shadow:0 0 0 2px rgba(13,98,255,.08) inset;
+  }
+  .plan-choice-icon{
+    color:#0d62ff;
+  }
+  .plan-modal-cta{
+    background:#0d62ff;
+  }
+
+
+  .edit-scratch-page{
+    display:grid;
+    gap:22px;
+    padding-bottom:44px;
+  }
+  .edit-scratch-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:16px;
+    padding-bottom:14px;
+    border-bottom:1px solid var(--cb-line);
+  }
+  .edit-scratch-title{
+    font-size:18px;
+    font-weight:900;
+    color:var(--cb-ink);
+    margin-bottom:4px;
+  }
+  .edit-scratch-sub{
+    font-size:13px;
+    color:var(--cb-muted);
+  }
+  .edit-scratch-price{
+    font-size:20px;
+    font-weight:900;
+    color:#0d62ff;
+    white-space:nowrap;
+  }
+  .edit-scratch-layout{
+    display:grid;
+    grid-template-columns:minmax(260px,420px) minmax(360px,1fr) 320px;
+    gap:24px;
+    align-items:start;
+  }
+  .edit-card{
+    background:#fff;
+    border:1px solid var(--cb-line);
+    border-radius:18px;
+    box-shadow:var(--cb-shadow);
+  }
+  .edit-hero{
+    padding:22px;
+    text-align:center;
+  }
+  .edit-hero-frame{
+    min-height:380px;
+    border-radius:18px;
+    background:#f6f8fb;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:88px;
+    color:#64748b;
+  }
+  .edit-hero-name{
+    margin-top:16px;
+    font-size:24px;
+    font-weight:900;
+    color:var(--cb-ink);
+  }
+  .edit-hero-meta{
+    margin-top:6px;
+    font-size:16px;
+    color:var(--cb-muted);
+  }
+  .edit-main{
+    padding:22px;
+  }
+  .edit-banner{
+    background:#e8f0ff;
+    color:#0d62ff;
+    border-radius:12px;
+    padding:12px 14px;
+    font-size:13px;
+    font-weight:800;
+    margin-bottom:18px;
+  }
+  .edit-section{
+    margin-bottom:20px;
+  }
+  .edit-label{
+    font-size:14px;
+    font-weight:900;
+    color:var(--cb-ink);
+    margin-bottom:10px;
+  }
+  .edit-input, .edit-select{
+    width:100%;
+    min-height:46px;
+    border:1px solid var(--cb-line);
+    border-radius:10px;
+    padding:0 14px;
+    font-size:14px;
+    color:var(--cb-ink);
+    background:#fff;
+  }
+  .edit-grid-2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+  .edit-choices{
+    display:grid;
+    gap:10px;
+  }
+  .edit-choices.two{
+    grid-template-columns:1fr 1fr;
+  }
+  .edit-choice{
+    min-height:48px;
+    border:1.5px solid #d3dae8;
+    border-radius:10px;
+    background:#fff;
+    font-size:14px;
+    font-weight:800;
+    color:var(--cb-ink);
+    cursor:pointer;
+    padding:10px 14px;
+    text-align:left;
+  }
+  .edit-choice.active{
+    border-color:#0d62ff;
+    background:#eef5ff;
+    color:#0d62ff;
+    box-shadow:0 0 0 2px rgba(13,98,255,.08) inset;
+  }
+  .edit-plan-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+  }
+  .edit-plan-card{
+    border:1.5px solid #d7dbe5;
+    border-radius:16px;
+    background:#fff;
+    padding:18px;
+    cursor:pointer;
+  }
+  .edit-plan-card.active{
+    border-color:#0d62ff;
+    background:#eef5ff;
+    box-shadow:0 0 0 2px rgba(13,98,255,.08) inset;
+  }
+  .edit-plan-icon{
+    font-size:22px;
+    color:#0d62ff;
+    margin-bottom:8px;
+  }
+  .edit-plan-title{
+    font-size:18px;
+    font-weight:900;
+    color:var(--cb-ink);
+    margin-bottom:10px;
+  }
+  .edit-plan-feature{
+    display:flex;
+    gap:10px;
+    font-size:14px;
+    line-height:1.5;
+    color:var(--cb-ink);
+    margin-bottom:8px;
+  }
+  .edit-plan-price{
+    margin-top:12px;
+    font-size:20px;
+    font-weight:900;
+    color:var(--cb-ink);
+  }
+  .edit-swatches{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .edit-swatch{
+    width:34px;
+    height:34px;
+    border-radius:999px;
+    border:2px solid #d1d5db;
+    cursor:pointer;
+    background:var(--swatch, #ddd);
+  }
+  .edit-swatch.active{
+    border-color:#0d62ff;
+    box-shadow:0 0 0 2px rgba(13,98,255,.12);
+  }
+  .edit-storage-list{
+    display:grid;
+    gap:10px;
+  }
+  .edit-storage{
+    border:1.5px solid #d3dae8;
+    border-radius:10px;
+    background:#fff;
+    padding:12px 14px;
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    cursor:pointer;
+  }
+  .edit-storage.active{
+    border-color:#0d62ff;
+    background:#eef5ff;
+    box-shadow:0 0 0 2px rgba(13,98,255,.08) inset;
+  }
+  .edit-storage-name{
+    font-size:14px;
+    font-weight:900;
+    color:var(--cb-ink);
+  }
+  .edit-storage-price{
+    font-size:12px;
+    color:var(--cb-muted);
+    text-align:right;
+  }
+  .edit-note{
+    margin-top:8px;
+    font-size:12px;
+    color:#0d62ff;
+    font-weight:800;
+    background:#dbeafe;
+    border-radius:10px;
+    padding:8px 10px;
+    display:inline-block;
+  }
+  .edit-side{
+    padding:20px;
+    position:sticky;
+    top:24px;
+  }
+  .edit-summary-title{
+    font-size:18px;
+    font-weight:900;
+    color:var(--cb-ink);
+    margin-bottom:16px;
+  }
+  .edit-summary-row{
+    display:flex;
+    justify-content:space-between;
+    gap:14px;
+    margin-bottom:12px;
+    font-size:14px;
+    color:var(--cb-ink);
+  }
+  .edit-summary-row.muted{
+    color:var(--cb-muted);
+  }
+  .edit-total{
+    display:flex;
+    justify-content:space-between;
+    gap:14px;
+    padding-top:14px;
+    margin-top:14px;
+    border-top:1px solid var(--cb-line);
+    font-size:18px;
+    font-weight:900;
+    color:var(--cb-ink);
+  }
+  .edit-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:12px;
+    margin-top:22px;
+  }
+  @media (max-width: 1200px){
+    .edit-scratch-layout{
+      grid-template-columns:1fr;
+    }
+    .edit-side{
+      position:static;
+    }
+  }
+
+
+  /* rebuilt edit device screen */
+  .rebuild-edit-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:16px;
+    padding-bottom:14px;
+    border-bottom:1px solid var(--cb-line);
+    margin-bottom:18px;
+  }
+  .rebuild-edit-title{
+    font-size:18px;
+    font-weight:900;
+    color:var(--cb-ink);
+    margin-bottom:4px;
+  }
+  .rebuild-edit-sub{
+    font-size:13px;
+    color:var(--cb-muted);
+  }
+  .rebuild-edit-price{
+    font-size:20px;
+    font-weight:900;
+    color:var(--cb-blue);
+    white-space:nowrap;
+  }
+  .rebuild-edit-layout{
+    display:grid;
+    grid-template-columns:280px minmax(420px,1fr) 320px;
+    gap:24px;
+    align-items:start;
+  }
+  .rebuild-edit-device,
+  .rebuild-edit-main,
+  .rebuild-edit-side{
+    background:#fff;
+    border:1px solid var(--cb-line);
+    border-radius:18px;
+    box-shadow:var(--cb-shadow);
+    padding:20px;
+  }
+  .rebuild-edit-device-frame{
+    min-height:300px;
+    border-radius:18px;
+    background:#f6f8fb;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:84px;
+    color:#64748b;
+  }
+  .rebuild-edit-device-name{
+    margin-top:14px;
+    font-size:22px;
+    font-weight:900;
+    text-align:center;
+    color:var(--cb-ink);
+  }
+  .rebuild-edit-device-meta{
+    margin-top:6px;
+    text-align:center;
+    font-size:15px;
+    color:var(--cb-muted);
+  }
+  .rebuild-edit-section{
+    margin-bottom:20px;
+  }
+  .rebuild-edit-label{
+    font-size:14px;
+    font-weight:900;
+    color:var(--cb-ink);
+    margin-bottom:10px;
+  }
+  .rebuild-edit-delivery{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+  .rebuild-edit-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:12px;
+    margin-top:22px;
+  }
+  @media (max-width: 1200px){
+    .rebuild-edit-layout{
+      grid-template-columns:1fr;
+    }
+  }
+
+
+  .rebuild-trade-box{
+    border:1px solid var(--cb-line);
+    border-radius:14px;
+    background:#f8fbff;
+    padding:14px;
+  }
+  .rebuild-trade-summary{
+    font-size:13px;
+    color:var(--cb-muted);
+    margin-bottom:12px;
+  }
+  .rebuild-trade-question{
+    margin-top:12px;
+  }
+  .rebuild-trade-imei-row{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    flex-wrap:wrap;
+  }
+  .rebuild-trade-imei-row .edit-input{
+    flex:1 1 220px;
+  }
+  .rebuild-trade-result{
+    margin-top:10px;
+    border:1px solid #bfe6de;
+    background:var(--cb-good-bg);
+    color:var(--cb-good);
+    border-radius:12px;
+    padding:12px 14px;
+    font-size:13px;
+    font-weight:800;
+  }
+
+
+  .rebuild-edit-port-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+
+
+  .rebuild-byod-imei-box{
+    border:1px solid var(--cb-line);
+    border-radius:14px;
+    background:#f8fbff;
+    padding:14px;
+  }
+  .rebuild-byod-imei-result{
+    margin-top:10px;
+    border:1px solid #bfe6de;
+    background:var(--cb-good-bg);
+    color:var(--cb-good);
+    border-radius:12px;
+    padding:12px 14px;
+    font-size:13px;
+    font-weight:800;
   }
 
 </style>
@@ -953,6 +1905,10 @@
     </div>
   </div>
 
+  <div id="lineEditView" class="page hidden">
+    <div class="container"><div id="lineEditMount"></div></div>
+  </div>
+
   <div id="reviewView" class="page hidden">
     <div class="container review-shell">
       <div class="review-layout">
@@ -1096,34 +2052,15 @@
     </div>
   </div>
 
+  
   <div id="asurionView" class="page hidden">
     <div class="container asurion-shell">
-      <div class="asurion-layout">
-        <div class="sticky-side">
-          <div class="card">
-            <div class="card-body">
-              <h2 class="card-title">Order pools</h2>
-              <div class="card-sub">Allocate the quote-level totals across individual lines.</div>
-              <div class="pool-grid">
-                <div class="pool-card"><div class="k">Total Lines</div><div class="v" id="poolLines">0</div></div>
-                <div class="pool-card"><div class="k">Port-In Available</div><div class="v" id="poolPort">0</div></div>
-                <div class="pool-card"><div class="k">Trade-In Available</div><div class="v" id="poolTrade">0</div></div>
-              </div>
-              <div class="actions" style="grid-template-columns:1fr;margin-top:16px">
-                <button class="btn" id="autoAssignBtn">Auto-Configure Lines</button>
-                <button class="btn primary" id="completeAsurionBtn">Move to Checkout</button>
-              </div>
-              <div class="checkout-status hidden" id="checkoutStatus"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-body">
-            <h2 class="card-title">Line configuration</h2>
-            <div class="card-sub">Assign nickname, number type, and plan for each line.</div>
-            <div class="line-grid" id="lineGrid" style="margin-top:18px"></div>
-          </div>
+      <div class="asurion-main-card card">
+        <div class="card-body">
+          <h2 class="card-title">Line configuration</h2>
+          <div class="card-sub">Review each line and use Edit to complete any missing details.</div>
+          <div class="line-grid" id="lineGrid" style="margin-top:18px"></div>
+          <div class="checkout-status hidden" id="checkoutStatus" style="margin-top:16px"></div>
         </div>
       </div>
     </div>
@@ -1324,6 +2261,7 @@ let state = initialState();
 let cart = [];
 let asurionLines = [];
 let screenHistory = ["catalogView"];
+let activeLineEditIndex = null;
 
 function currentDevice(){ return DEVICES[state.deviceId] || null; }
 function isPhone(){ return state.category === "phones"; }
@@ -1334,7 +2272,7 @@ function money(n){ return "$" + Number(n || 0).toFixed(0); }
 function hasProPhoneOnAccount(){ return true; }
 
 function setVisibleView(viewId){
-  ["catalogView","configuratorView","reviewView","handoffDecisionView","successView","asurionView"].forEach(id=>{
+  ["catalogView","configuratorView","lineEditView","reviewView","handoffDecisionView","successView","asurionView"].forEach(id=>{
     const el = document.getElementById(id);
     if(el) el.classList.toggle("hidden", id !== viewId);
   });
@@ -1907,6 +2845,366 @@ function renderCartItems(){
   $("orderPromo").textContent = money(totals.promo);
 }
 
+
+function renderLineEditView(){
+  const line = activeLineEditIndex !== null ? asurionLines[activeLineEditIndex] : null;
+  if(!line){
+    showOnly("asurionView");
+    renderAsurion();
+    return;
+  }
+
+  const device = Object.values(DEVICES).find(d => (d.name || "") === (line.product || "")) || {};
+  const colorPalette = {
+    "Black":"#2f3542","Titanium":"#c8c0b6","Natural Titanium":"#c8c0b6","Blue":"#35548b","White":"#f5f5f5",
+    "Silver":"#d8dde6","Graphite":"#4b5563","Gold":"#d4b483","Pink":"#ec4899","Purple":"#8b5cf6",
+    "Cobalt Violet":"#6b5ca5","Gray":"#9ca3af","Green":"#10b981","Titanium Gray":"#8b8f97","Navy":"#1e3a8a"
+  };
+
+  const isByodLine = /bring your|byod|byot|byow/i.test(line.product || "") || /^(byod|byot|byow)$/i.test(line.deviceId || "");
+
+  if(!line.tradeFlow){
+    line.tradeFlow = {
+      physicalDamage: "",
+      functionalScreen: "",
+      activationLocksRemoved: "",
+      imei: "356789012345678",
+      imeiChecked: false
+    };
+  }
+  if(!line.byodFlow){
+    line.byodFlow = {
+      imei: "356789012345678",
+      imeiChecked: false
+    };
+  }
+
+  const monthlyPrice = Number(line.monthlyPrice || 36.11);
+  const fullPrice = Number(line.fullPrice || 1299.99);
+  const planCharge = (line.plan || "Standard") === "Pro" ? 10 : 5;
+  const deliveryMethod = line.deliveryMethod || "shipping";
+  const isPorting = line.numberType === "port";
+
+  $("lineEditMount").innerHTML = `
+    <div class="rebuild-edit-head">
+      <div>
+        <div class="rebuild-edit-title">${line.product || "Selected device"}</div>
+        <div class="rebuild-edit-sub">Edit Device</div>
+      </div>
+      <div class="rebuild-edit-price">${line.payToday ? `$${fullPrice.toFixed(2)} paid today` : `$${(monthlyPrice + planCharge).toFixed(2)}/mo`}</div>
+    </div>
+
+    <div class="rebuild-edit-layout">
+      <div class="rebuild-edit-device">
+        <div class="rebuild-edit-device-frame">${device.icon || "📱"}</div>
+        <div class="rebuild-edit-device-name">${line.product || "Selected device"}</div>
+        <div class="rebuild-edit-device-meta">${isByodLine ? (line.byodFlow.imeiChecked ? "IMEI verified" : "Customer-owned device") : `${line.storage || ""}${line.color ? `, ${line.color}` : ""}`}</div>
+      </div>
+
+      <div class="rebuild-edit-main">
+        ${device.promo ? `<div class="edit-banner">${device.promo}</div>` : ``}
+
+        ${!isByodLine && device.colors?.length ? `
+        <div class="rebuild-edit-section">
+          <div class="rebuild-edit-label">Color: ${line.color || device.colors[0]}</div>
+          <div class="edit-swatches">
+            ${device.colors.map(color=>`
+              <button type="button" class="edit-swatch ${((line.color || device.colors[0])===color) ? "active" : ""}"
+                style="--swatch:${colorPalette[color] || '#d1d5db'}"
+                data-edit-field="color" data-edit-value="${color}"></button>
+            `).join("")}
+          </div>
+        </div>` : ``}
+
+        ${!isByodLine && device.storages?.length ? `
+        <div class="rebuild-edit-section">
+          <div class="rebuild-edit-label">Storage size</div>
+          <div class="edit-storage-list">
+            ${device.storages.map(storage=>`
+              <button type="button" class="edit-storage ${((line.storage || device.storages[0])===storage) ? "active" : ""}" data-edit-field="storage" data-edit-value="${storage}">
+                <span class="edit-storage-name">${storage}</span>
+                <span class="edit-storage-price">From $${fullPrice.toFixed(0)} or $${monthlyPrice.toFixed(2)}/mo</span>
+              </button>
+            `).join("")}
+          </div>
+        </div>` : ``}
+
+        <div class="rebuild-edit-section">
+          <div class="rebuild-edit-label">Porting</div>
+          <div class="edit-choices two">
+            <button type="button" class="edit-choice ${isPorting ? "active" : ""}" data-edit-field="numberType" data-edit-value="port">Yes</button>
+            <button type="button" class="edit-choice ${!isPorting ? "active" : ""}" data-edit-field="numberType" data-edit-value="new">No</button>
+          </div>
+        </div>
+
+        ${isPorting ? `
+        <div class="rebuild-edit-section">
+          <div class="rebuild-edit-port-grid">
+            <div>
+              <div class="rebuild-edit-label">MDN</div>
+              <input id="editPortMdnInput" class="edit-input" maxlength="10" inputmode="numeric" value="${line.mdn || ""}" placeholder="Enter 10-digit number">
+            </div>
+            <div>
+              <div class="rebuild-edit-label">Carrier</div>
+              <select id="editPortCarrierSelect" class="edit-input">
+                <option value="" ${!(line.currentCarrier || "") ? "selected" : ""}>Select carrier</option>
+                <option value="AT&T" ${line.currentCarrier==="AT&T" ? "selected" : ""}>AT&T</option>
+                <option value="Verizon" ${line.currentCarrier==="Verizon" ? "selected" : ""}>Verizon</option>
+                <option value="T-Mobile" ${line.currentCarrier==="T-Mobile" ? "selected" : ""}>T-Mobile</option>
+                <option value="Other" ${line.currentCarrier==="Other" ? "selected" : ""}>Other</option>
+              </select>
+            </div>
+          </div>
+        </div>` : ``}
+
+        ${isByodLine ? `
+        <div class="rebuild-edit-section">
+          <div class="rebuild-edit-label">IMEI checker</div>
+          <div class="rebuild-byod-imei-box">
+            <div class="rebuild-trade-imei-row">
+              <input id="byodImeiInput" class="edit-input" maxlength="15" value="${line.byodFlow.imei || "356789012345678"}" placeholder="Enter 15-digit IMEI">
+              <button type="button" class="btn primary" id="checkByodImeiBtn">Check IMEI</button>
+            </div>
+            ${line.byodFlow.imeiChecked ? `<div class="rebuild-byod-imei-result">Device: iPhone 13 Pro Max 256 GB • Eligible to be used on the Comcast Business network.</div>` : ``}
+          </div>
+        </div>` : `
+        <div class="rebuild-edit-section">
+          <div class="rebuild-edit-label">Delivery and availability</div>
+          <div class="rebuild-edit-delivery">
+            <button type="button" class="edit-choice ${deliveryMethod==="shipping" ? "active" : ""}" data-edit-field="deliveryMethod" data-edit-value="shipping">Free shipping at checkout</button>
+            <button type="button" class="edit-choice ${deliveryMethod==="pickup" ? "active" : ""}" data-edit-field="deliveryMethod" data-edit-value="pickup">In-store pickup</button>
+          </div>
+        </div>
+
+        <div class="rebuild-edit-section">
+          <div class="rebuild-edit-label">Payment</div>
+          <div class="edit-choices two">
+            <button type="button" class="edit-choice ${!line.payToday ? "active" : ""}" data-edit-field="payToday" data-edit-value="monthly">Pay Monthly</button>
+            <button type="button" class="edit-choice ${line.payToday ? "active" : ""}" data-edit-field="payToday" data-edit-value="full">Pay in full</button>
+          </div>
+          ${!line.payToday ? `<div class="edit-note">Save more when you pay monthly</div>` : ``}
+        </div>
+
+        <div class="rebuild-edit-section">
+          <div class="rebuild-edit-label">Do you have a device to trade in?</div>
+          <div class="edit-choices two">
+            <button type="button" class="edit-choice ${line.tradeIn ? "active" : ""}" data-edit-field="tradeIn" data-edit-value="yes">Yes</button>
+            <button type="button" class="edit-choice ${!line.tradeIn ? "active" : ""}" data-edit-field="tradeIn" data-edit-value="no">No</button>
+          </div>
+        </div>
+
+        ${line.tradeIn ? `
+        <div class="rebuild-edit-section">
+          <div class="rebuild-edit-label">Trade-in working condition</div>
+          <div class="rebuild-trade-box">
+            <div class="rebuild-trade-summary">Complete the trade-in checks before continuing. The IMEI checker is included below.</div>
+
+            <div class="rebuild-trade-question">
+              <div class="edit-label">Is the device free of major physical damage?</div>
+              <div class="edit-choices two">
+                <button type="button" class="edit-choice ${line.tradeFlow.physicalDamage==="yes" ? "active" : ""}" data-trade-field="physicalDamage" data-trade-value="yes">Yes</button>
+                <button type="button" class="edit-choice ${line.tradeFlow.physicalDamage==="no" ? "active" : ""}" data-trade-field="physicalDamage" data-trade-value="no">No</button>
+              </div>
+            </div>
+
+            ${line.tradeFlow.physicalDamage ? `
+            <div class="rebuild-trade-question">
+              <div class="edit-label">Does the device have a functional screen and battery?</div>
+              <div class="edit-choices two">
+                <button type="button" class="edit-choice ${line.tradeFlow.functionalScreen==="yes" ? "active" : ""}" data-trade-field="functionalScreen" data-trade-value="yes">Yes</button>
+                <button type="button" class="edit-choice ${line.tradeFlow.functionalScreen==="no" ? "active" : ""}" data-trade-field="functionalScreen" data-trade-value="no">No</button>
+              </div>
+            </div>` : ``}
+
+            ${line.tradeFlow.physicalDamage && line.tradeFlow.functionalScreen ? `
+            <div class="rebuild-trade-question">
+              <div class="edit-label">Are all activation locks removed from the device?</div>
+              <div class="edit-choices two">
+                <button type="button" class="edit-choice ${line.tradeFlow.activationLocksRemoved==="yes" ? "active" : ""}" data-trade-field="activationLocksRemoved" data-trade-value="yes">Yes</button>
+                <button type="button" class="edit-choice ${line.tradeFlow.activationLocksRemoved==="no" ? "active" : ""}" data-trade-field="activationLocksRemoved" data-trade-value="no">No</button>
+              </div>
+            </div>` : ``}
+
+            ${line.tradeFlow.physicalDamage && line.tradeFlow.functionalScreen && line.tradeFlow.activationLocksRemoved ? `
+            <div class="rebuild-trade-question">
+              <div class="edit-label">IMEI checker</div>
+              <div class="rebuild-trade-imei-row">
+                <input id="tradeImeiInput" class="edit-input" maxlength="15" value="${line.tradeFlow.imei || "356789012345678"}" placeholder="Enter 15-digit IMEI">
+                <button type="button" class="btn primary" id="checkTradeImeiBtn">Check IMEI</button>
+              </div>
+              ${line.tradeFlow.imeiChecked ? `<div class="rebuild-trade-result">IMEI is valid • Attached device: iPhone 13 128 GB</div>` : ``}
+            </div>` : ``}
+          </div>
+        </div>` : ``}`}
+
+        <div class="rebuild-edit-actions">
+          <button type="button" class="btn" id="cancelLineEditBtn">Cancel</button>
+          <button type="button" class="btn primary" id="continueLineEditBtn">Continue</button>
+        </div>
+      </div>
+
+      <div class="rebuild-edit-side">
+        <div class="edit-summary-title">Estimated cost for this line</div>
+        <div class="edit-summary-row"><span>Device payment</span><strong>${line.payToday ? `$${fullPrice.toFixed(2)}` : `$${monthlyPrice.toFixed(2)}/mo`}</strong></div>
+        ${!isByodLine ? `<div class="edit-summary-row"><span>Delivery</span><strong>${deliveryMethod==="shipping" ? "Free shipping" : "In-store pickup"}</strong></div>` : ``}
+        <div class="edit-summary-row"><span>Porting</span><strong>${isPorting ? "Yes" : "No"}</strong></div>
+        <div class="edit-summary-row muted"><span>${line.plan || "Standard"}</span><strong>${line.payToday ? "$0.00" : (line.plan==="Pro" ? "$10.00/mo" : "$5.00/mo")}</strong></div>
+        ${line.tradeIn && !isByodLine ? `<div class="edit-summary-row"><span>Trade-in</span><strong>${line.tradeCompleted ? "Completed" : "In progress"}</strong></div>` : ``}
+        ${isByodLine && line.byodFlow.imeiChecked ? `<div class="edit-summary-row"><span>Eligibility</span><strong>Verified</strong></div>` : ``}
+        ${!line.payToday ? `<div class="edit-note">Includes monthly pricing on this line</div>` : ``}
+        <div class="edit-total"><span>Total</span><strong>${line.payToday ? `$${fullPrice.toFixed(2)}` : `$${(monthlyPrice + planCharge).toFixed(2)}/mo`}</strong></div>
+      </div>
+    </div>
+  `;
+
+  $("lineEditMount").querySelectorAll("[data-edit-field]").forEach(btn=>{
+    btn.onclick = ()=>{
+      const field = btn.dataset.editField;
+      const value = btn.dataset.editValue;
+      const target = asurionLines[activeLineEditIndex];
+      if(!target) return;
+
+      if(field === "color"){
+        target.color = value;
+      } else if(field === "storage"){
+        target.storage = value;
+      } else if(field === "deliveryMethod"){
+        target.deliveryMethod = value;
+      } else if(field === "payToday"){
+        target.payToday = value === "full";
+      } else if(field === "tradeIn"){
+        target.tradeIn = value === "yes";
+        if(!target.tradeIn){
+          target.tradeCompleted = false;
+        }
+        if(target.tradeIn && !target.tradeFlow){
+          target.tradeFlow = {
+            physicalDamage: "",
+            functionalScreen: "",
+            activationLocksRemoved: "",
+            imei: "356789012345678",
+            imeiChecked: false
+          };
+        }
+      } else if(field === "numberType"){
+        target.numberType = value;
+        if(value !== "port"){
+          target.mdn = "";
+          target.currentCarrier = "";
+        }
+      }
+
+      renderLineEditView();
+    };
+  });
+
+  $("lineEditMount").querySelectorAll("[data-trade-field]").forEach(btn=>{
+    btn.onclick = ()=>{
+      const target = asurionLines[activeLineEditIndex];
+      if(!target) return;
+      if(!target.tradeFlow){
+        target.tradeFlow = {
+          physicalDamage: "",
+          functionalScreen: "",
+          activationLocksRemoved: "",
+          imei: "356789012345678",
+          imeiChecked: false
+        };
+      }
+      const field = btn.dataset.tradeField;
+      const value = btn.dataset.tradeValue;
+      target.tradeFlow[field] = value;
+      if(field !== "activationLocksRemoved"){
+        target.tradeFlow.imeiChecked = false;
+      }
+      target.tradeCompleted = false;
+      renderLineEditView();
+    };
+  });
+
+  if($("editPortMdnInput")){
+    $("editPortMdnInput").oninput = (e)=>{
+      const target = asurionLines[activeLineEditIndex];
+      if(!target) return;
+      const digitsOnly = e.target.value.replace(/\D/g, "").slice(0, 10);
+      target.mdn = digitsOnly;
+      e.target.value = digitsOnly;
+    };
+  }
+
+  if($("editPortCarrierSelect")){
+    $("editPortCarrierSelect").onchange = (e)=>{
+      const target = asurionLines[activeLineEditIndex];
+      if(!target) return;
+      target.currentCarrier = e.target.value;
+    };
+  }
+
+  if($("byodImeiInput")){
+    $("byodImeiInput").oninput = (e)=>{
+      const target = asurionLines[activeLineEditIndex];
+      if(!target || !target.byodFlow) return;
+      target.byodFlow.imei = e.target.value.replace(/\D/g, "").slice(0, 15);
+      target.byodFlow.imeiChecked = false;
+      e.target.value = target.byodFlow.imei;
+    };
+  }
+
+  if($("checkByodImeiBtn")){
+    $("checkByodImeiBtn").onclick = ()=>{
+      const target = asurionLines[activeLineEditIndex];
+      if(!target || !target.byodFlow) return;
+      target.byodFlow.imeiChecked = true;
+      renderLineEditView();
+    };
+  }
+
+  if($("tradeImeiInput")){
+    $("tradeImeiInput").oninput = (e)=>{
+      const target = asurionLines[activeLineEditIndex];
+      if(!target || !target.tradeFlow) return;
+      target.tradeFlow.imei = e.target.value.replace(/\D/g, "").slice(0, 15);
+      target.tradeFlow.imeiChecked = false;
+      target.tradeCompleted = false;
+      e.target.value = target.tradeFlow.imei;
+    };
+  }
+
+  if($("checkTradeImeiBtn")){
+    $("checkTradeImeiBtn").onclick = ()=>{
+      const target = asurionLines[activeLineEditIndex];
+      if(!target || !target.tradeFlow) return;
+      target.tradeFlow.imeiChecked = true;
+      renderLineEditView();
+    };
+  }
+
+  $("cancelLineEditBtn").onclick = ()=>{
+    activeLineEditIndex = null;
+    showOnly("asurionView");
+    renderAsurion();
+  };
+
+  $("continueLineEditBtn").onclick = ()=>{
+    const target = asurionLines[activeLineEditIndex];
+    if(target){
+      if(target.tradeIn){
+        const tf = target.tradeFlow || {};
+        target.tradeCompleted = !!(tf.physicalDamage && tf.functionalScreen && tf.activationLocksRemoved && tf.imeiChecked);
+        if(target.tradeCompleted && !target.tradeDevice){
+          target.tradeDevice = "Trade-in details completed";
+        }
+      } else {
+        target.tradeCompleted = false;
+      }
+    }
+    activeLineEditIndex = null;
+    showOnly("asurionView");
+    renderAsurion();
+  };
+}
+
+
 function renderReview(){
   upsertCartFromState();
   renderCartItems();
@@ -1933,329 +3231,266 @@ function updateProceed(){
 }
 
 function initAsurionLines(){
-  const totalLines = cart.reduce((sum,item)=>sum + (item.quantity || 0), 0);
-  const portLines = cart.filter(item => item.category==="phones").reduce((sum,item)=> sum + (item.portDecision==="yes" ? (item.portCount || 0) : 0), 0);
-  const tradeLines = cart.reduce((sum,item)=> sum + (item.tradeDecision==="yes" ? (item.tradeCount || 0) : 0), 0);
-
-  $("poolLines").textContent = totalLines;
-  $("poolPort").textContent = portLines;
-  $("poolTrade").textContent = tradeLines;
-
   asurionLines = [];
   let lineIndex = 1;
   cart.forEach(item => {
     const d = DEVICES[item.deviceId] || {};
-    const isByodItem = ["byod","byot","byow"].includes(item.deviceId);
     for(let i=0;i<(item.quantity || 0);i++){
       const isPhoneItem = item.category==="phones";
       const isPort = isPhoneItem && item.portDecision==="yes" && i < (item.portCount || 0);
-      const tradeIn = !isByodItem && item.tradeDecision==="yes" && i < (item.tradeCount || 0);
+      const tradeIn = item.tradeDecision==="yes" && i < (item.tradeCount || 0);
       const tradeRow = tradeIn ? (item.tradeRows?.[i] || null) : null;
       const protectionIncluded = (item.category==="tablets" || item.category==="watches") ? hasProPhoneOnAccount() : item.plan==="Pro";
       const protectionValue = protectionIncluded ? "Included" : (item.protectionDecision==="yes" && i < (item.protectionCount || 0) ? "Yes" : "No");
 
       asurionLines.push({
-        label:`Line ${lineIndex++}`,
+        label:`Line ${lineIndex}`,
         isEditingName:false,
-        isByodLine:isByodItem,
         product:d.name || "Selected Device",
+        deviceId:item.deviceId || "",
         color:item.color || "",
         storage:item.storage || "",
-        colorOptions:(DEVICES[item.deviceId]?.colors || []).slice(),
-        storageOptions:(DEVICES[item.deviceId]?.storages || []).slice(),
-        byodImei:"123456789012345",
-        byodEligibilityStatus:"",
-        byodEligibilityMessage:"",
-        byodDetectedDevice:"",
         numberType:isPort ? "port" : "new",
         mdn:"",
         currentCarrier:"",
         tradeIn,
         tradeDevice: tradeRow ? `${tradeRow.make || ""} ${tradeRow.model || ""}${tradeRow.storage ? " • " + tradeRow.storage : ""}`.trim() : "",
-        imei:"123456789012345",
-        imeiStatus:"",
-        imeiDevice:"",
-        condition:"",
-        majorDamage:"",
-        screenDamage:"",
-        liquidDamage:"",
-        powersOn:"",
         deviceProtection: protectionValue,
+        payToday:(item.paymentType || "").toLowerCase()==="retail",
+        monthlyPrice:item.monthlyPrice || item.deviceMonthlyPrice || 36.11,
+        fullPrice:item.fullPrice || item.deviceFullPrice || 1299.99,
         plan:item.plan || "Standard"
       });
+      lineIndex += 1;
     }
   });
 }
 
+
+function renderPlanModal(){
+  const existing = document.getElementById("planModalOverlay");
+  if(existing) existing.remove();
+  if(activePlanModalIndex === null) return;
+
+  const line = asurionLines[activePlanModalIndex];
+  if(!line) return;
+
+  const selected = pendingPlanSelection || line.plan || "Standard";
+  const price = selected === "Pro" ? 10 : 5;
+  const banner = selected === "Pro"
+    ? "Select Pro to unlock the premium experience for this line"
+    : "Select Standard to keep this line on the base experience";
+
+  const overlay = document.createElement("div");
+  overlay.className = "plan-modal";
+  overlay.id = "planModalOverlay";
+  overlay.innerHTML = `
+    <div class="plan-modal-card">
+      <div class="plan-modal-topbar">
+        <button class="plan-modal-close" id="closePlanModalBtn" aria-label="Close">✕</button>
+      </div>
+      <div class="plan-banner">${banner}</div>
+      <div class="plan-modal-body">
+        <div class="plan-modal-title">Data options</div>
+        <div class="plan-choice-grid">
+          <button class="plan-choice ${selected==="Pro" ? "active" : ""}" data-plan-option="Pro">
+            <div class="plan-choice-icon">✦</div>
+            <div class="plan-choice-name">Pro</div>
+            <div class="plan-feature"><span class="plan-feature-icon">📶</span><span>Unlimited data</span></div>
+            <div class="plan-feature"><span class="plan-feature-icon">🛜</span><span>Unlimited mobile hotspot data, reduced speeds after 30GB</span></div>
+            <div class="plan-choice-price">$10 /mo</div>
+          </button>
+          <button class="plan-choice ${selected==="Standard" ? "active" : ""}" data-plan-option="Standard">
+            <div class="plan-choice-icon">∞</div>
+            <div class="plan-choice-name">Standard</div>
+            <div class="plan-feature"><span class="plan-feature-icon">📶</span><span>Unlimited data</span></div>
+            <div class="plan-feature"><span class="plan-feature-icon">🛜</span><span>Unlimited mobile hotspot data at reduced speeds</span></div>
+            <div class="plan-choice-price">$5 /mo</div>
+          </button>
+        </div>
+      </div>
+      <div class="plan-modal-footer">
+        <div class="plan-modal-divider">📱 Mobile</div>
+        <div class="plan-modal-bottom">
+          <div>
+            <div class="plan-modal-price">$${price}<small> /mo</small></div>
+            <div class="plan-modal-copy">
+              ${selected==="Pro"
+                ? "Pro is $10 per month for each eligible line in this conceptual flow. Taxes, fees, and equipment not included."
+                : "Standard is $5 per month for each eligible line in this conceptual flow. Taxes, fees, and equipment not included."}
+            </div>
+          </div>
+          <button class="plan-modal-cta" id="applyPlanChangeBtn">Change plan</button>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  document.getElementById("closePlanModalBtn").onclick = ()=>{
+    activePlanModalIndex = null;
+    pendingPlanSelection = null;
+    renderPlanModal();
+  };
+
+  overlay.querySelectorAll("[data-plan-option]").forEach(btn=>{
+    btn.onclick = ()=>{
+      pendingPlanSelection = btn.dataset.planOption;
+      renderPlanModal();
+    };
+  });
+
+  document.getElementById("applyPlanChangeBtn").onclick = ()=>{
+    if(activePlanModalIndex !== null && asurionLines[activePlanModalIndex]){
+      const chosen = pendingPlanSelection || asurionLines[activePlanModalIndex].plan || "Standard";
+      asurionLines[activePlanModalIndex].plan = chosen;
+      const match = cart.find(item=>{
+        const d = DEVICES[item.deviceId] || {};
+        return (d.name || "") === (asurionLines[activePlanModalIndex].product || "");
+      });
+      if(match){
+        match.plan = chosen;
+        match.planPriceMonthly = chosen === "Pro" ? 10 : 5;
+      }
+    }
+    activePlanModalIndex = null;
+    pendingPlanSelection = null;
+    renderPlanModal();
+    renderAsurion();
+  };
+}
+
+
 function renderAsurion(){
-  const ynButtons = (lineIdx, field, value) => `
-    <div class="trade-yn">
-      <button type="button" class="trade-yn-btn ${value==="yes" ? "active" : ""}" data-line="${lineIdx}" data-field="${field}" data-value="yes">Yes</button>
-      <button type="button" class="trade-yn-btn ${value==="no" ? "active" : ""}" data-line="${lineIdx}" data-field="${field}" data-value="no">No</button>
+  const iconForLine = (line)=>{
+    const p = (line.product || "").toLowerCase();
+    if(p.includes("watch")) return "⌚";
+    if(p.includes("tablet") || p.includes("ipad") || p.includes("galaxy tab")) return "▭";
+    return "📱";
+  };
+
+  const normalizePlan = (plan)=>{
+    if((plan || "").toLowerCase().includes("pro")) return "Pro";
+    if((plan || "").toLowerCase().includes("premium")) return "Pro";
+    return "Standard";
+  };
+
+  const lineNeedsAttention = (line)=>{
+    const gaps = [];
+    if(line.numberType === "port" && (!(line.mdn || "").trim() || !(line.currentCarrier || "").trim())){
+      gaps.push("Port-in details");
+    }
+    if(line.tradeIn && !line.tradeCompleted){
+      gaps.push("Trade-in details");
+    }
+    return gaps;
+  };
+
+  const groupOrder = ["Pro","Standard"];
+  const grouped = {};
+  asurionLines.forEach(line=>{
+    const key = normalizePlan(line.plan);
+    line.plan = key;
+    if(!grouped[key]) grouped[key] = [];
+    grouped[key].push(line);
+  });
+  const orderedPlans = groupOrder.filter(k => grouped[k]?.length);
+
+  $("lineGrid").innerHTML = `
+    <div class="line-summary-shell">
+      <div class="finance-card">
+        <div class="finance-title">Your financing eligibility</div>
+        <div class="finance-grid">
+          <div class="finance-metric">
+            <div class="finance-icon">☎</div>
+            <div>
+              <div class="finance-metric-title">5 lines available to add to this account</div>
+              <div class="finance-metric-sub">${asurionLines.length} in cart</div>
+              <div style="margin-top:14px" class="finance-metric-title">5 devices qualify for monthly financing</div>
+              <div class="finance-metric-sub">0 in cart</div>
+            </div>
+          </div>
+          <div class="finance-metric">
+            <div class="finance-icon">💳</div>
+            <div>
+              <div class="finance-metric-title">$2,500 available credit for device financing</div>
+              <div class="finance-metric-sub">$0.00 in cart</div>
+            </div>
+          </div>
+          <div class="finance-callout">
+            <div class="finance-icon" style="width:30px;height:30px;border-radius:10px;font-size:16px">🏷</div>
+            <div>
+              <div class="finance-metric-title">Select a different financing option</div>
+              <div class="finance-metric-sub">You can try a different financing option to see if your limits increase.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-header">
+          <div class="plan-title">Unlimited</div>
+        </div>
+
+        ${orderedPlans.map(planName=>`
+          <div class="plan-group">
+            <div class="plan-group-head">${planName}</div>
+            <div class="line-list">
+              ${grouped[planName].map(line=>{
+                const idx = asurionLines.indexOf(line);
+                const monthly = Number(line.monthlyPrice || 36.11).toFixed(2);
+                const full = Number(line.fullPrice || 1299.99).toFixed(2);
+                const priceMarkup = line.payToday
+                  ? `<strong>$${full}</strong><span>paid today</span>`
+                  : `<strong>$${monthly}/mo</strong><span>for 36 months</span>`;
+                const gaps = lineNeedsAttention(line);
+                const attention = gaps.length
+                  ? `<div class="attention-badge">Needs review: ${gaps.join(" and ")} remaining</div>`
+                  : `<div class="attention-badge ok">Ready</div>`;
+                return `
+                <div class="line-card-summary">
+                  <div class="line-card-icon">${iconForLine(line)}</div>
+                  <div>
+                    <div class="line-card-name">${line.label}</div>
+                    <div class="line-card-meta">${line.product || "Selected device"}${line.storage ? `, ${line.storage}` : ""}${line.color ? ` ${line.color}` : ""}</div>
+                    <div class="line-card-submeta">${line.numberType==="new" ? "New Number" : "Port-In Number"}</div>
+                    ${attention}
+                    <div class="line-card-links">
+                      <button class="line-card-link" data-line="${idx}" data-action="change-plan">Change plan</button>
+                      <button class="line-card-link" data-line="${idx}" data-action="add-accessories">Add accessories</button>
+                      <button class="line-card-link" data-line="${idx}" data-action="edit-line">Edit Device</button>
+                      <button class="line-card-link" data-line="${idx}" data-action="remove-line">Remove</button>
+                    </div>
+                  </div>
+                  <div class="line-card-price">${priceMarkup}</div>
+                  <div class="line-card-footer">
+                    <label class="pay-today">
+                      <input type="checkbox" data-line="${idx}" data-action="toggle-pay-today" ${line.payToday ? "checked" : ""}>
+                      <span>Pay the total amount today ($${full})</span>
+                    </label>
+                  </div>
+                </div>`;
+              }).join("")}
+            </div>
+          </div>
+        `).join("")}
+
+        <div class="line-actions-row">
+          <button class="btn primary" id="completeAsurionBtn">Move to Checkout</button>
+        </div>
+      </div>
     </div>
   `;
 
-  $("lineGrid").innerHTML = asurionLines.map((line, idx)=>{
-    const byod = !!line.isByodLine;
-    const showMajor = !byod && line.tradeIn;
-    const showScreen = showMajor && !!line.majorDamage;
-    const showLiquid = showScreen && !!line.screenDamage;
-    const showPower = showLiquid && !!line.liquidDamage;
-    const showImei = showPower && !!line.powersOn;
-
-    return `
-    <div class="line-card">
-      <div class="line-head">
-        <div>
-          <div class="line-name-row">
-            <div class="line-name">${line.label}</div>
-            <button type="button" class="line-edit-btn" data-line="${idx}" data-action="edit-name" title="Edit line name">✎</button>
-            ${line.isEditingName ? `<input class="line-inline-edit" data-line="${idx}" data-action="name-input" type="text" value="${line.label}" placeholder="Enter line name" />` : ``}
-          </div>
-          <div class="card-sub">${line.label.startsWith("Line ") ? "Default line name" : "Custom line name applied"}</div>
-        </div>
-        <div class="line-actions">
-          <div class="line-status">${line.numberType==="port" ? "Port-In Line" : "New Number Line"}</div>
-          <button type="button" class="line-remove-btn" data-line="${idx}" data-action="remove-line">Remove line</button>
-        </div>
-      </div>
-
-      <div class="line-layout">
-        ${byod ? `
-          <div class="field">
-            <label>Enter IMEI</label>
-            <div class="imei-row">
-              <input type="text" data-line="${idx}" data-field="byodImei" data-action="clear-byod-imei-on-focus" value="${line.byodImei || "123456789012345"}" />
-              <button type="button" class="imei-check-btn" data-line="${idx}" data-action="check-byod-imei">Check IMEI</button>
-            </div>
-            ${line.byodEligibilityStatus ? `<div class="eligibility-status ${line.byodEligibilityStatus==="checking" ? "pending" : ""}">${line.byodEligibilityStatus==="checking" ? "Checking device compatibility..." : (line.byodEligibilityMessage || "This device is eligible to be used on the Comcast Business network.")}</div>` : ``}
-            ${line.byodDetectedDevice ? `<div class="byod-detected">Detected device: ${line.byodDetectedDevice}</div>` : ``}
-          </div>
-        ` : `
-          <div class="field">
-            <label>Assigned product</label>
-            <select data-line="${idx}" data-field="product"><option selected>${line.product}</option></select>
-          </div>
-
-          <div class="field">
-            <label>Color</label>
-            <select data-line="${idx}" data-field="color">
-              ${(line.colorOptions && line.colorOptions.length ? line.colorOptions : [line.color || "Not captured"]).map(option => `<option value="${option}" ${line.color===option?"selected":""}>${option}</option>`).join("")}
-            </select>
-          </div>
-
-          <div class="field">
-            <label>Storage</label>
-            <select data-line="${idx}" data-field="storage">
-              ${(line.storageOptions && line.storageOptions.length ? line.storageOptions : [line.storage || "Not captured"]).map(option => `<option value="${option}" ${line.storage===option?"selected":""}>${option}</option>`).join("")}
-            </select>
-          </div>
-        `}
-
-        <div class="field">
-          <label>Plan</label>
-          <select data-line="${idx}" data-field="plan"><option selected>${line.plan}</option></select>
-        </div>
-
-        <div class="field">
-          <label>Number setup</label>
-          <select data-line="${idx}" data-field="numberType">
-            <option value="port" ${line.numberType==="port"?"selected":""}>Port-In Number</option>
-            <option value="new" ${line.numberType==="new"?"selected":""}>New Number</option>
-          </select>
-        </div>
-
-        ${line.numberType==="port" ? `
-          <div class="field">
-            <label>Port-In MDN</label>
-            <input type="text" data-line="${idx}" data-field="mdn" value="${line.mdn || ""}" />
-          </div>
-
-          <div class="field">
-            <label>Current carrier</label>
-            <select data-line="${idx}" data-field="currentCarrier">
-              <option value="" ${!line.currentCarrier?"selected":""}>Select current carrier</option>
-              <option value="AT&T" ${line.currentCarrier==="AT&T"?"selected":""}>AT&T</option>
-              <option value="Verizon" ${line.currentCarrier==="Verizon"?"selected":""}>Verizon</option>
-              <option value="T-Mobile" ${line.currentCarrier==="T-Mobile"?"selected":""}>T-Mobile</option>
-              <option value="Xfinity Mobile" ${line.currentCarrier==="Xfinity Mobile"?"selected":""}>Xfinity Mobile</option>
-              <option value="Other" ${line.currentCarrier==="Other"?"selected":""}>Other</option>
-            </select>
-          </div>
-        ` : ``}
-
-        <div class="field">
-          <label>Device protection</label>
-          <select data-line="${idx}" data-field="deviceProtection">
-            <option value="Included" ${line.deviceProtection==="Included"?"selected":""}>Included</option>
-            <option value="Yes" ${line.deviceProtection==="Yes"?"selected":""}>Yes</option>
-            <option value="No" ${line.deviceProtection==="No"?"selected":""}>No</option>
-          </select>
-        </div>
-
-        ${byod ? `` : `
-          <div class="field">
-            <label>Trade-In</label>
-            <select data-line="${idx}" data-field="tradeIn">
-              <option value="yes" ${line.tradeIn?"selected":""}>Yes</option>
-              <option value="no" ${!line.tradeIn?"selected":""}>No</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label>${line.tradeDevice ? "Trade-in device" : "Device trade-in details"}</label>
-            ${line.tradeIn
-              ? `<div class="trade-summary">${line.tradeDevice || "Trade-in selected. Capture the trade-in details below."}</div>`
-              : `<div class="readonly-note">No trade-in attached to this line.</div>`}
-          </div>
-
-          ${line.tradeIn ? `
-            <div class="trade-checklist">
-              <div class="trade-checklist-head">
-                <div class="trade-checklist-title">Device trade-in details</div>
-                <a href="javascript:void(0)" class="trade-checklist-link">How trade-ins work</a>
-              </div>
-
-              <div class="trade-q-list">
-                ${showMajor ? `
-                <div class="trade-q-item">
-                  <label>Is the device free of major physical damage?</label>
-                  ${ynButtons(idx, "majorDamage", line.majorDamage)}
-                </div>` : ``}
-
-                ${showScreen ? `
-                <div class="trade-q-item">
-                  <label>Does the device have a functional screen that is free of cracks and other damage?</label>
-                  ${ynButtons(idx, "screenDamage", line.screenDamage)}
-                </div>` : ``}
-
-                ${showLiquid ? `
-                <div class="trade-q-item">
-                  <label>Is the device free from liquid damage?</label>
-                  ${ynButtons(idx, "liquidDamage", line.liquidDamage)}
-                </div>` : ``}
-
-                ${showPower ? `
-                <div class="trade-q-item">
-                  <label>Does the device power on?</label>
-                  ${ynButtons(idx, "powersOn", line.powersOn)}
-                </div>` : ``}
-
-                ${showImei ? `
-                <div class="trade-q-item">
-                  <label>Trade-in device's IMEI (15 digits)</label>
-                  <div class="imei-row">
-                    <input type="text" data-line="${idx}" data-field="imei" data-action="clear-on-focus" value="${line.imei || "123456789012345"}" placeholder="Enter IMEI" />
-                    <button type="button" class="imei-check-btn" data-line="${idx}" data-action="check-imei">Check IMEI</button>
-                  </div>
-                  ${line.imeiStatus ? `<div class="imei-status ${line.imeiStatus==="checking" ? "pending" : ""}">${line.imeiStatus==="checking" ? "Checking IMEI..." : `IMEI is valid. Attached device: ${line.imeiDevice || "iPhone 13 128 GB"}.`}</div>` : ``}
-                </div>` : ``}
-              </div>
-            </div>
-          ` : ``}
-        `}
-      </div>
-    </div>
-    `;
-  }).join("");
-
-  $("lineGrid").querySelectorAll("select,input").forEach(el=>{
-    el.onchange = ()=>{
-      const idx = Number(el.dataset.line);
-      const field = el.dataset.field;
-      if(field){
-        if(field==="tradeIn") asurionLines[idx][field] = el.value==="yes";
-        else asurionLines[idx][field] = el.value;
-
-        if(field==="imei"){
-          asurionLines[idx].imeiStatus = "";
-          asurionLines[idx].imeiDevice = "";
-        }
-        if(field==="byodImei"){
-          asurionLines[idx].byodEligibilityStatus = "";
-          asurionLines[idx].byodEligibilityMessage = "";
-          asurionLines[idx].byodDetectedDevice = "";
-        }
-        if(field==="numberType" && el.value==="new"){
-          asurionLines[idx].mdn = "";
-          asurionLines[idx].currentCarrier = "";
-        }
-        if(field==="tradeIn" && el.value==="no"){
-          asurionLines[idx].imei = "";
-          asurionLines[idx].imeiStatus = "";
-          asurionLines[idx].imeiDevice = "";
-          asurionLines[idx].majorDamage = "";
-          asurionLines[idx].screenDamage = "";
-          asurionLines[idx].liquidDamage = "";
-          asurionLines[idx].powersOn = "";
-        }
-      } else if(el.dataset.action === "name-input"){
-        asurionLines[idx].label = el.value.trim() || `Line ${idx+1}`;
-        asurionLines[idx].isEditingName = false;
-      }
-      renderAsurion();
-    };
-  });
-
-  $("lineGrid").querySelectorAll(".trade-yn-btn").forEach(btn=>{
+  $("lineGrid").querySelectorAll('[data-action="edit-line"]').forEach(btn=>{
     btn.onclick = ()=>{
       const idx = Number(btn.dataset.line);
-      const field = btn.dataset.field;
-      const value = btn.dataset.value;
-      asurionLines[idx][field] = value;
-
-      if(field === "majorDamage"){
-        asurionLines[idx].screenDamage = "";
-        asurionLines[idx].liquidDamage = "";
-        asurionLines[idx].powersOn = "";
-        asurionLines[idx].imeiStatus = "";
-        asurionLines[idx].imeiDevice = "";
-      } else if(field === "screenDamage"){
-        asurionLines[idx].liquidDamage = "";
-        asurionLines[idx].powersOn = "";
-        asurionLines[idx].imeiStatus = "";
-        asurionLines[idx].imeiDevice = "";
-      } else if(field === "liquidDamage"){
-        asurionLines[idx].powersOn = "";
-        asurionLines[idx].imeiStatus = "";
-        asurionLines[idx].imeiDevice = "";
-      } else if(field === "powersOn"){
-        asurionLines[idx].imeiStatus = "";
-        asurionLines[idx].imeiDevice = "";
-      }
-
-      renderAsurion();
-    };
-  });
-
-  $("lineGrid").querySelectorAll('input[data-action="clear-on-focus"]').forEach(input=>{
-    input.onfocus = ()=>{
-      if(input.value === "123456789012345"){
-        input.value = "";
-        const idx = Number(input.dataset.line);
-        asurionLines[idx].imei = "";
-      }
-    };
-    input.oninput = ()=>{
-      const idx = Number(input.dataset.line);
-      asurionLines[idx].imei = input.value;
-    };
-  });
-
-  $("lineGrid").querySelectorAll('input[data-action="clear-byod-imei-on-focus"]').forEach(input=>{
-    input.onfocus = ()=>{
-      if(input.value === "123456789012345"){
-        input.value = "";
-        const idx = Number(input.dataset.line);
-        asurionLines[idx].byodImei = "";
-      }
-    };
-    input.oninput = ()=>{
-      const idx = Number(input.dataset.line);
-      asurionLines[idx].byodImei = input.value;
-      asurionLines[idx].byodEligibilityStatus = "";
-      asurionLines[idx].byodEligibilityMessage = "";
-      asurionLines[idx].byodDetectedDevice = "";
+      const line = asurionLines[idx];
+      if(!line) return;
+      activeLineEditIndex = idx;
+      showOnly("lineEditView");
+      renderLineEditView();
+      window.scrollTo({top:0, behavior:"smooth"});
     };
   });
 
@@ -2267,63 +3502,36 @@ function renderAsurion(){
     };
   });
 
-  $("lineGrid").querySelectorAll('[data-action="check-imei"]').forEach(btn=>{
-    btn.onclick = ()=>{
-      const idx = Number(btn.dataset.line);
-      asurionLines[idx].imeiStatus = "checking";
-      asurionLines[idx].imeiDevice = "";
+  $("lineGrid").querySelectorAll('[data-action="toggle-pay-today"]').forEach(input=>{
+    input.onchange = ()=>{
+      const idx = Number(input.dataset.line);
+      asurionLines[idx].payToday = input.checked;
       renderAsurion();
-      setTimeout(()=>{
-        asurionLines[idx].imeiStatus = "valid";
-        asurionLines[idx].imeiDevice = "iPhone 13 128 GB";
-        renderAsurion();
-      }, 700);
     };
   });
 
-  $("lineGrid").querySelectorAll('[data-action="check-byod-imei"]').forEach(btn=>{
+  $("lineGrid").querySelectorAll('[data-action="change-plan"]').forEach(btn=>{
     btn.onclick = ()=>{
       const idx = Number(btn.dataset.line);
-      asurionLines[idx].byodEligibilityStatus = "checking";
-      asurionLines[idx].byodEligibilityMessage = "";
-      asurionLines[idx].byodDetectedDevice = "";
-      renderAsurion();
-      setTimeout(()=>{
-        asurionLines[idx].byodEligibilityStatus = "valid";
-        asurionLines[idx].byodEligibilityMessage = "This device is eligible to be used on the Comcast Business network.";
-        asurionLines[idx].byodDetectedDevice = "iPhone 13 Pro Max 256GB";
-        renderAsurion();
-      }, 700);
+      activePlanModalIndex = idx;
+      pendingPlanSelection = normalizePlan(asurionLines[idx]?.plan || "Standard");
+      renderPlanModal();
     };
   });
 
-  $("lineGrid").querySelectorAll('[data-action="edit-name"]').forEach(btn=>{
+  $("lineGrid").querySelectorAll('[data-action="add-accessories"]').forEach(btn=>{
     btn.onclick = ()=>{
-      const idx = Number(btn.dataset.line);
-      asurionLines[idx].isEditingName = !asurionLines[idx].isEditingName;
-      renderAsurion();
-      const input = $("lineGrid").querySelector(`[data-line="${idx}"][data-action="name-input"]`);
-      if(input){
-        input.focus();
-        input.select();
-        input.onkeydown = (e)=>{
-          if(e.key === "Enter"){
-            asurionLines[idx].label = input.value.trim() || `Line ${idx+1}`;
-            asurionLines[idx].isEditingName = false;
-            renderAsurion();
-          } else if(e.key === "Escape"){
-            asurionLines[idx].isEditingName = false;
-            renderAsurion();
-          }
-        };
-        input.onblur = ()=>{
-          asurionLines[idx].label = input.value.trim() || `Line ${idx+1}`;
-          asurionLines[idx].isEditingName = false;
-          renderAsurion();
-        };
-      }
+      const status = $("checkoutStatus");
+      status.classList.remove("hidden");
+      status.textContent = "Accessory flow will be added in the next step.";
     };
   });
+
+  $("completeAsurionBtn").onclick = ()=>{
+    const status = $("checkoutStatus");
+    status.classList.remove("hidden");
+    status.textContent = "All visible lines are aligned. Moving to checkout.";
+  };
 }
 
 function bindCounter(minus, plus, get, set, maxFn){
@@ -2409,11 +3617,9 @@ function init(){
     const actualTrade = asurionLines.filter(line => line.tradeIn).length;
 
     const lineInputsReady = asurionLines.every(line => {
-      const byod = !!line.isByodLine;
       const numberReady = line.numberType === "new" ? true : (!!(line.mdn || "").trim() && !!(line.currentCarrier || "").trim());
-      const byodReady = !byod ? true : (line.byodEligibilityStatus === "valid");
-      const tradeReady = byod ? true : (!line.tradeIn ? true : (!!line.majorDamage && !!line.screenDamage && !!line.liquidDamage && !!line.powersOn && line.imeiStatus === "valid"));
-      return numberReady && byodReady && tradeReady;
+      const tradeReady = !line.tradeIn ? true : (!!line.majorDamage && !!line.screenDamage && !!line.liquidDamage && !!line.powersOn && line.imeiStatus === "valid");
+      return numberReady && tradeReady;
     });
 
     status.classList.remove("hidden");
