@@ -1601,6 +1601,178 @@
     font-weight:800;
   }
 
+
+  .cart-header-shell{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    margin-bottom:22px;
+    padding:6px 0 2px;
+  }
+  .cart-header-title{
+    font-size:28px;
+    font-weight:900;
+    color:#111827;
+    line-height:1.1;
+  }
+  .cart-header-actions{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    flex-wrap:wrap;
+  }
+  .cart-header-eligibility{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    color:#3558f5;
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    background:transparent;
+    border:0;
+    cursor:pointer;
+    padding:0;
+  }
+  .cart-header-eligibility .icon{
+    width:18px;
+    height:18px;
+    border:1.5px solid #3558f5;
+    border-radius:4px;
+    display:grid;
+    place-items:center;
+    font-size:12px;
+    line-height:1;
+  }
+  .cart-header-add-btn{
+    min-height:56px;
+    padding:0 22px;
+    border-radius:4px;
+    border:0;
+    background:#3558f5;
+    color:#fff;
+    font-size:14px;
+    font-weight:900;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+  }
+  .cart-header-plus{
+    width:20px;
+    height:20px;
+    border:1.5px solid rgba(255,255,255,.9);
+    border-radius:999px;
+    display:grid;
+    place-items:center;
+    font-size:14px;
+    line-height:1;
+  }
+  .eligibility-screen-shell{
+    min-height:calc(100vh - 72px);
+    background:#f6f7fb;
+  }
+  .eligibility-screen-top{
+    height:76px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 24px;
+    border-bottom:1px solid #d9e1ec;
+    background:#fff;
+  }
+  .eligibility-screen-top-title{
+    font-size:20px;
+    font-weight:900;
+    color:#111827;
+  }
+  .eligibility-screen-close{
+    border:0;
+    background:transparent;
+    font-size:34px;
+    line-height:1;
+    cursor:pointer;
+    color:#111827;
+  }
+  .eligibility-screen-body{
+    max-width:1260px;
+    margin:0 auto;
+    padding:28px 24px 48px;
+  }
+  .eligibility-screen-heading{
+    font-size:28px;
+    font-weight:900;
+    margin-bottom:22px;
+    color:#111827;
+  }
+  .eligibility-screen-card{
+    background:#fff;
+    border:1px solid #d9e1ec;
+    border-radius:14px;
+    padding:28px;
+  }
+  .eligibility-screen-grid{
+    display:grid;
+    grid-template-columns:1.1fr 1.1fr 1.4fr;
+    gap:24px;
+    align-items:start;
+  }
+  .eligibility-screen-item{
+    display:flex;
+    gap:14px;
+    align-items:flex-start;
+  }
+  .eligibility-screen-icon{
+    width:28px;
+    height:28px;
+    display:grid;
+    place-items:center;
+    font-size:18px;
+    color:#111827;
+    flex:none;
+  }
+  .eligibility-screen-item-title{
+    font-size:16px;
+    font-weight:900;
+    line-height:1.35;
+    margin-bottom:6px;
+    color:#111827;
+  }
+  .eligibility-screen-item-sub{
+    font-size:14px;
+    color:#111827;
+    line-height:1.45;
+  }
+  .eligibility-screen-link{
+    display:inline-block;
+    margin-top:16px;
+    color:#0d62ff;
+    font-size:14px;
+    font-weight:800;
+  }
+  .eligibility-screen-actions{
+    display:flex;
+    justify-content:flex-end;
+    padding-top:24px;
+  }
+  @media (max-width: 980px){
+    .eligibility-screen-grid{
+      grid-template-columns:1fr;
+    }
+    .cart-header-shell{
+      flex-direction:column;
+      align-items:flex-start;
+    }
+    .cart-header-actions{
+      width:100%;
+      justify-content:space-between;
+    }
+  }
+
 </style>
 </head>
 <body>
@@ -1904,6 +2076,54 @@
       </div>
     </div>
   </div>
+
+
+  <div id="eligibilityView" class="page hidden">
+    <div class="eligibility-screen-shell">
+      <div class="eligibility-screen-top">
+        <div class="eligibility-screen-top-title">Mobile lines</div>
+        
+      </div>
+      <div class="eligibility-screen-body">
+        <div class="eligibility-screen-heading">Your eligibility</div>
+        <div class="eligibility-screen-card">
+          <div class="eligibility-screen-grid">
+            <div class="eligibility-screen-item">
+              <div class="eligibility-screen-icon">📞</div>
+              <div>
+                <div class="eligibility-screen-item-title">0 lines on device payment plan</div>
+                <div class="eligibility-screen-item-title" style="margin-top:28px">8 lines on your account</div>
+                <div class="eligibility-screen-item-sub">1 in cart</div>
+                <div class="eligibility-screen-item-sub">2 existing</div>
+              </div>
+            </div>
+            <div class="eligibility-screen-item">
+              <div class="eligibility-screen-icon">⟳</div>
+              <div>
+                <div class="eligibility-screen-item-title">$0 on device payment plan</div>
+              </div>
+            </div>
+            <div class="eligibility-screen-item">
+              <div class="eligibility-screen-icon">🏷</div>
+              <div>
+                <div class="eligibility-screen-item-title">Select a different financing option</div>
+                <div class="eligibility-screen-item-sub">You can try a different financing option to see if your limits increase.</div>
+                <div class="eligibility-screen-link">See financing options</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="eligibility-screen-actions">
+          <button class="cart-header-add-btn" id="eligibilityAddLineBtn">
+            <span class="cart-header-plus">+</span>
+            <span>Add a Line</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 
   <div id="lineEditView" class="page hidden">
     <div class="container"><div id="lineEditMount"></div></div>
@@ -2272,7 +2492,7 @@ function money(n){ return "$" + Number(n || 0).toFixed(0); }
 function hasProPhoneOnAccount(){ return true; }
 
 function setVisibleView(viewId){
-  ["catalogView","configuratorView","lineEditView","reviewView","handoffDecisionView","successView","asurionView"].forEach(id=>{
+  ["catalogView","configuratorView","lineEditView","reviewView","handoffDecisionView","successView","asurionView","eligibilityView"].forEach(id=>{
     const el = document.getElementById(id);
     if(el) el.classList.toggle("hidden", id !== viewId);
   });
@@ -3398,32 +3618,17 @@ function renderAsurion(){
 
   $("lineGrid").innerHTML = `
     <div class="line-summary-shell">
-      <div class="finance-card">
-        <div class="finance-title">Your financing eligibility</div>
-        <div class="finance-grid">
-          <div class="finance-metric">
-            <div class="finance-icon">☎</div>
-            <div>
-              <div class="finance-metric-title">5 lines available to add to this account</div>
-              <div class="finance-metric-sub">${asurionLines.length} in cart</div>
-              <div style="margin-top:14px" class="finance-metric-title">5 devices qualify for monthly financing</div>
-              <div class="finance-metric-sub">0 in cart</div>
-            </div>
-          </div>
-          <div class="finance-metric">
-            <div class="finance-icon">💳</div>
-            <div>
-              <div class="finance-metric-title">$2,500 available credit for device financing</div>
-              <div class="finance-metric-sub">$0.00 in cart</div>
-            </div>
-          </div>
-          <div class="finance-callout">
-            <div class="finance-icon" style="width:30px;height:30px;border-radius:10px;font-size:16px">🏷</div>
-            <div>
-              <div class="finance-metric-title">Select a different financing option</div>
-              <div class="finance-metric-sub">You can try a different financing option to see if your limits increase.</div>
-            </div>
-          </div>
+      <div class="cart-header-shell">
+        <div class="cart-header-title">Your Cart</div>
+        <div class="cart-header-actions">
+          <button class="cart-header-eligibility" id="openEligibilityBtn" type="button">
+            <span class="icon">☰</span>
+            <span>Your Line Eligibility</span>
+          </button>
+          <button class="cart-header-add-btn" id="addLineBtn" type="button">
+            <span class="cart-header-plus">+</span>
+            <span>Add a Line</span>
+          </button>
         </div>
       </div>
 
@@ -3481,6 +3686,20 @@ function renderAsurion(){
       </div>
     </div>
   `;
+
+  if($("openEligibilityBtn")){
+    $("openEligibilityBtn").onclick = ()=>{
+      showOnly("eligibilityView");
+      window.scrollTo({top:0, behavior:"smooth"});
+    };
+  }
+
+  if($("addLineBtn")){
+    $("addLineBtn").onclick = ()=>{
+      showOnly("catalogView");
+      window.scrollTo({top:0, behavior:"smooth"});
+    };
+  }
 
   $("lineGrid").querySelectorAll('[data-action="edit-line"]').forEach(btn=>{
     btn.onclick = ()=>{
@@ -3631,6 +3850,14 @@ function init(){
   };
 }
 init();
+
+if($("eligibilityAddLineBtn")){
+  $("eligibilityAddLineBtn").onclick = ()=>{
+    showOnly("catalogView");
+    window.scrollTo({top:0, behavior:"smooth"});
+  };
+}
+
 </script>
 
     <div class="catalog-footer-override">
