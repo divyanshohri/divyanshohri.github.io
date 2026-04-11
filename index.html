@@ -1773,6 +1773,51 @@
     }
   }
 
+
+  /* stronger boxed treatment for plan type on configurator screen */
+  .plan-grid{
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+    gap:14px !important;
+  }
+  .plan-card{
+    border:2px solid var(--cb-line) !important;
+    border-radius:16px !important;
+    padding:18px !important;
+    background:#fff !important;
+    cursor:pointer !important;
+    min-height:110px !important;
+    display:flex !important;
+    flex-direction:column !important;
+    justify-content:center !important;
+    box-shadow:0 4px 12px rgba(16,24,40,.05) !important;
+  }
+  .plan-card:hover{
+    border-color:#9dbcf8 !important;
+    box-shadow:0 8px 18px rgba(13,98,255,.08) !important;
+  }
+  .plan-card.active{
+    background:#edf4ff !important;
+    border-color:var(--cb-blue) !important;
+    color:var(--cb-ink) !important;
+    box-shadow:0 0 0 3px rgba(13,98,255,.08) inset, 0 10px 22px rgba(13,98,255,.10) !important;
+  }
+  .plan-name{
+    font-size:18px !important;
+    font-weight:900 !important;
+    margin-bottom:8px !important;
+  }
+  .plan-copy{
+    font-size:13px !important;
+    line-height:1.45 !important;
+    opacity:1 !important;
+    color:var(--cb-muted) !important;
+    margin-top:0 !important;
+  }
+  .plan-card.active .plan-copy{
+    color:var(--cb-ink) !important;
+  }
+
 </style>
 </head>
 <body>
@@ -3124,7 +3169,54 @@ function renderLineEditView(){
       <div class="rebuild-edit-main">
         ${device.promo ? `<div class="edit-banner">${device.promo}</div>` : ``}
 
-        ${!isByodLine && device.colors?.length ? `
+        ${isByodLine ? `
+        <div class="rebuild-edit-section">
+          <div class="rebuild-edit-label">What is your IMEI?</div>
+          <div class="rebuild-byod-imei-box">
+            <div class="rebuild-trade-imei-row">
+              <input id="byodImeiInput" class="edit-input" maxlength="15" value="${line.byodFlow.imei || "356789012345678"}" placeholder="Enter 15-digit IMEI">
+              <button type="button" class="btn primary" id="checkByodImeiBtn">Check IMEI</button>
+            </div>
+            ${line.byodFlow.imeiChecked ? `<div class="rebuild-byod-imei-result">Device: iPhone 13 Pro Max 256 GB • Eligible to be used on the Comcast Business network.</div>` : ``}
+          </div>
+        </div>
+
+        ${line.byodFlow.imeiChecked ? `
+        <div class="rebuild-edit-section">
+          <div class="rebuild-edit-label">Selected plan</div>
+          <div class="edit-note">${line.plan || "Standard"} plan selected for this line</div>
+        </div>
+
+        <div class="rebuild-edit-section">
+          <div class="rebuild-edit-label">Porting</div>
+          <div class="edit-choices two">
+            <button type="button" class="edit-choice ${isPorting ? "active" : ""}" data-edit-field="numberType" data-edit-value="port">Yes</button>
+            <button type="button" class="edit-choice ${!isPorting ? "active" : ""}" data-edit-field="numberType" data-edit-value="new">No</button>
+          </div>
+        </div>
+
+        ${isPorting ? `
+        <div class="rebuild-edit-section">
+          <div class="rebuild-edit-port-grid">
+            <div>
+              <div class="rebuild-edit-label">MDN</div>
+              <input id="editPortMdnInput" class="edit-input" maxlength="10" inputmode="numeric" value="${line.mdn || ""}" placeholder="Enter 10-digit number">
+            </div>
+            <div>
+              <div class="rebuild-edit-label">Carrier</div>
+              <select id="editPortCarrierSelect" class="edit-input">
+                <option value="" ${!(line.currentCarrier || "") ? "selected" : ""}>Select carrier</option>
+                <option value="AT&T" ${line.currentCarrier==="AT&T" ? "selected" : ""}>AT&T</option>
+                <option value="Verizon" ${line.currentCarrier==="Verizon" ? "selected" : ""}>Verizon</option>
+                <option value="T-Mobile" ${line.currentCarrier==="T-Mobile" ? "selected" : ""}>T-Mobile</option>
+                <option value="Other" ${line.currentCarrier==="Other" ? "selected" : ""}>Other</option>
+              </select>
+            </div>
+          </div>
+        </div>` : ``}
+        ` : ``}
+        ` : `
+        ${device.colors?.length ? `
         <div class="rebuild-edit-section">
           <div class="rebuild-edit-label">Color: ${line.color || device.colors[0]}</div>
           <div class="edit-swatches">
@@ -3136,7 +3228,7 @@ function renderLineEditView(){
           </div>
         </div>` : ``}
 
-        ${!isByodLine && device.storages?.length ? `
+        ${device.storages?.length ? `
         <div class="rebuild-edit-section">
           <div class="rebuild-edit-label">Storage size</div>
           <div class="edit-storage-list">
@@ -3177,17 +3269,6 @@ function renderLineEditView(){
           </div>
         </div>` : ``}
 
-        ${isByodLine ? `
-        <div class="rebuild-edit-section">
-          <div class="rebuild-edit-label">IMEI checker</div>
-          <div class="rebuild-byod-imei-box">
-            <div class="rebuild-trade-imei-row">
-              <input id="byodImeiInput" class="edit-input" maxlength="15" value="${line.byodFlow.imei || "356789012345678"}" placeholder="Enter 15-digit IMEI">
-              <button type="button" class="btn primary" id="checkByodImeiBtn">Check IMEI</button>
-            </div>
-            ${line.byodFlow.imeiChecked ? `<div class="rebuild-byod-imei-result">Device: iPhone 13 Pro Max 256 GB • Eligible to be used on the Comcast Business network.</div>` : ``}
-          </div>
-        </div>` : `
         <div class="rebuild-edit-section">
           <div class="rebuild-edit-label">Delivery and availability</div>
           <div class="rebuild-edit-delivery">
@@ -3255,7 +3336,8 @@ function renderLineEditView(){
               ${line.tradeFlow.imeiChecked ? `<div class="rebuild-trade-result">IMEI is valid • Attached device: iPhone 13 128 GB</div>` : ``}
             </div>` : ``}
           </div>
-        </div>` : ``}`}
+        </div>` : ``}
+        `}
 
         <div class="rebuild-edit-actions">
           <button type="button" class="btn" id="cancelLineEditBtn">Cancel</button>
@@ -3606,6 +3688,8 @@ function renderAsurion(){
     return gaps;
   };
 
+  const allLinesReady = asurionLines.length > 0 && asurionLines.every(line => lineNeedsAttention(line).length === 0);
+
   const groupOrder = ["Pro","Standard"];
   const grouped = {};
   asurionLines.forEach(line=>{
@@ -3681,25 +3765,11 @@ function renderAsurion(){
         `).join("")}
 
         <div class="line-actions-row">
-          <button class="btn primary" id="completeAsurionBtn">Move to Checkout</button>
+          <button class="btn primary" id="completeAsurionBtn" ${allLinesReady ? "" : "disabled"} style="${allLinesReady ? "" : "opacity:.5;cursor:not-allowed;"}">Move to Checkout</button>
         </div>
       </div>
     </div>
   `;
-
-  if($("openEligibilityBtn")){
-    $("openEligibilityBtn").onclick = ()=>{
-      showOnly("eligibilityView");
-      window.scrollTo({top:0, behavior:"smooth"});
-    };
-  }
-
-  if($("addLineBtn")){
-    $("addLineBtn").onclick = ()=>{
-      showOnly("catalogView");
-      window.scrollTo({top:0, behavior:"smooth"});
-    };
-  }
 
   $("lineGrid").querySelectorAll('[data-action="edit-line"]').forEach(btn=>{
     btn.onclick = ()=>{
@@ -3749,6 +3819,10 @@ function renderAsurion(){
   $("completeAsurionBtn").onclick = ()=>{
     const status = $("checkoutStatus");
     status.classList.remove("hidden");
+    if(!allLinesReady){
+      status.textContent = "Move to Checkout stays disabled until all lines are configured and no line needs review.";
+      return;
+    }
     status.textContent = "All visible lines are aligned. Moving to checkout.";
   };
 }
