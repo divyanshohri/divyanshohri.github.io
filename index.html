@@ -3771,6 +3771,20 @@ function renderAsurion(){
     </div>
   `;
 
+  if($("openEligibilityBtn")){
+    $("openEligibilityBtn").onclick = ()=>{
+      setVisibleView("eligibilityView");
+      window.scrollTo({top:0, behavior:"smooth"});
+    };
+  }
+
+  if($("addLineBtn")){
+    $("addLineBtn").onclick = ()=>{
+      setVisibleView("catalogView");
+      window.scrollTo({top:0, behavior:"smooth"});
+    };
+  }
+
   $("lineGrid").querySelectorAll('[data-action="edit-line"]').forEach(btn=>{
     btn.onclick = ()=>{
       const idx = Number(btn.dataset.line);
