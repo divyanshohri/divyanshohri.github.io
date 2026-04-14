@@ -1950,16 +1950,24 @@
 .review-safe-actions{
   display:grid;
   grid-template-columns:1fr;
-  gap:12px;
+  gap:10px;
   margin-top:18px;
 }
 .review-safe-actions .btn{
-  min-height:56px;
-  border-radius:16px;
-  font-size:16px;
+  min-height:48px;
+  width:100%;
+  border-radius:14px;
+  font-size:15px;
   font-weight:800;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:0 16px;
+  white-space:normal;
+  line-height:1.2;
 }
-.review-safe-actions .btn.dashed,
+.review-safe-actions #reviewAddMoreBtn,
 .review-safe-actions #reviewConfigureQuoteBtn{
   background:#fff;
   border:1.5px solid #cfd8e3;
@@ -2048,6 +2056,26 @@
     .final-bottom-actions{flex-direction:column;align-items:flex-start}
   }
 
+
+
+
+
+  #conciergeModal #proceedConciergeBtn{
+    min-width:112px;
+    width:auto;
+    padding:0 18px;
+    height:44px;
+    border-radius:12px;
+    font-size:16px;
+    font-weight:800;
+    line-height:1;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(180deg,#2f66e5,#2458cf);
+    border:1px solid #2458cf;
+    box-shadow:0 4px 10px rgba(31,79,184,.14);
+  }
+
 </style>
 </head>
 <body>
@@ -2070,15 +2098,6 @@
       <div class="filter-chip-row" id="brandChips"></div>
       <div class="catalog-grid" id="catalogGrid"></div>
     </div>
-
-    
-    
-    
-    </div>
-    </div>
-
-
-
   </div>
 
   
@@ -2821,14 +2840,186 @@ let cart = [];
 let asurionLines = [];
 let screenHistory = ["catalogView"];
 let activeLineEditIndex = null;
+let activePlanModalIndex = null;
+let pendingPlanSelection = null;
 
 function currentDevice(){ return DEVICES[state.deviceId] || null; }
 function isPhone(){ return state.category === "phones"; }
 function isTablet(){ return state.category === "tablets"; }
 function isWatch(){ return state.category === "watches"; }
 function isByod(){ return state.orderType === "byod"; }
-function money(n){ return "$" + Number(n || 0).toFixed(0); }
+function money(n){
+  const value = Number(n);
+  return "$" + (Number.isFinite(value) ? value : 0).toFixed(2);
+}
+
 function hasProPhoneOnAccount(){ return true; }
+
+function getDeviceBasePrice(deviceId){
+  return Number(DEVICES[deviceId]?.basePrice || 0);
+}
+function getPlanMonthlyCharge(plan){
+  const value = String(plan || "").toLowerCase();
+  if(value.includes("watch")) return 10;
+  if(value.includes("pro")) return 10;
+  if(value.includes("standard")) return 5;
+  if(value.includes("tablet")) return 0;
+  return 0;
+}
+function normalizePlan(plan){
+  const value = String(plan || "").toLowerCase();
+  if(value.includes("watch")) return "Watch Plan";
+  if(value.includes("tablet")) return "Tablet Plan";
+  if(value.includes("pro")) return "Pro";
+  return "Standard";
+}
+function normalizeSnapshot(snapshot){
+  if(!snapshot) return snapshot;
+  const device = DEVICES[snapshot.deviceId];
+  if(!device) return snapshot;
+
+  snapshot.category = snapshot.category || device.category;
+  snapshot.orderType = snapshot.orderType || "purchase";
+  snapshot.tradeRows = Array.isArray(snapshot.tradeRows) ? snapshot.tradeRows : [];
+  snapshot.selectedPromoIds = Array.isArray(snapshot.selectedPromoIds) ? snapshot.selectedPromoIds : [];
+
+  const toInt = value => {
+    const parsed = parseInt(value, 10);
+    return Number.isFinite(parsed) ? Math.max(0, parsed) : 0;
+  };
+
+  snapshot.quantity = toInt(snapshot.quantity);
+  snapshot.monthly = toInt(snapshot.monthly);
+  snapshot.retail = toInt(snapshot.retail);
+  snapshot.portCount = toInt(snapshot.portCount);
+  snapshot.tradeCount = toInt(snapshot.tradeCount);
+  snapshot.protectionCount = toInt(snapshot.protectionCount);
+
+  if(!device.colors.includes(snapshot.color)) snapshot.color = device.colors[0] || "";
+  if(!device.storages.includes(snapshot.storage)) snapshot.storage = device.storages[0] || "";
+  if(!device.sims.includes(snapshot.sim)) snapshot.sim = device.sims[0] || "";
+  if(device.connectivity){
+    if(!device.connectivity.includes(snapshot.connectivity)) snapshot.connectivity = device.connectivity[0] || "";
+  } else {
+    snapshot.connectivity = "";
+  }
+
+  if(snapshot.orderType === "byod"){
+    snapshot.monthly = 0;
+    snapshot.retail = 0;
+    snapshot.tradeDecision = "no";
+    snapshot.tradeCount = 0;
+    snapshot.tradeRows = [];
+  }
+
+  snapshot.monthly = Math.min(snapshot.monthly, snapshot.quantity);
+  snapshot.retail = Math.min(snapshot.retail, Math.max(0, snapshot.quantity - snapshot.monthly));
+  if(snapshot.monthly + snapshot.retail > snapshot.quantity){
+    snapshot.retail = Math.max(0, snapshot.quantity - snapshot.monthly);
+  }
+
+  if(snapshot.category !== "phones"){
+    snapshot.portDecision = null;
+    snapshot.portCount = 0;
+  } else if(snapshot.portDecision !== "yes"){
+    snapshot.portCount = 0;
+  } else {
+    snapshot.portCount = Math.min(snapshot.portCount, snapshot.quantity);
+  }
+
+  if(snapshot.tradeDecision !== "yes"){
+    snapshot.tradeCount = 0;
+    snapshot.tradeRows = [];
+  } else {
+    snapshot.tradeCount = Math.min(snapshot.tradeCount, snapshot.quantity);
+    const rows = [];
+    for(let i=0;i<snapshot.tradeCount;i++){
+      if(snapshot.category === "watches") rows.push(snapshot.tradeRows[i] || {make:"", model:""});
+      else rows.push(snapshot.tradeRows[i] || {make:"", model:"", storage:""});
+    }
+    snapshot.tradeRows = rows;
+  }
+
+  if(snapshot.protectionDecision !== "yes"){
+    snapshot.protectionCount = 0;
+  } else {
+    snapshot.protectionCount = Math.min(snapshot.protectionCount, snapshot.quantity);
+  }
+
+  if(snapshot.category === "tablets") snapshot.plan = "Tablet Plan";
+  if(snapshot.category === "watches") snapshot.plan = "Watch Plan ($10)";
+  if(snapshot.category === "phones" && snapshot.plan && !["Standard","Pro"].includes(snapshot.plan)) snapshot.plan = "";
+
+  return snapshot;
+}
+function normalizeState(){
+  normalizeSnapshot(state);
+}
+function getDeviceMonthlyCharge(snapshot){
+  const monthlyQty = Math.max(0, Number(snapshot?.monthly || 0));
+  const gross = getDeviceBasePrice(snapshot?.deviceId) && monthlyQty ? (getDeviceBasePrice(snapshot.deviceId) * monthlyQty) / 36 : 0;
+  const promoMonthly = snapshot?.category === "phones" ? (promoValueForSnapshot(snapshot) / 36) : 0;
+  return Math.max(0, gross - promoMonthly);
+}
+function getPlanChargeTotal(snapshot){
+  return getPlanMonthlyCharge(snapshot?.plan) * Math.max(0, Number(snapshot?.quantity || 0));
+}
+function getMonthlyCharge(snapshot){
+  return getDeviceMonthlyCharge(snapshot) + getPlanChargeTotal(snapshot);
+}
+function getDeviceTotal(snapshot){
+  return getDeviceBasePrice(snapshot?.deviceId) * Math.max(0, Number(snapshot?.quantity || 0));
+}
+function getDownPayment(snapshot){
+  return getDeviceBasePrice(snapshot?.deviceId) * Math.max(0, Number(snapshot?.retail || 0));
+}
+function getEstimatedTaxes(snapshot){
+  return Math.max(0, getDeviceTotal(snapshot) * 0.04);
+}
+function getDueToday(snapshot){
+  return getDownPayment(snapshot) + getEstimatedTaxes(snapshot);
+}
+function isConfiguratorReady(snapshot=state){
+  normalizeSnapshot(snapshot);
+  const device = DEVICES[snapshot.deviceId];
+  if(!device) return false;
+
+  const payOk = snapshot.orderType === "byod"
+    ? snapshot.quantity > 0
+    : (snapshot.monthly + snapshot.retail === snapshot.quantity && snapshot.quantity > 0);
+  const protectionIncluded = (snapshot.category === "tablets" || snapshot.category === "watches") ? hasProPhoneOnAccount() : snapshot.plan === "Pro";
+  const protectionOk = protectionIncluded
+    ? true
+    : (snapshot.protectionDecision !== null && (snapshot.protectionDecision === "no" || snapshot.protectionCount <= snapshot.quantity));
+  const portOk = snapshot.category !== "phones"
+    ? true
+    : (snapshot.portDecision !== null && (snapshot.portDecision === "no" || snapshot.portCount <= snapshot.quantity));
+  const tradeOk = snapshot.orderType === "byod"
+    ? true
+    : (snapshot.tradeDecision !== null && (snapshot.tradeDecision === "no" || snapshot.tradeCount <= snapshot.quantity));
+  const connectivityOk = snapshot.category !== "watches" || !!snapshot.connectivity;
+
+  return snapshot.quantity > 0 && !!snapshot.plan && payOk && tradeOk && protectionOk && portOk && connectivityOk;
+}
+function isLineByod(line){
+  return !!line && (
+    line.orderType === "byod" ||
+    /bring your|byod|byot|byow/i.test(line.product || "") ||
+    /^(byod|byot|byow)$/i.test(line.deviceId || "")
+  );
+}
+function resetApplication(){
+  state = initialState();
+  cart = [];
+  asurionLines = [];
+  screenHistory = ["catalogView"];
+  activeLineEditIndex = null;
+  activePlanModalIndex = null;
+  pendingPlanSelection = null;
+  renderCatalog();
+  setVisibleView("catalogView");
+}
+
 
 function setVisibleView(viewId){
   ["catalogView","configuratorView","lineEditView","reviewView","handoffDecisionView","finalCheckoutView","successView","asurionView","eligibilityView","configSummaryView"].forEach(id=>{
@@ -2888,10 +3079,12 @@ function ensureStateCartId(){
   if(!state._cartId) state._cartId = "cart_" + Date.now() + "_" + Math.random().toString(36).slice(2,7);
 }
 function snapshotCurrentState(){
+  normalizeSnapshot(state);
   ensureStateCartId();
   return JSON.parse(JSON.stringify(state));
 }
 function upsertCartFromState(){
+  if(!state.deviceId) return;
   ensureStateCartId();
   const snap = snapshotCurrentState();
   const idx = cart.findIndex(item => item._cartId === snap._cartId);
@@ -3123,28 +3316,33 @@ function renderTradeRows(){
   });
 }
 
+
 function renderConfigurator(){
+  normalizeState();
   const d = currentDevice();
-  $("selectedThumb").innerHTML = d ? d.thumb : "";
-  $("selectedName").textContent = d ? d.name : "No device selected";
-  $("selectedMeta").textContent = d ? `${d.brand} • ${d.sku}` : "Choose a device from the catalog.";
-  if($("summaryThumb")) $("summaryThumb").innerHTML = d ? d.thumb : "";
-  if($("summaryName")) $("summaryName").textContent = d ? d.name : "No device selected";
-  if($("summaryMeta")) $("summaryMeta").textContent = d ? `${d.brand} • ${d.sku}` : "Choose a device from the catalog.";
-  if($("configDeviceName")) $("configDeviceName").textContent = d ? d.name : "Selected device";
-  if($("configBreadcrumb")) $("configBreadcrumb").textContent = `${isPhone() ? "Phones" : isTablet() ? "Tablets" : "Watches"} / ${d ? d.brand : "Selected"} / ${d ? d.name : "Selected device"}`;
+  if(!d) return;
+
+  $("selectedThumb").innerHTML = d.thumb || "";
+  $("selectedName").textContent = d.name || "No device selected";
+  $("selectedMeta").textContent = `${d.brand} • ${d.sku}`;
+  if($("summaryThumb")) $("summaryThumb").innerHTML = d.thumb || "";
+  if($("summaryName")) $("summaryName").textContent = d.name || "No device selected";
+  if($("summaryMeta")) $("summaryMeta").textContent = `${d.brand} • ${d.sku}`;
+  if($("configDeviceName")) $("configDeviceName").textContent = d.name || "Selected device";
+  if($("configBreadcrumb")) $("configBreadcrumb").textContent = `${isPhone() ? "Phones" : isTablet() ? "Tablets" : "Watches"} / ${d.brand || "Selected"} / ${d.name || "Selected device"}`;
   if($("configPriceHead")){
-    const base = Number(d?.basePrice || 0);
-    const monthlyBase = state.monthly ? (base * state.monthly)/36 : (base ? base/36 : 0);
-    const down = state.retail ? base * state.retail : 0;
-    $("configPriceHead").textContent = base ? `${money(monthlyBase)}/mo${down ? ` + ${money(down)} down` : ""}` : "$0";
+    const previewMonthly = state.quantity > 0 ? getMonthlyCharge(state) : (d.basePrice ? d.basePrice / 36 : 0);
+    const down = state.quantity > 0 ? getDownPayment(state) : 0;
+    $("configPriceHead").textContent = (previewMonthly || down)
+      ? `${money(previewMonthly)}/mo${down ? ` + ${money(down)} down` : ""}`
+      : money(0);
   }
 
   $("qtyTitle").textContent = isTablet() ? (isByod() ? "How many tablets are you bringing?" : "Tablet quantity") : isWatch() ? (isByod() ? "How many watches are you bringing?" : "Watch quantity") : isByod() ? "How many devices are you bringing?" : "Purchase quantity";
   $("qtySub").textContent = isByod() ? (isTablet() ? "Start by capturing how many customer-owned tablets will be activated." : isWatch() ? "Start by capturing how many customer-owned watches will be activated." : "Capture the number of customer-owned devices that will be activated.") : (isTablet() ? "Choose the quantity after selecting the tablet attributes for this configuration." : isWatch() ? "Choose the quantity after selecting the watch attributes for this configuration." : "Choose the quantity after selecting the device attributes for this configuration.");
   $("qtyLabel").textContent = isTablet() ? (isByod() ? "BYOT quantity" : "Tablets being purchased") : isWatch() ? (isByod() ? "BYOW quantity" : "Watches being purchased") : (isByod() ? "BYOD quantity" : "Devices being purchased");
   $("qtyValue").textContent = state.quantity;
-  $("baseTotal").textContent = money((d?.basePrice || 0) * state.quantity);
+  $("baseTotal").textContent = money(getDeviceTotal(state));
 
   const isPhoneByod = isPhone() && isByod();
   $("attrPanel").classList.toggle("hidden", isPhoneByod);
@@ -3153,7 +3351,6 @@ function renderConfigurator(){
   $("portPanel").classList.toggle("hidden", !isPhone());
   $("tradePanel").classList.toggle("hidden", isByod());
 
-  // Reorder the first visible steps by flow type
   const configMain = $("configMain");
   const attrPanel = $("attrPanel");
   const qtyPanel = $("qtyPanel");
@@ -3228,23 +3425,24 @@ function renderConfigurator(){
 
   $("storageLabel").textContent = isWatch() ? "Watch type" : "Storage";
   $("attrSub").textContent = isWatch() ? "Choose the watch color, watch type, and SIM type." : "Choose the applicable device attributes.";
-
   $("paymentSub").textContent = isWatch() ? "Split the quantity between Monthly and Paid in full." : "Split the quantity between Monthly and Full Price.";
   $("monthlyLabel").textContent = "Monthly";
   $("retailLabel").textContent = isWatch() ? "Paid in full" : "Full Price";
 
-  $("colorSelect").innerHTML = (d?.colors || []).map(v=>`<option value="${v}" ${state.color===v?"selected":""}>${v}</option>`).join("");
-  $("storageSelect").innerHTML = (d?.storages || []).map(v=>`<option value="${v}" ${state.storage===v?"selected":""}>${v}</option>`).join("");
-  $("simSelect").innerHTML = (d?.sims || []).map(v=>`<option value="${v}" ${state.sim===v?"selected":""}>${v}</option>`).join("");
-  $("connectivitySelect").innerHTML = ((d?.connectivity || []).map(v=>`<option value="${v}" ${state.connectivity===v?"selected":""}>${v}</option>`).join(""));
+  $("colorSelect").innerHTML = (d.colors || []).map(v=>`<option value="${v}" ${state.color===v?"selected":""}>${v}</option>`).join("");
+  $("storageSelect").innerHTML = (d.storages || []).map(v=>`<option value="${v}" ${state.storage===v?"selected":""}>${v}</option>`).join("");
+  $("simSelect").innerHTML = (d.sims || []).map(v=>`<option value="${v}" ${state.sim===v?"selected":""}>${v}</option>`).join("");
+  $("connectivitySelect").innerHTML = ((d.connectivity || []).map(v=>`<option value="${v}" ${state.connectivity===v?"selected":""}>${v}</option>`).join(""));
 
   $("monthlyValue").textContent = state.monthly;
   $("retailValue").textContent = state.retail;
-  const payOk = isByod() ? true : (state.monthly + state.retail === state.quantity && state.quantity>0);
+  const payOk = isByod() ? state.quantity > 0 : (state.monthly + state.retail === state.quantity && state.quantity>0);
   $("paymentBadge").textContent = isByod() ? "BYOD" : (payOk ? "Balanced" : "Needs adjustment");
   $("paymentGrid").style.display = isByod() ? "none" : "grid";
   $("paymentStatus").className = payOk ? "status-banner" : "warn-banner";
-  $("paymentStatus").textContent = isByod() ? (isTablet() ? "BYOT does not require device financing selection." : isWatch() ? "BYOW does not require device financing selection." : "BYOD does not require a device payment split.") : `Monthly (${state.monthly}) + ${isWatch() ? "Paid in full" : "Full Price"} (${state.retail}) = ${state.monthly+state.retail} of ${state.quantity} devices.`;
+  $("paymentStatus").textContent = isByod()
+    ? (isTablet() ? "BYOT does not require device financing selection." : isWatch() ? "BYOW does not require device financing selection." : "BYOD does not require a device payment split.")
+    : `Monthly (${state.monthly}) + ${isWatch() ? "Paid in full" : "Full Price"} (${state.retail}) = ${state.monthly+state.retail} of ${state.quantity} devices.`;
 
   updatePlanUi();
   if(isTablet()){
@@ -3312,21 +3510,14 @@ function renderConfigurator(){
   $("tradeSkipCard").classList.toggle("hidden", isByod() || !(state.tradeDecision==="yes" && state.tradeCount>0));
   $("tradeSkipBanner").classList.add("hidden");
 
-  const monthlyBase = state.monthly ? ((d?.basePrice || 0) * state.monthly)/36 : 0;
-  $("sumTotal").textContent = money((d?.basePrice || 0) * state.quantity);
-  $("sumDueToday").textContent = money((d?.basePrice || 0) * state.retail);
-  $("sumMonthly").textContent = money(monthlyBase - (isPhone() ? appliedPromoMonthlyCredit() : 0));
-  $("sumTrade").textContent = money(tradeTotal());
-  $("sumPromo").textContent = money(isPhone() && appliedPromo() ? appliedPromo().totalCredit : 0);
-
-  const tradeOk = isByod() ? true : (state.tradeDecision!==null && (state.tradeDecision==="no" || state.tradeCount<=state.quantity));
-  const protectionOk = protectionIncluded ? true : (state.protectionDecision!==null && (state.protectionDecision==="no" || state.protectionCount<=state.quantity));
-  const portOk = !isPhone() ? true : (state.portDecision!==null && (state.portDecision==="no" || state.portCount<=state.quantity));
-  const connectivityOk = !isWatch() || !!state.connectivity;
-  const ready = state.quantity>0 && !!state.plan && payOk && tradeOk && protectionOk && portOk && connectivityOk;
-  $("summaryStatusBanner").textContent = ready ? "Ready for review" : "In progress";
-  $("continueBtn").disabled = !ready;
-  $("continueBtn").style.opacity = ready ? "1" : ".55";
+  const ready = isConfiguratorReady(state);
+  const continueBtn = $("configContinueBtn");
+  if(continueBtn){
+    continueBtn.disabled = !ready;
+    continueBtn.style.opacity = ready ? "1" : ".55";
+    continueBtn.title = ready ? "" : "Complete the required selections before continuing.";
+    continueBtn.textContent = state._cartId ? "Update Quote" : "Continue";
+  }
 }
 
 function promoValueForSnapshot(item){
@@ -3409,10 +3600,10 @@ function renderCartItems(){
     };
   });
 
-  $("orderTotal").textContent = money(totals.total);
-  $("orderMonthly").textContent = money(totals.monthly);
-  $("orderTrade").textContent = money(totals.trade);
-  $("orderPromo").textContent = money(totals.promo);
+  if($("orderTotal")) $("orderTotal").textContent = money(totals.total);
+  if($("orderMonthly")) $("orderMonthly").textContent = money(totals.monthly);
+  if($("orderTrade")) $("orderTrade").textContent = money(totals.trade);
+  if($("orderPromo")) $("orderPromo").textContent = money(totals.promo);
 }
 
 
@@ -3431,7 +3622,7 @@ function renderLineEditView(){
     "Cobalt Violet":"#6b5ca5","Gray":"#9ca3af","Green":"#10b981","Titanium Gray":"#8b8f97","Navy":"#1e3a8a"
   };
 
-  const isByodLine = /bring your|byod|byot|byow/i.test(line.product || "") || /^(byod|byot|byow)$/i.test(line.deviceId || "");
+  const isByodLine = isLineByod(line);
 
   if(!line.tradeFlow){
     line.tradeFlow = {
@@ -3451,7 +3642,7 @@ function renderLineEditView(){
 
   const monthlyPrice = Number(line.monthlyPrice || 36.11);
   const fullPrice = Number(line.fullPrice || 1299.99);
-  const planCharge = (line.plan || "Standard") === "Pro" ? 10 : 5;
+  const planCharge = getPlanMonthlyCharge(line.plan);
   const deliveryMethod = line.deliveryMethod || "shipping";
   const isPorting = line.numberType === "port";
 
@@ -3655,7 +3846,7 @@ function renderLineEditView(){
         <div class="edit-summary-row"><span>Device payment</span><strong>${line.payToday ? `$${fullPrice.toFixed(2)}` : `$${monthlyPrice.toFixed(2)}/mo`}</strong></div>
         ${!isByodLine ? `<div class="edit-summary-row"><span>Delivery</span><strong>${deliveryMethod==="shipping" ? "Free shipping" : "In-store pickup"}</strong></div>` : ``}
         <div class="edit-summary-row"><span>Porting</span><strong>${isPorting ? "Yes" : "No"}</strong></div>
-        <div class="edit-summary-row muted"><span>${line.plan || "Standard"}</span><strong>${line.payToday ? "$0.00" : (line.plan==="Pro" ? "$10.00/mo" : "$5.00/mo")}</strong></div>
+        <div class="edit-summary-row muted"><span>${line.plan || "Standard"}</span><strong>${planCharge ? `${money(planCharge)}/mo` : "$0.00"}</strong></div>
         ${line.tradeIn && !isByodLine ? `<div class="edit-summary-row"><span>Trade-in</span><strong>${line.tradeCompleted ? "Completed" : "In progress"}</strong></div>` : ``}
         ${isByodLine && line.byodFlow.imeiChecked ? `<div class="edit-summary-row"><span>Eligibility</span><strong>Verified</strong></div>` : ``}
         ${!line.payToday ? `<div class="edit-note">Includes monthly pricing on this line</div>` : ``}
@@ -3812,8 +4003,12 @@ function renderLineEditView(){
 }
 
 
-function renderReview(){
-  upsertCartFromState();
+
+function renderReview(options = {}){
+  const commitCurrent = !!options.commitCurrent;
+  if(commitCurrent && currentDevice() && isConfiguratorReady(state)){
+    upsertCartFromState();
+  }
 
   const banner = $("cartSummaryBanner");
   const wrap = $("cartItemsList");
@@ -3822,14 +4017,11 @@ function renderReview(){
   const thumbFor = (item)=> deviceFor(item).thumb || "";
   const promoValue = (item)=> promoValueForSnapshot(item) || 0;
   const tradeValue = (item)=> tradeTotalFromSnapshot(item) || 0;
-  const totalDeviceCost = (item)=> (deviceFor(item).basePrice || 0) * (item.quantity || 0);
-  const downPayment = (item)=> (deviceFor(item).basePrice || 0) * (item.retail || 0);
-  const monthlyDue = (item)=>{
-    const d = deviceFor(item);
-    const gross = item.monthly ? (((d.basePrice || 0) * item.monthly)/36) : 0;
-    return gross - (item.category === "phones" ? promoValue(item)/36 : 0);
-  };
-  const taxesFees = (item)=> downPayment(item) + Math.max(0, totalDeviceCost(item) * 0.04);
+  const totalDeviceCost = (item)=> getDeviceTotal(item);
+  const downPayment = (item)=> getDownPayment(item);
+  const monthlyDue = (item)=> getMonthlyCharge(item);
+  const taxesFees = (item)=> getEstimatedTaxes(item);
+  const dueTodayTotal = (item)=> getDueToday(item);
 
   if(!cart.length){
     banner.innerHTML = `
@@ -3845,6 +4037,7 @@ function renderReview(){
   }
 
   const totals = cart.reduce((acc,item)=>{
+    normalizeSnapshot(item);
     acc.lines += item.quantity || 0;
     acc.monthly += monthlyDue(item);
     acc.down += downPayment(item);
@@ -3852,8 +4045,9 @@ function renderReview(){
     acc.trade += tradeValue(item);
     acc.promo += promoValue(item);
     acc.device += totalDeviceCost(item);
+    acc.dueToday += dueTodayTotal(item);
     return acc;
-  }, {lines:0, monthly:0, down:0, tax:0, trade:0, promo:0, device:0});
+  }, {lines:0, monthly:0, down:0, tax:0, trade:0, promo:0, device:0, dueToday:0});
 
   banner.innerHTML = `
     <div class="review-safe-head">
@@ -3868,6 +4062,7 @@ function renderReview(){
     <div class="review-safe-shell">
       <div class="review-safe-list">
         ${cart.map((item, idx)=>{
+          normalizeSnapshot(item);
           const d = deviceFor(item);
           const title = d.name || "Selected device";
           const meta = [
@@ -3878,9 +4073,9 @@ function renderReview(){
             item.plan || null,
             item.orderType === "byod" ? "BYOD" : "Purchase"
           ].filter(Boolean).join(" • ");
-          const price = item.monthly > 0 ? `${money(monthlyDue(item))}/mo` : money(totalDeviceCost(item));
-          const priceSub = item.monthly > 0 ? "for 36 months" : "paid today";
-          const payTodayChecked = item.retail === item.quantity && item.quantity > 0;
+          const displayMonthly = monthlyDue(item);
+          const price = displayMonthly > 0 ? `${money(displayMonthly)}/mo` : money(totalDeviceCost(item));
+          const priceSub = displayMonthly > 0 ? "estimated monthly" : "paid today";
 
           return `
             <div class="review-safe-card">
@@ -3923,7 +4118,7 @@ function renderReview(){
 
               <div class="review-safe-bottom">
                 <div>Payment mix: ${item.monthly || 0} monthly / ${item.retail || 0} paid in full</div>
-                <div>Total due today: ${money(downPayment(item) + taxesFees(item))}</div>
+                <div>Total due today: ${money(dueTodayTotal(item))}</div>
               </div>
             </div>
           `;
@@ -3955,32 +4150,18 @@ function renderReview(){
     };
   });
 
-  wrap.querySelectorAll('[data-review-action="change-plan"]').forEach(btn=>{
+  wrap.querySelectorAll('[data-review-action="change-plan"],[data-review-action="edit-device"]').forEach(btn=>{
     btn.onclick = ()=>{
       const idx = Number(btn.dataset.reviewIdx);
       const item = cart[idx];
       if(!item) return;
       state = JSON.parse(JSON.stringify(item));
-      state._cartId = idx;
-      showOnly("configuratorView", false);
+      normalizeState();
+      showOnly("configuratorView");
       renderConfigurator();
       window.scrollTo({top:0, behavior:"smooth"});
     };
   });
-  wrap.querySelectorAll('[data-review-action="edit-device"]').forEach(btn=>{
-    btn.onclick = ()=>{
-      const idx = Number(btn.dataset.reviewIdx);
-      const item = cart[idx];
-      if(!item) return;
-      state = JSON.parse(JSON.stringify(item));
-      state._cartId = idx;
-      showOnly("configuratorView", false);
-      renderConfigurator();
-      window.scrollTo({top:0, behavior:"smooth"});
-    };
-  });
-
-
 
   $("reviewAddMoreBtn").onclick = ()=>{
     resetForNewDevice(state.category);
@@ -3988,6 +4169,7 @@ function renderReview(){
     renderCatalog();
   };
   $("reviewConfigureQuoteBtn").onclick = ()=>{
+    if(!cart.length) return;
     initAsurionLines();
     renderAsurion();
     showOnly("asurionView");
@@ -4032,55 +4214,63 @@ function updateProceed(){
 }
 
 
+
 function renderFinalCheckoutPage(){
   const totals = asurionLines.reduce((acc,line)=>{
-    const monthly = Number(line.monthlyPrice || 36.11);
-    const full = Number(line.fullPrice || 1299.99);
-    const dueToday = line.payToday ? full : 91.00;
-    const monthlyDue = line.payToday ? 0 : monthly;
-    const taxes = Math.max(0, full * 0.04);
+    const deviceMonthly = line.payToday ? 0 : Number(line.monthlyPrice || 0);
+    const planMonthly = getPlanMonthlyCharge(line.plan);
+    const full = Number(line.fullPrice || 0);
+    const dueToday = line.payToday ? full : 0;
+    const oneTimeTaxes = Math.max(0, full * 0.04);
     acc.down += dueToday;
-    acc.monthly += monthlyDue;
-    acc.taxes += taxes;
+    acc.monthly += deviceMonthly + planMonthly;
+    acc.oneTimeTaxes += oneTimeTaxes;
     return acc;
-  }, {down:0, monthly:0, taxes:0});
+  }, {down:0, monthly:0, oneTimeTaxes:0});
 
-  const first = $("finalFirstName")?.value?.trim() || "Brittanie";
+  const dueTodayTotal = totals.down + totals.oneTimeTaxes;
+  const dueNextTotal = totals.monthly;
+
   if($("finalCheckoutTitle")) $("finalCheckoutTitle").textContent = "Ok CBM, let’s review your order";
 
   if($("finalCheckoutDeviceProposal")){
-    $("finalCheckoutDeviceProposal").innerHTML = asurionLines.map(line=>
-      `${line.product || "Selected device"}, ${line.storage || ""} ${line.color || ""}, ${money(Number(line.monthlyPrice || 36.11))}/mo for 36 months`
-    ).join("<br><br>");
+    $("finalCheckoutDeviceProposal").innerHTML = asurionLines.map(line=>{
+      const deviceCharge = line.payToday ? money(0) : `${money(Number(line.monthlyPrice || 0))}/mo`;
+      return `${line.product || "Selected device"}, ${line.storage || ""} ${line.color || ""}, ${deviceCharge} for 36 months`;
+    }).join("<br><br>");
   }
 
-  if($("finalDueToday")) $("finalDueToday").textContent = money(totals.down + totals.taxes);
-  if($("finalDueNext")) $("finalDueNext").textContent = money(totals.monthly + totals.taxes);
-  if($("finalOneTime")) $("finalOneTime").textContent = money(totals.down + totals.taxes);
-  if($("finalPlanMonthly")) $("finalPlanMonthly").textContent = money(totals.monthly) + "/mo";
-  if($("finalTaxesFees")) $("finalTaxesFees").textContent = money(totals.taxes) + "/mo";
-  if($("finalDueTodayDetail")) $("finalDueTodayDetail").textContent = money(totals.down + totals.taxes);
-  if($("finalDueNextDetail")) $("finalDueNextDetail").textContent = money(totals.monthly + totals.taxes);
+  if($("finalDueToday")) $("finalDueToday").textContent = money(dueTodayTotal);
+  if($("finalDueNext")) $("finalDueNext").textContent = money(dueNextTotal);
+  if($("finalOneTime")) $("finalOneTime").textContent = money(dueTodayTotal);
+  if($("finalPlanMonthly")) $("finalPlanMonthly").textContent = money(dueNextTotal) + "/mo";
+  if($("finalTaxesFees")) $("finalTaxesFees").textContent = money(0) + "/mo";
+  if($("finalDueTodayDetail")) $("finalDueTodayDetail").textContent = money(dueTodayTotal);
+  if($("finalDueNextDetail")) $("finalDueNextDetail").textContent = money(dueNextTotal);
 
   if($("finalPlanItems")){
-    $("finalPlanItems").innerHTML = asurionLines.map(line=>`
-      <div class="final-mini-row"><span>${line.plan || "Mobile Data"}</span><strong>${line.plan==="Pro" ? "$10.00/mo" : "$20.00/mo"}</strong></div>
-      <div class="final-line-item">
-        <div class="final-line-thumb">${(DEVICES[line.deviceId || ""] || {}).thumb || ""}</div>
-        <div>
-          <div class="final-line-name">${line.product || "Selected device"}</div>
-          <div class="final-line-meta">${line.storage || ""} ${line.color || ""} • ${line.numberType==="port" ? "Port-In Number" : "New Number"}</div>
-          <div class="final-line-meta">Device payment: ${money(Number(line.monthlyPrice || 36.11))}/mo, APR for 36 months</div>
+    $("finalPlanItems").innerHTML = asurionLines.map(line=>{
+      const planCharge = getPlanMonthlyCharge(line.plan);
+      const deviceMonthly = line.payToday ? 0 : Number(line.monthlyPrice || 0);
+      return `
+        <div class="final-mini-row"><span>${line.plan || "Mobile Data"}</span><strong>${money(planCharge)}/mo</strong></div>
+        <div class="final-line-item">
+          <div class="final-line-thumb">${(DEVICES[line.deviceId || ""] || {}).thumb || ""}</div>
+          <div>
+            <div class="final-line-name">${line.product || "Selected device"}</div>
+            <div class="final-line-meta">${line.storage || ""} ${line.color || ""} • ${line.numberType==="port" ? "Port-In Number" : "New Number"}</div>
+            <div class="final-line-meta">Device payment: ${line.payToday ? money(0) : `${money(deviceMonthly)}/mo`}, APR for 36 months</div>
+          </div>
+          <div class="final-line-price">${line.payToday ? money(0) : `${money(deviceMonthly)}/mo`}</div>
         </div>
-        <div class="final-line-price">${money(Number(line.monthlyPrice || 36.11))}/mo</div>
-      </div>
-    `).join("");
+      `;
+    }).join("");
   }
 
   if($("finalDueTodayItems")){
     $("finalDueTodayItems").innerHTML = asurionLines.map(line=>{
-      const full = Number(line.fullPrice || 1299.99);
-      const dueToday = line.payToday ? full : 91.00;
+      const full = Number(line.fullPrice || 0);
+      const dueToday = line.payToday ? full : 0;
       const taxes = Math.max(0, full * 0.04);
       return `
         <div class="final-mini-row"><span>Mobile</span><strong>${money(dueToday + taxes)}</strong></div>
@@ -4089,7 +4279,7 @@ function renderFinalCheckoutPage(){
           <div>
             <div class="final-line-name">${line.product || "Selected device"}</div>
             <div class="final-line-meta">${line.storage || ""} ${line.color || ""}</div>
-            <div class="final-line-meta">Includes initial device payment and taxes.</div>
+            <div class="final-line-meta">Includes equipment taxes${line.payToday ? " and the paid-in-full device amount" : ""}.</div>
           </div>
           <div class="final-line-price">${money(dueToday + taxes)}</div>
         </div>
@@ -4098,46 +4288,59 @@ function renderFinalCheckoutPage(){
   }
 
   if($("finalDueNextItems")){
-    $("finalDueNextItems").innerHTML = asurionLines.map(line=>`
-      <div class="final-mini-row"><span>Mobile</span><strong>${money(Number(line.monthlyPrice || 36.11))}/mo</strong></div>
-      <div class="final-line-item">
-        <div class="final-line-thumb">${(DEVICES[line.deviceId || ""] || {}).thumb || ""}</div>
-        <div>
-          <div class="final-line-name">${line.product || "Selected device"}</div>
-          <div class="final-line-meta">${line.storage || ""} ${line.color || ""}</div>
-          <div class="final-line-meta">Service with ${line.plan || "selected plan"}.</div>
+    $("finalDueNextItems").innerHTML = asurionLines.map(line=>{
+      const deviceMonthly = line.payToday ? 0 : Number(line.monthlyPrice || 0);
+      const planCharge = getPlanMonthlyCharge(line.plan);
+      return `
+        <div class="final-mini-row"><span>Mobile</span><strong>${money(deviceMonthly + planCharge)}/mo</strong></div>
+        <div class="final-line-item">
+          <div class="final-line-thumb">${(DEVICES[line.deviceId || ""] || {}).thumb || ""}</div>
+          <div>
+            <div class="final-line-name">${line.product || "Selected device"}</div>
+            <div class="final-line-meta">${line.storage || ""} ${line.color || ""}</div>
+            <div class="final-line-meta">Service with ${line.plan || "selected plan"}.</div>
+          </div>
+          <div class="final-line-price">${money(deviceMonthly + planCharge)}/mo</div>
         </div>
-        <div class="final-line-price">${money(Number(line.monthlyPrice || 36.11))}/mo</div>
-      </div>
-    `).join("") + `<div class="final-mini-row" style="margin-top:10px"><span>Estimated monthly plan tax</span><strong>${money(totals.taxes)}/mo</strong></div>`;
+      `;
+    }).join("");
   }
 
   if($("finalIdBlock")){
     $("finalIdBlock").innerHTML = `
       Sales Session ID : S-${Date.now()}<br>
       Visitor Session ID : demo-session<br>
-      Cart ID : cart-${asurionLines.length}-${Math.max(1, Math.round(totals.down + totals.monthly))}<br>
+      Cart ID : cart-${asurionLines.length}-${Math.max(1, Math.round(dueTodayTotal + dueNextTotal))}<br>
       Consent ID : false<br>
       Digital Session ID : DS-${Date.now()}
     `;
   }
 }
+
+
 function initAsurionLines(){
   asurionLines = [];
   let lineIndex = 1;
   cart.forEach(item => {
+    normalizeSnapshot(item);
     const d = DEVICES[item.deviceId] || {};
     for(let i=0;i<(item.quantity || 0);i++){
-      const isPhoneItem = item.category==="phones";
-      const isPort = isPhoneItem && item.portDecision==="yes" && i < (item.portCount || 0);
-      const tradeIn = item.tradeDecision==="yes" && i < (item.tradeCount || 0);
+      const isPhoneItem = item.category === "phones";
+      const isPort = isPhoneItem && item.portDecision === "yes" && i < (item.portCount || 0);
+      const tradeIn = item.tradeDecision === "yes" && i < (item.tradeCount || 0);
       const tradeRow = tradeIn ? (item.tradeRows?.[i] || null) : null;
-      const protectionIncluded = (item.category==="tablets" || item.category==="watches") ? hasProPhoneOnAccount() : item.plan==="Pro";
-      const protectionValue = protectionIncluded ? "Included" : (item.protectionDecision==="yes" && i < (item.protectionCount || 0) ? "Yes" : "No");
+      const protectionIncluded = (item.category === "tablets" || item.category === "watches") ? hasProPhoneOnAccount() : item.plan === "Pro";
+      const protectionValue = protectionIncluded ? "Included" : (item.protectionDecision === "yes" && i < (item.protectionCount || 0) ? "Yes" : "No");
+      const monthlyPrice = Number(((d.basePrice || 0) / 36).toFixed(2));
+      const payToday = i >= (item.monthly || 0);
 
       asurionLines.push({
         label:`Line ${lineIndex}`,
         isEditingName:false,
+        category:item.category,
+        orderType:item.orderType,
+        sourceCartId:item._cartId,
+        sourceIndex:i,
         product:d.name || "Selected Device",
         deviceId:item.deviceId || "",
         color:item.color || "",
@@ -4146,17 +4349,20 @@ function initAsurionLines(){
         mdn:"",
         currentCarrier:"",
         tradeIn,
+        tradeCompleted:false,
         tradeDevice: tradeRow ? `${tradeRow.make || ""} ${tradeRow.model || ""}${tradeRow.storage ? " • " + tradeRow.storage : ""}`.trim() : "",
         deviceProtection: protectionValue,
-        payToday:(item.paymentType || "").toLowerCase()==="retail",
-        monthlyPrice:item.monthlyPrice || item.deviceMonthlyPrice || 36.11,
-        fullPrice:item.fullPrice || item.deviceFullPrice || 1299.99,
-        plan:item.plan || "Standard"
+        payToday,
+        monthlyPrice:monthlyPrice || 0,
+        fullPrice:Number(d.basePrice || 0),
+        plan:item.plan || (item.category === "phones" ? "Standard" : item.category === "watches" ? "Watch Plan ($10)" : "Tablet Plan")
       });
       lineIndex += 1;
     }
   });
 }
+
+
 
 
 function renderPlanModal(){
@@ -4167,7 +4373,7 @@ function renderPlanModal(){
   const line = asurionLines[activePlanModalIndex];
   if(!line) return;
 
-  const selected = pendingPlanSelection || line.plan || "Standard";
+  const selected = pendingPlanSelection || normalizePlan(line.plan || "Standard");
   const price = selected === "Pro" ? 10 : 5;
   const banner = selected === "Pro"
     ? "Select Pro to unlock the premium experience for this line"
@@ -4234,15 +4440,15 @@ function renderPlanModal(){
 
   document.getElementById("applyPlanChangeBtn").onclick = ()=>{
     if(activePlanModalIndex !== null && asurionLines[activePlanModalIndex]){
-      const chosen = pendingPlanSelection || asurionLines[activePlanModalIndex].plan || "Standard";
-      asurionLines[activePlanModalIndex].plan = chosen;
-      const match = cart.find(item=>{
-        const d = DEVICES[item.deviceId] || {};
-        return (d.name || "") === (asurionLines[activePlanModalIndex].product || "");
+      const chosen = pendingPlanSelection || normalizePlan(asurionLines[activePlanModalIndex].plan || "Standard");
+      const sourceCartId = asurionLines[activePlanModalIndex].sourceCartId;
+      asurionLines.forEach(entry=>{
+        if(entry.sourceCartId === sourceCartId) entry.plan = chosen;
       });
+      const match = cart.find(item => item._cartId === sourceCartId);
       if(match){
         match.plan = chosen;
-        match.planPriceMonthly = chosen === "Pro" ? 10 : 5;
+        normalizeSnapshot(match);
       }
     }
     activePlanModalIndex = null;
@@ -4251,6 +4457,8 @@ function renderPlanModal(){
     renderAsurion();
   };
 }
+
+
 
 
 function renderAsurion(){
@@ -4262,8 +4470,10 @@ function renderAsurion(){
   };
 
   const normalizePlan = (plan)=>{
-    if((plan || "").toLowerCase().includes("pro")) return "Pro";
-    if((plan || "").toLowerCase().includes("premium")) return "Pro";
+    const value = (plan || "").toLowerCase();
+    if(value.includes("watch")) return "Watch Plan";
+    if(value.includes("tablet")) return "Tablet Plan";
+    if(value.includes("pro")) return "Pro";
     return "Standard";
   };
 
@@ -4275,20 +4485,41 @@ function renderAsurion(){
     if(line.tradeIn && !line.tradeCompleted){
       gaps.push("Trade-in details");
     }
+    if(isLineByod(line) && !(line.byodFlow && line.byodFlow.imeiChecked)){
+      gaps.push("IMEI validation");
+    }
     return gaps;
   };
 
-  const allLinesReady = asurionLines.length > 0 && asurionLines.every(line => lineNeedsAttention(line).length === 0);
-
-  const groupOrder = ["Pro","Standard"];
   const grouped = {};
   asurionLines.forEach(line=>{
     const key = normalizePlan(line.plan);
-    line.plan = key;
     if(!grouped[key]) grouped[key] = [];
     grouped[key].push(line);
   });
-  const orderedPlans = groupOrder.filter(k => grouped[k]?.length);
+  const groupOrder = ["Pro","Standard","Tablet Plan","Watch Plan"];
+  const orderedPlans = groupOrder.filter(key => grouped[key]?.length);
+  const allLinesReady = asurionLines.length > 0 && asurionLines.every(line => lineNeedsAttention(line).length === 0);
+
+  if(!asurionLines.length){
+    $("lineGrid").innerHTML = `
+      <div class="line-summary-shell">
+        <div class="cart-header-shell">
+          <div class="cart-header-title">Your Cart</div>
+          <div class="cart-header-actions">
+            <button class="cart-header-add-btn" id="addLineBtn" type="button">
+              <span class="cart-header-plus">+</span>
+              <span>Add a Line</span>
+            </button>
+          </div>
+        </div>
+        <div class="card"><div class="card-body">There are no configured lines yet. Add a device from the catalog to continue.</div></div>
+      </div>
+    `;
+    if($("checkoutStatus")) $("checkoutStatus").classList.add("hidden");
+    if($("addLineBtn")) $("addLineBtn").onclick = ()=>{ showOnly("catalogView"); window.scrollTo({top:0, behavior:"smooth"}); };
+    return;
+  }
 
   $("lineGrid").innerHTML = `
     <div class="line-summary-shell">
@@ -4317,15 +4548,22 @@ function renderAsurion(){
             <div class="line-list">
               ${grouped[planName].map(line=>{
                 const idx = asurionLines.indexOf(line);
-                const monthly = Number(line.monthlyPrice || 36.11).toFixed(2);
-                const full = Number(line.fullPrice || 1299.99).toFixed(2);
-                const priceMarkup = line.payToday
-                  ? `<strong>$${full}</strong><span>paid today</span>`
-                  : `<strong>$${monthly}/mo</strong><span>for 36 months</span>`;
+                const deviceMonthly = line.payToday ? 0 : Number(line.monthlyPrice || 0);
+                const planMonthly = getPlanMonthlyCharge(line.plan);
+                const full = Number(line.fullPrice || 0);
+                const lineMonthlyTotal = deviceMonthly + planMonthly;
+                const priceMarkup = full > 0
+                  ? (line.payToday
+                      ? `<strong>${money(full)}</strong><span>paid today</span>`
+                      : `<strong>${money(lineMonthlyTotal)}/mo</strong><span>estimated monthly</span>`)
+                  : `<strong>${money(lineMonthlyTotal)}/mo</strong><span>service only</span>`;
                 const gaps = lineNeedsAttention(line);
                 const attention = gaps.length
                   ? `<div class="attention-badge">Needs review: ${gaps.join(" and ")} remaining</div>`
                   : `<div class="attention-badge ok">Ready</div>`;
+                const planLink = line.category === "phones"
+                  ? `<button class="line-card-link" data-line="${idx}" data-action="change-plan">Change plan</button>`
+                  : ``;
                 return `
                 <div class="line-card-summary">
                   <div class="line-card-icon">${iconForLine(line)}</div>
@@ -4335,19 +4573,21 @@ function renderAsurion(){
                     <div class="line-card-submeta">${line.numberType==="new" ? "New Number" : "Port-In Number"}</div>
                     ${attention}
                     <div class="line-card-links">
-                      <button class="line-card-link" data-line="${idx}" data-action="change-plan">Change plan</button>
+                      ${planLink}
                       <button class="line-card-link" data-line="${idx}" data-action="add-accessories">Add accessories</button>
                       <button class="line-card-link" data-line="${idx}" data-action="edit-line">Edit Device</button>
                       <button class="line-card-link" data-line="${idx}" data-action="remove-line">Remove</button>
                     </div>
                   </div>
                   <div class="line-card-price">${priceMarkup}</div>
-                  <div class="line-card-footer">
-                    <label class="pay-today">
-                      <input type="checkbox" data-line="${idx}" data-action="toggle-pay-today" ${line.payToday ? "checked" : ""}>
-                      <span>Pay the total amount today ($${full})</span>
-                    </label>
-                  </div>
+                  ${full > 0 ? `
+                    <div class="line-card-footer">
+                      <label class="pay-today">
+                        <input type="checkbox" data-line="${idx}" data-action="toggle-pay-today" ${line.payToday ? "checked" : ""}>
+                        <span>Pay the total amount today (${money(full)})</span>
+                      </label>
+                    </div>
+                  ` : ``}
                 </div>`;
               }).join("")}
             </div>
@@ -4363,14 +4603,14 @@ function renderAsurion(){
 
   if($("openEligibilityBtn")){
     $("openEligibilityBtn").onclick = ()=>{
-      setVisibleView("eligibilityView");
+      showOnly("eligibilityView");
       window.scrollTo({top:0, behavior:"smooth"});
     };
   }
 
   if($("addLineBtn")){
     $("addLineBtn").onclick = ()=>{
-      setVisibleView("catalogView");
+      showOnly("catalogView");
       window.scrollTo({top:0, behavior:"smooth"});
     };
   }
@@ -4390,6 +4630,21 @@ function renderAsurion(){
   $("lineGrid").querySelectorAll('[data-action="remove-line"]').forEach(btn=>{
     btn.onclick = ()=>{
       const idx = Number(btn.dataset.line);
+      const removed = asurionLines[idx];
+      if(!removed) return;
+      const sourceCart = cart.find(item => item._cartId === removed.sourceCartId);
+      if(sourceCart){
+        sourceCart.quantity = Math.max(0, (sourceCart.quantity || 0) - 1);
+        if(removed.payToday) sourceCart.retail = Math.max(0, (sourceCart.retail || 0) - 1);
+        else sourceCart.monthly = Math.max(0, (sourceCart.monthly || 0) - 1);
+        if(removed.numberType === "port") sourceCart.portCount = Math.max(0, (sourceCart.portCount || 0) - 1);
+        if(removed.tradeIn) sourceCart.tradeCount = Math.max(0, (sourceCart.tradeCount || 0) - 1);
+        if(removed.deviceProtection === "Yes") sourceCart.protectionCount = Math.max(0, (sourceCart.protectionCount || 0) - 1);
+        normalizeSnapshot(sourceCart);
+        if(sourceCart.quantity === 0){
+          cart = cart.filter(item => item._cartId !== sourceCart._cartId);
+        }
+      }
       asurionLines.splice(idx, 1);
       renderAsurion();
     };
@@ -4398,7 +4653,21 @@ function renderAsurion(){
   $("lineGrid").querySelectorAll('[data-action="toggle-pay-today"]').forEach(input=>{
     input.onchange = ()=>{
       const idx = Number(input.dataset.line);
-      asurionLines[idx].payToday = input.checked;
+      const line = asurionLines[idx];
+      if(!line) return;
+      const previous = !!line.payToday;
+      line.payToday = input.checked;
+      const sourceCart = cart.find(item => item._cartId === line.sourceCartId);
+      if(sourceCart && previous !== line.payToday){
+        if(line.payToday){
+          sourceCart.monthly = Math.max(0, (sourceCart.monthly || 0) - 1);
+          sourceCart.retail = (sourceCart.retail || 0) + 1;
+        } else {
+          sourceCart.retail = Math.max(0, (sourceCart.retail || 0) - 1);
+          sourceCart.monthly = (sourceCart.monthly || 0) + 1;
+        }
+        normalizeSnapshot(sourceCart);
+      }
       renderAsurion();
     };
   });
@@ -4434,33 +4703,34 @@ function renderAsurion(){
   };
 }
 
+
 function bindCounter(minus, plus, get, set, maxFn){
   $(minus).onclick = ()=>{ set(Math.max(0, get()-1)); renderConfigurator(); };
   $(plus).onclick = ()=>{ set(Math.min(maxFn(), get()+1)); renderConfigurator(); };
 }
+
 
 function init(){
   try { history.replaceState({viewId:"catalogView"}, "", "#catalogView"); } catch(e) {}
   window.onpopstate = (event)=>{
     const viewId = event.state && event.state.viewId ? event.state.viewId : "catalogView";
     setVisibleView(viewId);
+    if(screenHistory[screenHistory.length-1] !== viewId) screenHistory.push(viewId);
   };
-  $("topBackBtn").onclick = ()=> goBackScreen();
+  if($("topBackBtn")) $("topBackBtn").onclick = ()=> goBackScreen();
 
   renderCatalog();
+  setVisibleView("catalogView");
 
   bindCounter("qtyMinus","qtyPlus", ()=>state.quantity, v=>{
     state.quantity = v;
-    if(state.monthly + state.retail > v) state.retail = Math.max(0, v - state.monthly);
-    if(state.portCount > v) state.portCount = v;
-    if(state.tradeCount > v) state.tradeCount = v;
-    if(state.protectionCount > v) state.protectionCount = v;
+    normalizeState();
   }, ()=>20);
-  bindCounter("monthlyMinus","monthlyPlus", ()=>state.monthly, v=>state.monthly=v, ()=>Math.max(0, state.quantity - state.retail));
-  bindCounter("retailMinus","retailPlus", ()=>state.retail, v=>state.retail=v, ()=>Math.max(0, state.quantity - state.monthly));
-  bindCounter("portMinus","portPlus", ()=>state.portCount, v=>state.portCount=v, ()=>state.quantity);
-  bindCounter("tradeMinus","tradePlus", ()=>state.tradeCount, v=>state.tradeCount=v, ()=>state.quantity);
-  bindCounter("protectionMinus","protectionPlus", ()=>state.protectionCount, v=>state.protectionCount=v, ()=>state.quantity);
+  bindCounter("monthlyMinus","monthlyPlus", ()=>state.monthly, v=>{ state.monthly=v; normalizeState(); }, ()=>Math.max(0, state.quantity - state.retail));
+  bindCounter("retailMinus","retailPlus", ()=>state.retail, v=>{ state.retail=v; normalizeState(); }, ()=>Math.max(0, state.quantity - state.monthly));
+  bindCounter("portMinus","portPlus", ()=>state.portCount, v=>{ state.portCount=v; normalizeState(); }, ()=>state.quantity);
+  bindCounter("tradeMinus","tradePlus", ()=>state.tradeCount, v=>{ state.tradeCount=v; normalizeState(); }, ()=>state.quantity);
+  bindCounter("protectionMinus","protectionPlus", ()=>state.protectionCount, v=>{ state.protectionCount=v; normalizeState(); }, ()=>state.quantity);
 
   $("colorSelect").onchange = e=>{ state.color=e.target.value; renderConfigurator(); };
   $("storageSelect").onchange = e=>{ state.storage=e.target.value; renderConfigurator(); };
@@ -4470,7 +4740,7 @@ function init(){
   $("planStandard").onclick = ()=>{ if(isTablet() || isWatch()) return; state.plan="Standard"; renderConfigurator(); };
   $("planPro").onclick = ()=>{ state.plan = isTablet() ? "Tablet Plan" : isWatch() ? "Watch Plan ($10)" : "Pro"; renderConfigurator(); };
 
-  [...$("protectionToggle").querySelectorAll("button")].forEach(btn=>btn.onclick=()=>{ state.protectionDecision=btn.dataset.value; renderConfigurator(); });
+  [...$("protectionToggle").querySelectorAll("button")].forEach(btn=>btn.onclick=()=>{ state.protectionDecision=btn.dataset.value; if(state.protectionDecision==="no") state.protectionCount=0; renderConfigurator(); });
   [...$("portToggle").querySelectorAll("button")].forEach(btn=>btn.onclick=()=>{ state.portDecision=btn.dataset.value; if(state.portDecision==="no") state.portCount=0; renderConfigurator(); });
   [...$("tradeToggle").querySelectorAll("button")].forEach(btn=>btn.onclick=()=>{ state.tradeDecision=btn.dataset.value; if(state.tradeDecision==="no"){ state.tradeCount=0; state.tradeRows=[]; } renderConfigurator(); });
   $("tradeSkipHint").onclick = ()=>{ $("tradeSkipBanner").classList.remove("hidden"); };
@@ -4478,12 +4748,15 @@ function init(){
   $("backToCatalogBtn").onclick = ()=> showOnly("catalogView");
   if($("summaryAddToCartBtn")){
     $("summaryAddToCartBtn").textContent = "Add to Cart";
-    $("summaryAddToCartBtn").onclick = ()=>{ renderReview(); showOnly("reviewView"); window.scrollTo({top:0,behavior:"smooth"}); };
+    $("summaryAddToCartBtn").onclick = ()=>{ renderReview({commitCurrent:true}); showOnly("reviewView"); window.scrollTo({top:0,behavior:"smooth"}); };
   }
   if($("configContinueBtn")){
-    $("configContinueBtn").textContent = "Continue";
     $("configContinueBtn").onclick = ()=>{
-      renderReview();
+      if(!isConfiguratorReady(state)){
+        renderConfigurator();
+        return;
+      }
+      renderReview({commitCurrent:true});
       showOnly("reviewView");
       window.scrollTo({top:0,behavior:"smooth"});
     };
@@ -4498,9 +4771,7 @@ function init(){
   if($("saveQuoteBtn")) $("saveQuoteBtn").onclick = ()=> alert("Quote saved successfully for this demo.");
   if($("moveToConciergeBtn")) $("moveToConciergeBtn").onclick = ()=> showConciergeModal();
 
-  if($("cancelConciergeBtn")){
-    $("cancelConciergeBtn").onclick = ()=> hideConciergeModal();
-  }
+  if($("cancelConciergeBtn")) $("cancelConciergeBtn").onclick = ()=> hideConciergeModal();
   ["confirm1","confirm2","confirm3"].forEach(id=>{
     if($(id)) $(id).addEventListener("change", updateProceed);
   });
@@ -4528,36 +4799,13 @@ function init(){
     showOnly("successView");
   };
 
-  $("exitSuccessBtn").onclick = ()=>{ const successSub = document.querySelector("#successView .success-sub"); if(successSub) successSub.textContent = "Your order has been sent to Asurion."; showOnly("catalogView"); };
-  $("configureAnotherBtn").onclick = ()=>{ const successSub = document.querySelector("#successView .success-sub"); if(successSub) successSub.textContent = "Your order has been sent to Asurion."; showOnly("catalogView"); };
-  $("goToAsurionBtn").onclick = ()=>{ initAsurionLines(); renderAsurion(); showOnly("asurionView"); window.scrollTo({top:0,behavior:"smooth"}); };
+  $("exitSuccessBtn").onclick = ()=>{ const successSub = document.querySelector("#successView .success-sub"); if(successSub) successSub.textContent = "Your order has been sent to Asurion."; resetApplication(); };
+  $("configureAnotherBtn").onclick = ()=>{ const successSub = document.querySelector("#successView .success-sub"); if(successSub) successSub.textContent = "Your order has been sent to Asurion."; resetApplication(); };
+  $("goToAsurionBtn").onclick = ()=>{ if(!asurionLines.length) initAsurionLines(); renderAsurion(); showOnly("asurionView"); window.scrollTo({top:0,behavior:"smooth"}); };
 
-  $("autoAssignBtn").onclick = ()=>{ initAsurionLines(); renderAsurion(); };
-  $("completeAsurionBtn").onclick = ()=>{
-    const status = $("checkoutStatus");
-    const totalExpectedLines = cart.reduce((sum,item)=>sum + (item.quantity || 0), 0);
-    const expectedPort = cart.filter(item => item.category==="phones").reduce((sum,item)=> sum + (item.portDecision==="yes" ? (item.portCount || 0) : 0), 0);
-    const expectedTrade = cart.reduce((sum,item)=> sum + (item.tradeDecision==="yes" ? (item.tradeCount || 0) : 0), 0);
-
-    const actualLines = asurionLines.length;
-    const actualPort = asurionLines.filter(line => line.numberType==="port").length;
-    const actualTrade = asurionLines.filter(line => line.tradeIn).length;
-
-    const lineInputsReady = asurionLines.every(line => {
-      const numberReady = line.numberType === "new" ? true : (!!(line.mdn || "").trim() && !!(line.currentCarrier || "").trim());
-      const tradeReady = !line.tradeIn ? true : (!!line.majorDamage && !!line.screenDamage && !!line.liquidDamage && !!line.powersOn && line.imeiStatus === "valid");
-      return numberReady && tradeReady;
-    });
-
-    status.classList.remove("hidden");
-    if(actualLines === totalExpectedLines && actualPort === expectedPort && actualTrade === expectedTrade && lineInputsReady){
-      status.textContent = "All line configurations match the order pools. Moving to checkout.";
-    } else {
-      status.textContent = "The line configuration does not fully match the order pools yet. We would be updating the cart before checkout.";
-    }
-  };
-    if($("finalCheckoutBackBtn")){
+  if($("finalCheckoutBackBtn")){
     $("finalCheckoutBackBtn").onclick = ()=>{
+      renderAsurion();
       showOnly("asurionView", false);
       window.scrollTo({top:0,behavior:"smooth"});
     };
@@ -4576,7 +4824,14 @@ function init(){
     };
   }
 
+  if($("eligibilityAddLineBtn")){
+    $("eligibilityAddLineBtn").onclick = ()=>{
+      showOnly("catalogView");
+      window.scrollTo({top:0, behavior:"smooth"});
+    };
+  }
 }
+
 init();
 
 if($("eligibilityAddLineBtn")){
@@ -4586,20 +4841,6 @@ if($("eligibilityAddLineBtn")){
   };
 }
 
-
-document.addEventListener("click", (e)=>{
-  const btn = e.target.closest("#reviewConfigureQuoteBtn");
-  if(btn){
-    try{
-      initAsurionLines();
-      renderAsurion();
-      setVisibleView("asurionView");
-      window.scrollTo({top:0, behavior:"smooth"});
-    }catch(err){
-      console.error("Configure Quote failed", err);
-    }
-  }
-});
 
 </script>
 
