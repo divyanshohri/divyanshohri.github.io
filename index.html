@@ -2076,6 +2076,512 @@
     box-shadow:0 4px 10px rgba(31,79,184,.14);
   }
 
+
+  .entry-page{
+    min-height:100vh;
+    background:var(--cb-bg);
+    padding:34px 0 42px;
+  }
+  .entry-shell{
+    max-width:980px;
+    margin:0 auto;
+    padding:20px 12px 0;
+  }
+  .entry-center{
+    text-align:center;
+    margin:56px 0 28px;
+  }
+  .entry-title{
+    font-size:34px;
+    line-height:1.15;
+    font-weight:900;
+    color:#3558f5;
+    margin:0;
+  }
+  .entry-sub{
+    margin-top:10px;
+    font-size:16px;
+    color:#4b5563;
+  }
+  .entry-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+    margin-top:24px;
+  }
+  .entry-card{
+    width:100%;
+    min-height:116px;
+    border-radius:22px;
+    border:2px solid #d1d5db;
+    background:#fff;
+    display:grid;
+    grid-template-columns:170px 1fr 42px;
+    align-items:center;
+    padding:0 18px 0 0;
+    cursor:pointer;
+    box-shadow:0 8px 22px rgba(15,23,42,.05);
+    transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  }
+  .entry-card:hover{
+    transform:translateY(-1px);
+    border-color:#bfd6ff;
+    box-shadow:0 14px 28px rgba(15,23,42,.08);
+  }
+  .entry-card-media{
+    height:100%;
+    border-radius:18px;
+    background:#f7f7f8;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:16px;
+    font-size:44px;
+    color:#3558f5;
+  }
+  .entry-card-label{
+    text-align:left;
+    font-size:15px;
+    font-weight:900;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:#3558f5;
+    line-height:1.35;
+    padding:0 18px;
+  }
+  .entry-card-arrow{
+    color:#3558f5;
+    font-size:34px;
+    line-height:1;
+    text-align:center;
+  }
+  .entry-mini-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    margin-bottom:18px;
+  }
+  .entry-mini-title{
+    font-size:28px;
+    font-weight:900;
+    color:#111827;
+  }
+  .entry-back-btn{
+    height:42px;
+    padding:0 16px;
+    border-radius:999px;
+    border:1px solid var(--cb-line);
+    background:#fff;
+    font-weight:800;
+    cursor:pointer;
+  }
+  .data-option-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+    margin-top:18px;
+  }
+  .data-option-card{
+    border:1px solid var(--cb-line);
+    border-radius:18px;
+    background:#fff;
+    padding:20px;
+    box-shadow:var(--cb-shadow);
+    cursor:pointer;
+  }
+  .data-option-card:hover{
+    border-color:#bfd6ff;
+  }
+  .data-option-title{
+    font-size:22px;
+    font-weight:900;
+    color:#111827;
+  }
+  .data-option-copy{
+    margin-top:10px;
+    font-size:14px;
+    line-height:1.5;
+    color:#64748b;
+  }
+  .data-option-badge{
+    display:inline-flex;
+    margin-top:14px;
+    padding:6px 10px;
+    border-radius:999px;
+    background:#eef5ff;
+    color:#3558f5;
+    font-size:11px;
+    font-weight:900;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+  }
+  @media (max-width: 900px){
+    .entry-grid,
+    .data-option-grid{
+      grid-template-columns:1fr;
+    }
+    .entry-card{
+      grid-template-columns:120px 1fr 34px;
+      min-height:100px;
+    }
+    .entry-title{
+      font-size:28px;
+    }
+  }
+
+
+  .tablet-svg-icon{
+    width:52px;
+    height:52px;
+  }
+  .data-screen{
+    min-height:100vh;
+    background:var(--cb-bg);
+    padding-bottom:28px;
+  }
+  .data-screen-top{
+    border-top:1px solid #d9e1ec;
+    border-bottom:1px solid #d9e1ec;
+    background:var(--cb-bg);
+    padding:16px 0;
+  }
+  .data-category-tabs{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+    align-items:center;
+  }
+  .data-category-tab{
+    min-height:54px;
+    padding:0 18px;
+    border-radius:999px;
+    border:2px solid #c7c7c9;
+    background:#fff;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    font-size:15px;
+    font-weight:900;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:#111827;
+    cursor:pointer;
+  }
+  .data-category-tab.active{
+    color:#3558f5;
+    border-color:#bfcfff;
+    background:#f6f9ff;
+  }
+  .data-category-icon{
+    font-size:22px;
+    line-height:1;
+  }
+  .data-screen-close{
+    margin-left:auto;
+    border:0;
+    background:transparent;
+    font-size:36px;
+    line-height:1;
+    cursor:pointer;
+    color:#111827;
+  }
+  .data-screen-body{
+    max-width:980px;
+    margin:0 auto;
+    padding:28px 18px 0;
+  }
+  .data-screen-title{
+    font-size:28px;
+    font-weight:900;
+    color:#111827;
+    margin:0 0 26px;
+  }
+  .data-plan-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+  }
+  .data-plan-card{
+    position:relative;
+    background:#fff;
+    border:2px solid #d9e1ec;
+    border-radius:20px;
+    padding:42px 28px 26px;
+    box-shadow:0 10px 24px rgba(15,23,42,.04);
+    cursor:pointer;
+    min-height:430px;
+  }
+  .data-plan-card.active{
+    border-color:#3558f5;
+    box-shadow:0 0 0 3px rgba(53,88,245,.08) inset;
+  }
+  .data-plan-badge{
+    position:absolute;
+    top:-16px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#3558f5;
+    color:#fff;
+    min-height:42px;
+    padding:0 22px;
+    border-radius:10px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    font-size:14px;
+    font-weight:900;
+  }
+  .data-plan-infinity{
+    text-align:center;
+    font-size:48px;
+    line-height:1;
+    color:#111827;
+    margin-bottom:18px;
+  }
+  .data-plan-name{
+    text-align:center;
+    font-size:28px;
+    font-weight:900;
+    color:#111827;
+  }
+  .data-plan-features{
+    margin:30px 0 0;
+    padding:0 18px;
+    display:grid;
+    gap:18px;
+  }
+  .data-plan-feature{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    font-size:15px;
+    line-height:1.5;
+    color:#111827;
+  }
+  .data-plan-feature-icon{
+    width:22px;
+    flex:none;
+    text-align:center;
+  }
+  .data-plan-price{
+    margin-top:34px;
+    text-align:center;
+    font-size:56px;
+    line-height:1;
+    font-weight:900;
+    color:#111827;
+  }
+  .data-plan-price small{
+    font-size:20px;
+    font-weight:800;
+  }
+  .data-plan-sub{
+    margin-top:18px;
+    text-align:center;
+    font-size:14px;
+    color:#111827;
+  }
+  .data-footer{
+    margin-top:26px;
+    padding-top:22px;
+    border-top:1px solid #d9e1ec;
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:24px;
+  }
+  .data-footer-price{
+    font-size:22px;
+    font-weight:900;
+    color:#111827;
+  }
+  .data-footer-price strong{
+    font-size:44px;
+    line-height:1;
+  }
+  .data-footer-chip{
+    display:inline-flex;
+    align-items:center;
+    min-height:38px;
+    padding:0 14px;
+    border-radius:999px;
+    background:#ededee;
+    color:#111827;
+    font-size:12px;
+    font-weight:800;
+    margin-left:12px;
+  }
+  .data-footer-copy{
+    margin-top:14px;
+    max-width:760px;
+    font-size:14px;
+    line-height:1.5;
+    color:#333d4d;
+  }
+  .data-footer-cta{
+    min-width:214px;
+    min-height:66px;
+    padding:0 24px;
+    border-radius:6px;
+    border:0;
+    background:#3558f5;
+    color:#fff;
+    font-size:18px;
+    font-weight:900;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    cursor:pointer;
+  }
+  @media (max-width: 980px){
+    .data-plan-grid{
+      grid-template-columns:1fr;
+    }
+    .data-footer{
+      flex-direction:column;
+      align-items:flex-start;
+    }
+    .data-footer-cta{
+      width:100%;
+    }
+  }
+
+
+  .review-plan-modal{
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,.28);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    z-index:220;
+  }
+  .review-plan-modal-card{
+    width:min(760px,96vw);
+    background:#fff;
+    border-radius:18px;
+    box-shadow:0 24px 80px rgba(15,23,42,.22);
+    overflow:hidden;
+  }
+  .review-plan-modal-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px 20px 0;
+  }
+  .review-plan-modal-close{
+    border:none;
+    background:none;
+    font-size:28px;
+    line-height:1;
+    cursor:pointer;
+    color:#111827;
+  }
+  .review-plan-banner{
+    background:#0d62ff;
+    color:#fff;
+    font-weight:800;
+    padding:16px 22px;
+    font-size:16px;
+  }
+  .review-plan-body{
+    padding:24px 24px 20px;
+  }
+  .review-plan-title{
+    font-size:22px;
+    font-weight:900;
+    color:#111827;
+    margin-bottom:18px;
+  }
+  .review-plan-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+  }
+  .review-plan-option{
+    border:2px solid #d1d5db;
+    border-radius:16px;
+    background:#fff;
+    padding:20px;
+    cursor:pointer;
+    text-align:left;
+  }
+  .review-plan-option.active{
+    border-color:#0d62ff;
+    box-shadow:0 0 0 2px rgba(13,98,255,.08) inset;
+    background:#f8fbff;
+  }
+  .review-plan-option-name{
+    font-size:20px;
+    font-weight:900;
+    color:#111827;
+  }
+  .review-plan-option-copy{
+    margin-top:8px;
+    color:#64748b;
+    font-size:14px;
+    line-height:1.5;
+  }
+  .review-plan-option-price{
+    margin-top:16px;
+    font-size:22px;
+    font-weight:900;
+    color:#111827;
+  }
+  .review-plan-footer{
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    padding:0 24px 24px;
+  }
+
+
+  .byo-inline-shell{
+    margin-top:20px;
+    background:#fff;
+    border:1px solid var(--cb-line);
+    border-radius:20px;
+    box-shadow:var(--cb-shadow);
+    overflow:hidden;
+  }
+  .byo-inline-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    padding:18px 20px;
+    border-bottom:1px solid var(--cb-line);
+    background:#f8fbff;
+  }
+  .byo-inline-title{
+    font-size:20px;
+    font-weight:900;
+    color:#111827;
+  }
+  .byo-inline-sub{
+    margin-top:4px;
+    font-size:13px;
+    color:#64748b;
+  }
+  .byo-inline-reset{
+    height:40px;
+    padding:0 14px;
+    border-radius:999px;
+    border:1px solid var(--cb-line);
+    background:#fff;
+    font-weight:800;
+    cursor:pointer;
+  }
+  .byo-inline-embed{
+    min-height:640px;
+  }
+
+
+  .entry-shell.byo-expanded{
+    max-width:1280px;
+  }
+
 </style>
 </head>
 <body>
@@ -2088,7 +2594,157 @@
     </div>
   </div>
 
-  <div id="catalogView" class="page page-shell">
+  
+  <div id="entryView" class="page">
+    <div class="entry-page">
+      <div class="container entry-shell">
+        <div class="entry-center">
+          <h1 class="entry-title">Add a line to your plan</h1>
+          <div class="entry-sub">Shop new devices, bring your own, or explore mobile data options to get started.</div>
+        </div>
+
+        <div class="entry-grid">
+          <button class="entry-card" id="entryShopPhonesBtn" type="button">
+            <div class="entry-card-media">📱</div>
+            <div class="entry-card-label">Shop Phones</div>
+            <div class="entry-card-arrow">›</div>
+          </button>
+
+          <button class="entry-card" id="entryBringYourOwnBtn" type="button">
+            <div class="entry-card-media">📲</div>
+            <div class="entry-card-label">Bring Your Own</div>
+            <div class="entry-card-arrow">›</div>
+          </button>
+
+          <button class="entry-card" id="entryShopTabletsBtn" type="button">
+            <div class="entry-card-media">
+              <svg class="tablet-svg-icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-label="Tablet">
+                <rect x="18" y="8" width="28" height="48" rx="6" fill="none" stroke="#3558f5" stroke-width="3"/>
+                <circle cx="32" cy="49" r="2.2" fill="#3558f5"/>
+              </svg>
+            </div>
+            <div class="entry-card-label">Shop Tablets</div>
+            <div class="entry-card-arrow">›</div>
+          </button>
+
+          <button class="entry-card" id="entryExploreDataBtn" type="button">
+            <div class="entry-card-media">📶</div>
+            <div class="entry-card-label">Explore Data Options</div>
+            <div class="entry-card-arrow">›</div>
+          </button>
+
+          <button class="entry-card" id="entryShopWatchesBtn" type="button">
+            <div class="entry-card-media">⌚</div>
+            <div class="entry-card-label">Shop Smartwatches</div>
+            <div class="entry-card-arrow">›</div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <div id="byoChooserView" class="page hidden">
+    <div class="entry-page">
+      <div class="container entry-shell byo-expanded">
+        <div class="entry-mini-top">
+          <div class="entry-mini-title">Bring your own device</div>
+        </div>
+        <div class="entry-sub">Choose which device you are bringing today. The matching BYO configurator will open right here on the same screen.</div>
+
+        <div class="card" style="margin-top:20px">
+          <div class="card-body">
+            <div class="field">
+              <label>Which device are you bringing today?</label>
+              <select id="byoDeviceTypeSelect">
+                <option value="">Select device type</option>
+                <option value="phones">Phone</option>
+                <option value="tablets">Tablet</option>
+                <option value="watches">Smartwatch</option>
+              </select>
+            </div>
+            <div class="card-sub" style="margin-top:10px">Select a device type to open the matching BYO configurator below.</div>
+          </div>
+        </div>
+
+        <div id="byoInlineStartHint" class="catalog-banner" style="margin-top:18px">
+          Select a device type to begin the Bring Your Own flow.
+        </div>
+
+        <div id="byoInlineContainer" class="hidden"></div>
+      </div>
+    </div>
+  </div>
+
+<div id="dataOptionsView" class="page hidden">
+    <div class="data-screen">
+      <div class="data-screen-top">
+        <div class="container" style="display:flex;align-items:center;gap:16px">
+          <div class="data-category-tabs">
+            <button class="data-category-tab active" id="dataTabPhones" type="button">
+              <span class="data-category-icon">📱</span>
+              <span>Phone</span>
+            </button>
+            <button class="data-category-tab" id="dataTabWatches" type="button">
+              <span class="data-category-icon">⌚</span>
+              <span>Smartwatches</span>
+            </button>
+            <button class="data-category-tab" id="dataTabTablets" type="button">
+              <span class="data-category-icon">
+                <svg class="tablet-svg-icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-label="Tablet">
+                  <rect x="18" y="8" width="28" height="48" rx="6" fill="none" stroke="#111827" stroke-width="3"/>
+                  <circle cx="32" cy="49" r="2.2" fill="#111827"/>
+                </svg>
+              </span>
+              <span>Tablet</span>
+            </button>
+          </div>
+          <button class="data-screen-close" id="dataOptionsCloseBtn" type="button">×</button>
+        </div>
+      </div>
+
+      <div class="data-screen-body">
+        <h1 class="data-screen-title">Data options</h1>
+
+        <div class="data-plan-grid">
+          <button class="data-plan-card active" id="dataPlanStandardCard" type="button">
+            <div class="data-plan-badge">Best deal!</div>
+            <div class="data-plan-infinity">∞</div>
+            <div class="data-plan-name">Standard</div>
+            <div class="data-plan-features">
+              <div class="data-plan-feature"><span class="data-plan-feature-icon">◔</span><span>Core data option for the selected device type</span></div>
+              <div class="data-plan-feature"><span class="data-plan-feature-icon">⌖</span><span>Recommended for lower-cost line additions</span></div>
+            </div>
+            <div class="data-plan-price">$5<small>/mo</small></div>
+            <div class="data-plan-sub">Add another line using the same flow afterward.</div>
+          </button>
+
+          <button class="data-plan-card" id="dataPlanProCard" type="button">
+            <div class="data-plan-infinity">∞</div>
+            <div class="data-plan-name">Pro</div>
+            <div class="data-plan-features">
+              <div class="data-plan-feature"><span class="data-plan-feature-icon">◔</span><span>Higher-tier data option for the selected device type</span></div>
+              <div class="data-plan-feature"><span class="data-plan-feature-icon">⌖</span><span>Best when the customer wants the premium line setup</span></div>
+            </div>
+            <div class="data-plan-price">$10<small>/mo</small></div>
+            <div class="data-plan-sub">Add another line using the same flow afterward.</div>
+          </button>
+        </div>
+
+        <div class="data-footer">
+          <div>
+            <div class="data-footer-price"><strong id="dataFooterMainPrice">$5.00</strong>/mo <span class="data-footer-chip" id="dataFooterChip">Add another line for +$5/mo</span></div>
+            <div class="data-footer-copy" id="dataFooterCopy">
+              Standard is $5/mo for the selected line in this conceptual flow. Taxes, fees, and equipment not included.
+            </div>
+          </div>
+          <button class="data-footer-cta" id="dataOptionsAddToCartBtn" type="button">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div id="catalogView" class="page page-shell">
     <div class="container catalog-shell">
       <h1 class="page-title">Shop devices</h1>
       <div class="page-sub">Choose phones, tablets, or watches, then configure each device group before sending the cart to Asurion.</div>
@@ -2228,7 +2884,7 @@
                 <div class="warn-banner" id="paymentStatus" style="margin-top:14px">Set the payment mix to match the selected quantity.</div>
               </div>
 
-              <div class="zoe-section card">
+              <div class="zoe-section card" id="planPanel">
                 <div class="zoe-inline-title-wrap">
                   <div class="step-dot" id="planStep">5</div>
                   <div>
@@ -2838,10 +3494,17 @@ const initialState = () => ({
 let state = initialState();
 let cart = [];
 let asurionLines = [];
-let screenHistory = ["catalogView"];
+let screenHistory = ["entryView"];
 let activeLineEditIndex = null;
 let activePlanModalIndex = null;
 let pendingPlanSelection = null;
+let reviewPlanChangeIndex = null;
+let reviewPlanSelection = null;
+let byoInlineCategory = "";
+let byoInlineMounted = false;
+let entryPlanPreference = "";
+let dataOptionsCategory = "phones";
+let dataOptionsPlan = "Standard";
 
 function currentDevice(){ return DEVICES[state.deviceId] || null; }
 function isPhone(){ return state.category === "phones"; }
@@ -3012,21 +3675,23 @@ function resetApplication(){
   state = initialState();
   cart = [];
   asurionLines = [];
-  screenHistory = ["catalogView"];
+  screenHistory = ["entryView"];
   activeLineEditIndex = null;
   activePlanModalIndex = null;
   pendingPlanSelection = null;
+  byoInlineCategory = "";
+  ensureStandaloneConfiguratorPlacement();
   renderCatalog();
-  setVisibleView("catalogView");
+  setVisibleView("entryView");
 }
 
 
 function setVisibleView(viewId){
-  ["catalogView","configuratorView","lineEditView","reviewView","handoffDecisionView","finalCheckoutView","successView","asurionView","eligibilityView","configSummaryView"].forEach(id=>{
+  ["entryView","byoChooserView","dataOptionsView","catalogView","configuratorView","lineEditView","reviewView","handoffDecisionView","finalCheckoutView","successView","asurionView","eligibilityView","configSummaryView"].forEach(id=>{
     const el = document.getElementById(id);
     if(el) el.classList.toggle("hidden", id !== viewId);
   });
-  $("topBackBtn").classList.toggle("hidden", viewId === "catalogView");
+  $("topBackBtn").classList.toggle("hidden", viewId === "entryView");
 }
 function showOnly(viewId, push=true){
   setVisibleView(viewId);
@@ -3095,6 +3760,161 @@ function resetForNewDevice(categoryOverride=null){
   const keepCategory = categoryOverride || state.category;
   state = initialState();
   state.category = keepCategory;
+}
+
+
+
+function byodDeviceIdForCategory(category){
+  return category === "phones" ? "byod" : category === "tablets" ? "byot" : "byow";
+}
+
+function initByoStateForCategory(category){
+  state = initialState();
+  state.category = category;
+  state.brandFilter = "All brands";
+  state.deviceId = byodDeviceIdForCategory(category);
+  state.orderType = "byod";
+  const d = currentDevice();
+  state.color = d?.colors?.[0] || "";
+  state.storage = d?.storages?.[0] || "";
+  state.sim = d?.sims?.[0] || "";
+  state.connectivity = d?.connectivity?.[0] || "";
+  if(category === "phones"){
+    state.plan = entryPlanPreference && ["Standard","Pro"].includes(entryPlanPreference) ? entryPlanPreference : "Standard";
+  } else if(category === "tablets"){
+    state.plan = "Tablet Plan";
+  } else if(category === "watches"){
+    state.plan = "Watch Plan ($10)";
+  }
+  normalizeState();
+}
+
+function renderByoInlineConfigurator(){
+  const mount = $("byoInlineContainer");
+  const hint = $("byoInlineStartHint");
+  if(!mount) return;
+
+  // Always detach the shared configurator before switching categories
+  ensureStandaloneConfiguratorPlacement();
+
+  if(!byoInlineCategory){
+    mount.classList.add("hidden");
+    mount.innerHTML = "";
+    if(hint) hint.classList.remove("hidden");
+    return;
+  }
+
+  // Fully reset and initialize the BYO state for the newly selected category
+  initByoStateForCategory(byoInlineCategory);
+
+  mount.classList.remove("hidden");
+  if(hint) hint.classList.add("hidden");
+  mount.innerHTML = `
+    <div class="byo-inline-shell">
+      <div class="byo-inline-top">
+        <div>
+          <div class="byo-inline-title">Bring Your Own ${byoInlineCategory === "phones" ? "Phone" : byoInlineCategory === "tablets" ? "Tablet" : "Smartwatch"}</div>
+          <div class="byo-inline-sub">Complete the matching BYO configurator below on this same screen.</div>
+        </div>
+        <button class="byo-inline-reset" id="byoChangeDeviceBtn" type="button">Change device type</button>
+      </div>
+      <div class="byo-inline-embed" id="byoInlineEmbed"></div>
+    </div>
+  `;
+
+  // Fresh render for the newly selected BYO type
+  renderConfigurator();
+
+  const configurator = $("configuratorView");
+  const embed = $("byoInlineEmbed");
+  if(configurator && embed){
+    embed.appendChild(configurator);
+    configurator.classList.remove("hidden");
+  }
+
+  if($("byoChangeDeviceBtn")){
+    $("byoChangeDeviceBtn").onclick = ()=>{
+      // Detach old configurator and clear the current BYO selection
+      ensureStandaloneConfiguratorPlacement();
+      byoInlineCategory = "";
+      const sel = $("byoDeviceTypeSelect");
+      if(sel) sel.value = "";
+      renderByoInlineConfigurator();
+      window.scrollTo({top:0, behavior:"smooth"});
+    };
+  }
+}
+
+function ensureStandaloneConfiguratorPlacement(){
+  const configurator = $("configuratorView");
+  const eligibility = $("eligibilityView");
+  if(configurator && eligibility && configurator.parentElement !== document.body){
+    document.body.insertBefore(configurator, eligibility);
+  }
+}
+
+function openCatalogForCategory(category, push=true){
+  state.category = category;
+  state.brandFilter = "All brands";
+  renderCatalog();
+  showOnly("catalogView", push);
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function openByoConfigurator(category){
+  byoInlineCategory = category;
+  showOnly("byoChooserView");
+  renderByoInlineConfigurator();
+  const sel = $("byoDeviceTypeSelect");
+  if(sel) sel.value = category;
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function openCatalogFromPlanChoice(category, planValue){
+  entryPlanPreference = planValue || "";
+  openCatalogForCategory(category);
+}
+
+
+function renderDataOptionsScreen(){
+  const isPhones = dataOptionsCategory === "phones";
+  const isTablets = dataOptionsCategory === "tablets";
+  const isWatches = dataOptionsCategory === "watches";
+
+  if($("dataTabPhones")) $("dataTabPhones").classList.toggle("active", isPhones);
+  if($("dataTabTablets")) $("dataTabTablets").classList.toggle("active", isTablets);
+  if($("dataTabWatches")) $("dataTabWatches").classList.toggle("active", isWatches);
+
+  if($("dataPlanStandardCard")) $("dataPlanStandardCard").classList.toggle("active", dataOptionsPlan === "Standard");
+  if($("dataPlanProCard")) $("dataPlanProCard").classList.toggle("active", dataOptionsPlan === "Pro");
+
+  const planNameA = isPhones ? "Standard" : isTablets ? "Tablet Standard" : "Watch Standard";
+  const planNameB = isPhones ? "Pro" : isTablets ? "Tablet Pro" : "Watch Pro";
+
+  const priceA = isPhones ? 5 : isTablets ? 5 : 5;
+  const priceB = isPhones ? 10 : isTablets ? 10 : 10;
+
+  const activePrice = dataOptionsPlan === "Pro" ? priceB : priceA;
+
+  if($("dataPlanStandardCard")) {
+    const name = $("dataPlanStandardCard").querySelector(".data-plan-name");
+    const price = $("dataPlanStandardCard").querySelector(".data-plan-price");
+    if(name) name.textContent = "Standard";
+    if(price) price.innerHTML = `$${priceA}<small>/mo</small>`;
+  }
+  if($("dataPlanProCard")) {
+    const name = $("dataPlanProCard").querySelector(".data-plan-name");
+    const price = $("dataPlanProCard").querySelector(".data-plan-price");
+    if(name) name.textContent = "Pro";
+    if(price) price.innerHTML = `$${priceB}<small>/mo</small>`;
+  }
+
+  if($("dataFooterMainPrice")) $("dataFooterMainPrice").textContent = `$${activePrice.toFixed(2)}`;
+  if($("dataFooterChip")) $("dataFooterChip").textContent = `Add another line for +$${activePrice}/mo`;
+  if($("dataFooterCopy")) {
+    const categoryLabel = isPhones ? "phone" : isTablets ? "tablet" : "smartwatch";
+    $("dataFooterCopy").textContent = `${dataOptionsPlan} is $${activePrice}/mo for the selected ${categoryLabel} line in this conceptual flow. Taxes, fees, and equipment not included.`;
+  }
 }
 
 function renderTypeTabs(){
@@ -3180,6 +4000,14 @@ function renderCatalog(){
       state.storage = d.storages[0] || "";
       state.sim = d.sims[0] || "";
       state.connectivity = d.connectivity ? d.connectivity[0] : "";
+      if(state.category === "phones" && entryPlanPreference && ["Standard","Pro"].includes(entryPlanPreference)){
+        state.plan = entryPlanPreference;
+      } else if(state.category === "tablets" && entryPlanPreference === "Tablet Plan"){
+        state.plan = "Tablet Plan";
+      } else if(state.category === "watches" && entryPlanPreference === "Watch Plan ($10)"){
+        state.plan = "Watch Plan ($10)";
+      }
+      ensureStandaloneConfiguratorPlacement();
       showOnly("configuratorView");
       renderConfigurator();
       window.scrollTo({top:0, behavior:"smooth"});
@@ -3317,6 +4145,40 @@ function renderTradeRows(){
 }
 
 
+
+
+function bindPlanCardHandlers(){
+  const std = $("planStandard");
+  const pro = $("planPro");
+  if(std){
+    std.onclick = ()=>{
+      if(isTablet() || isWatch()) return;
+      state.plan = "Standard";
+      renderConfigurator();
+    };
+  }
+  if(pro){
+    pro.onclick = ()=>{
+      if(isTablet()){
+        state.plan = "Tablet Plan";
+        renderConfigurator();
+        return;
+      }
+      if(isWatch()){
+        state.plan = "Watch Plan ($10)";
+        renderConfigurator();
+        return;
+      }
+      state.plan = "Pro";
+      renderConfigurator();
+    };
+  }
+}
+
+function isLockedPhonePlanFlow(){
+  return state.category === "phones" && !!entryPlanPreference && ["Standard","Pro"].includes(entryPlanPreference);
+}
+
 function renderConfigurator(){
   normalizeState();
   const d = currentDevice();
@@ -3338,18 +4200,22 @@ function renderConfigurator(){
       : money(0);
   }
 
-  $("qtyTitle").textContent = isTablet() ? (isByod() ? "How many tablets are you bringing?" : "Tablet quantity") : isWatch() ? (isByod() ? "How many watches are you bringing?" : "Watch quantity") : isByod() ? "How many devices are you bringing?" : "Purchase quantity";
-  $("qtySub").textContent = isByod() ? (isTablet() ? "Start by capturing how many customer-owned tablets will be activated." : isWatch() ? "Start by capturing how many customer-owned watches will be activated." : "Capture the number of customer-owned devices that will be activated.") : (isTablet() ? "Choose the quantity after selecting the tablet attributes for this configuration." : isWatch() ? "Choose the quantity after selecting the watch attributes for this configuration." : "Choose the quantity after selecting the device attributes for this configuration.");
+  $("qtyTitle").textContent = isTablet() ? (isByod() ? "How many tablets are you bringing?" : "Tablet quantity") : isWatch() ? (isByod() ? "How many smartwatches are you bringing?" : "Watch quantity") : isByod() ? "How many devices are you bringing?" : "Purchase quantity";
+  $("qtySub").textContent = isByod() ? (isTablet() ? "Start by capturing how many customer-owned tablets will be activated." : isWatch() ? "Start by capturing how many customer-owned smartwatches will be activated." : "Capture the number of customer-owned devices that will be activated.") : (isTablet() ? "Choose the quantity after selecting the tablet attributes for this configuration." : isWatch() ? "Choose the quantity after selecting the watch attributes for this configuration." : "Choose the quantity after selecting the device attributes for this configuration.");
   $("qtyLabel").textContent = isTablet() ? (isByod() ? "BYOT quantity" : "Tablets being purchased") : isWatch() ? (isByod() ? "BYOW quantity" : "Watches being purchased") : (isByod() ? "BYOD quantity" : "Devices being purchased");
   $("qtyValue").textContent = state.quantity;
   $("baseTotal").textContent = money(getDeviceTotal(state));
 
   const isPhoneByod = isPhone() && isByod();
+  const isTabletByod = isTablet() && isByod();
+  const isWatchByod = isWatch() && isByod();
+  const planLockedFromEntry = isLockedPhonePlanFlow();
   $("attrPanel").classList.toggle("hidden", isPhoneByod);
-  $("paymentPanel").classList.toggle("hidden", isPhoneByod);
+  $("paymentPanel").classList.toggle("hidden", isByod());
   $("connectivityPanel").classList.toggle("hidden", !isWatch());
   $("portPanel").classList.toggle("hidden", !isPhone());
   $("tradePanel").classList.toggle("hidden", isByod());
+  if($("planPanel")) $("planPanel").classList.toggle("hidden", planLockedFromEntry && isPhone() && !isByod());
 
   const configMain = $("configMain");
   const attrPanel = $("attrPanel");
@@ -3376,6 +4242,9 @@ function renderConfigurator(){
   }
 
   if(isPhoneByod){
+    if(!state.plan || state.plan === "Tablet Plan" || state.plan === "Watch Plan ($10)"){
+      state.plan = entryPlanPreference && ["Standard","Pro"].includes(entryPlanPreference) ? entryPlanPreference : "Standard";
+    }
     setStep("qtyStep",1);
     setStep("promoStep",2);
     setStep("planStep",3);
@@ -3386,17 +4255,20 @@ function renderConfigurator(){
     setStep("qtyStep",2);
     setStep("promoStep",3);
     setStep("paymentStep",4);
-    setStep("planStep",5);
-    setStep("protectionStep",6);
-    setStep("portStep",7);
-    setStep("tradeStep",8);
+    if(planLockedFromEntry){
+      setStep("protectionStep",5);
+      setStep("portStep",6);
+      setStep("tradeStep",7);
+    } else {
+      setStep("planStep",5);
+      setStep("protectionStep",6);
+      setStep("portStep",7);
+      setStep("tradeStep",8);
+    }
   } else if(isTablet()){
     if(isByod()){
       setStep("qtyStep",1);
-      setStep("attrStep",2);
-      setStep("paymentStep",3);
-      setStep("planStep",4);
-      setStep("protectionStep",5);
+      setStep("protectionStep",2);
     } else {
       setStep("attrStep",1);
       setStep("qtyStep",2);
@@ -3408,10 +4280,7 @@ function renderConfigurator(){
   } else if(isWatch()){
     if(isByod()){
       setStep("qtyStep",1);
-      setStep("attrStep",2);
-      setStep("connectivityStep",3);
-      setStep("planStep",4);
-      setStep("protectionStep",5);
+      setStep("protectionStep",2);
     } else {
       setStep("attrStep",1);
       setStep("qtyStep",2);
@@ -3447,7 +4316,7 @@ function renderConfigurator(){
   updatePlanUi();
   if(isTablet()){
     $("planHeading").textContent = "Tablet plan";
-    $("planSub").textContent = "Only one tablet plan applies for this configuration.";
+    $("planSub").textContent = "Only the tablet plan applies for this configuration.";
     $("planStandard").classList.add("hidden");
     $("planPro").classList.remove("hidden");
     $("planPro").querySelector(".plan-name").textContent = "Tablet Plan";
@@ -3456,7 +4325,7 @@ function renderConfigurator(){
     $("planPro").classList.add("active");
   } else if(isWatch()){
     $("planHeading").textContent = "Watch plan";
-    $("planSub").textContent = "Only one watch plan applies for this configuration.";
+    $("planSub").textContent = "Only the watch plan applies for this configuration.";
     $("planStandard").classList.add("hidden");
     $("planPro").classList.remove("hidden");
     $("planPro").querySelector(".plan-name").textContent = "Watch Plan";
@@ -3472,6 +4341,10 @@ function renderConfigurator(){
     $("planStandard").querySelector(".plan-copy").textContent = "Standard plan with optional XMC.";
     $("planPro").querySelector(".plan-name").textContent = "Pro";
     $("planPro").querySelector(".plan-copy").textContent = "XMC Plus is included automatically.";
+
+    if(isLockedPhonePlanFlow()){
+      state.plan = entryPlanPreference;
+    }
   }
 
   const qtyBanner = $("qtyBanner");
@@ -4004,6 +4877,83 @@ function renderLineEditView(){
 
 
 
+
+function closeReviewPlanModal(){
+  reviewPlanChangeIndex = null;
+  reviewPlanSelection = null;
+  const existing = document.getElementById("reviewPlanModalOverlay");
+  if(existing) existing.remove();
+}
+
+function renderReviewPlanModal(){
+  const existing = document.getElementById("reviewPlanModalOverlay");
+  if(existing) existing.remove();
+  if(reviewPlanChangeIndex === null) return;
+
+  const item = cart[reviewPlanChangeIndex];
+  if(!item) return;
+  if(item.category !== "phones") return;
+
+  const selected = reviewPlanSelection || normalizePlan(item.plan || "Standard");
+  const overlay = document.createElement("div");
+  overlay.className = "review-plan-modal";
+  overlay.id = "reviewPlanModalOverlay";
+  overlay.innerHTML = `
+    <div class="review-plan-modal-card">
+      <div class="review-plan-modal-top">
+        <div></div>
+        <button class="review-plan-modal-close" id="closeReviewPlanModalBtn" aria-label="Close">✕</button>
+      </div>
+      <div class="review-plan-banner">Change plan for ${item.quantity || 1} line(s) in this device group</div>
+      <div class="review-plan-body">
+        <div class="review-plan-title">Select a plan</div>
+        <div class="review-plan-grid">
+          <button class="review-plan-option ${selected==="Standard" ? "active" : ""}" data-review-plan="Standard">
+            <div class="review-plan-option-name">Standard</div>
+            <div class="review-plan-option-copy">Standard plan with optional XMC device protection.</div>
+            <div class="review-plan-option-price">$5 /mo</div>
+          </button>
+          <button class="review-plan-option ${selected==="Pro" ? "active" : ""}" data-review-plan="Pro">
+            <div class="review-plan-option-name">Pro</div>
+            <div class="review-plan-option-copy">Premium plan. Device protection is included automatically.</div>
+            <div class="review-plan-option-price">$10 /mo</div>
+          </button>
+        </div>
+      </div>
+      <div class="review-plan-footer">
+        <button class="btn" id="cancelReviewPlanChangeBtn">Cancel</button>
+        <button class="btn primary" id="applyReviewPlanChangeBtn">Apply Plan</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  document.getElementById("closeReviewPlanModalBtn").onclick = closeReviewPlanModal;
+  document.getElementById("cancelReviewPlanChangeBtn").onclick = closeReviewPlanModal;
+
+  overlay.querySelectorAll("[data-review-plan]").forEach(btn=>{
+    btn.onclick = ()=>{
+      reviewPlanSelection = btn.dataset.reviewPlan;
+      renderReviewPlanModal();
+    };
+  });
+
+  document.getElementById("applyReviewPlanChangeBtn").onclick = ()=>{
+    const target = cart[reviewPlanChangeIndex];
+    if(target){
+      const chosen = reviewPlanSelection || normalizePlan(target.plan || "Standard");
+      target.plan = chosen;
+      if(chosen === "Pro"){
+        target.protectionDecision = "yes";
+        target.protectionCount = target.quantity || 0;
+      }
+      normalizeSnapshot(target);
+    }
+    closeReviewPlanModal();
+    renderReview();
+  };
+}
+
 function renderReview(options = {}){
   const commitCurrent = !!options.commitCurrent;
   if(commitCurrent && currentDevice() && isConfiguratorReady(state)){
@@ -4150,13 +5100,26 @@ function renderReview(options = {}){
     };
   });
 
-  wrap.querySelectorAll('[data-review-action="change-plan"],[data-review-action="edit-device"]').forEach(btn=>{
+  wrap.querySelectorAll('[data-review-action="change-plan"]').forEach(btn=>{
+    btn.onclick = ()=>{
+      const idx = Number(btn.dataset.reviewIdx);
+      const item = cart[idx];
+      if(!item) return;
+      if(item.category !== "phones") return;
+      reviewPlanChangeIndex = idx;
+      reviewPlanSelection = normalizePlan(item.plan || "Standard");
+      renderReviewPlanModal();
+    };
+  });
+
+  wrap.querySelectorAll('[data-review-action="edit-device"]').forEach(btn=>{
     btn.onclick = ()=>{
       const idx = Number(btn.dataset.reviewIdx);
       const item = cart[idx];
       if(!item) return;
       state = JSON.parse(JSON.stringify(item));
       normalizeState();
+      ensureStandaloneConfiguratorPlacement();
       showOnly("configuratorView");
       renderConfigurator();
       window.scrollTo({top:0, behavior:"smooth"});
@@ -4164,6 +5127,7 @@ function renderReview(options = {}){
   });
 
   $("reviewAddMoreBtn").onclick = ()=>{
+    ensureStandaloneConfiguratorPlacement();
     resetForNewDevice(state.category);
     showOnly("catalogView");
     renderCatalog();
@@ -4711,16 +5675,74 @@ function bindCounter(minus, plus, get, set, maxFn){
 
 
 function init(){
-  try { history.replaceState({viewId:"catalogView"}, "", "#catalogView"); } catch(e) {}
+  try { history.replaceState({viewId:"entryView"}, "", "#entryView"); } catch(e) {}
   window.onpopstate = (event)=>{
-    const viewId = event.state && event.state.viewId ? event.state.viewId : "catalogView";
+    const viewId = event.state && event.state.viewId ? event.state.viewId : "entryView";
     setVisibleView(viewId);
     if(screenHistory[screenHistory.length-1] !== viewId) screenHistory.push(viewId);
   };
   if($("topBackBtn")) $("topBackBtn").onclick = ()=> goBackScreen();
 
+  if($("entryShopPhonesBtn")) $("entryShopPhonesBtn").onclick = ()=>{ entryPlanPreference = ""; openCatalogForCategory("phones"); };
+  if($("entryShopTabletsBtn")) $("entryShopTabletsBtn").onclick = ()=>{ entryPlanPreference = ""; openCatalogForCategory("tablets"); };
+  if($("entryShopWatchesBtn")) $("entryShopWatchesBtn").onclick = ()=>{ entryPlanPreference = ""; openCatalogForCategory("watches"); };
+  if($("entryBringYourOwnBtn")) $("entryBringYourOwnBtn").onclick = ()=>{
+    byoInlineCategory = "";
+    if($("byoDeviceTypeSelect")) $("byoDeviceTypeSelect").value = "";
+    renderByoInlineConfigurator();
+    showOnly("byoChooserView");
+    window.scrollTo({top:0, behavior:"smooth"});
+  };
+
+  if($("byoDeviceTypeSelect")) $("byoDeviceTypeSelect").onchange = (e)=>{
+    ensureStandaloneConfiguratorPlacement();
+    byoInlineCategory = e.target.value;
+    const mount = $("byoInlineContainer");
+    if(mount) mount.innerHTML = "";
+    renderByoInlineConfigurator();
+    window.scrollTo({top:0, behavior:"smooth"});
+  };
+
+  if($("entryExploreDataBtn")) $("entryExploreDataBtn").onclick = ()=>{
+    dataOptionsCategory = "phones";
+    dataOptionsPlan = "Standard";
+    showOnly("dataOptionsView");
+    renderDataOptionsScreen();
+    window.scrollTo({top:0, behavior:"smooth"});
+  };
+
+  if($("dataTabPhones")) $("dataTabPhones").onclick = ()=>{ dataOptionsCategory = "phones"; renderDataOptionsScreen(); };
+  if($("dataTabTablets")) $("dataTabTablets").onclick = ()=>{ dataOptionsCategory = "tablets"; renderDataOptionsScreen(); };
+  if($("dataTabWatches")) $("dataTabWatches").onclick = ()=>{ dataOptionsCategory = "watches"; renderDataOptionsScreen(); };
+
+  if($("dataPlanStandardCard")) $("dataPlanStandardCard").onclick = ()=>{ dataOptionsPlan = "Standard"; renderDataOptionsScreen(); };
+  if($("dataPlanProCard")) $("dataPlanProCard").onclick = ()=>{ dataOptionsPlan = "Pro"; renderDataOptionsScreen(); };
+
+  if($("dataOptionsCloseBtn")) $("dataOptionsCloseBtn").onclick = ()=>{
+    showOnly("entryView", false);
+    window.scrollTo({top:0, behavior:"smooth"});
+  };
+
+  if($("dataOptionsAddToCartBtn")) $("dataOptionsAddToCartBtn").onclick = ()=>{
+    if(dataOptionsCategory === "phones"){
+      openCatalogFromPlanChoice("phones", dataOptionsPlan);
+    } else if(dataOptionsCategory === "tablets"){
+      openCatalogFromPlanChoice("tablets", "Tablet Plan");
+    } else {
+      openCatalogFromPlanChoice("watches", "Watch Plan ($10)");
+    }
+  };
+
+
+
+  if($("dataOptionProBtn")) $("dataOptionProBtn").onclick = ()=> openCatalogFromPlanChoice("phones", "Pro");
+  if($("dataOptionStandardBtn")) $("dataOptionStandardBtn").onclick = ()=> openCatalogFromPlanChoice("phones", "Standard");
+  if($("dataOptionTabletBtn")) $("dataOptionTabletBtn").onclick = ()=> openCatalogFromPlanChoice("tablets", "Tablet Plan");
+  if($("dataOptionWatchBtn")) $("dataOptionWatchBtn").onclick = ()=> openCatalogFromPlanChoice("watches", "Watch Plan ($10)");
+
+
   renderCatalog();
-  setVisibleView("catalogView");
+  setVisibleView("entryView");
 
   bindCounter("qtyMinus","qtyPlus", ()=>state.quantity, v=>{
     state.quantity = v;
@@ -4745,7 +5767,10 @@ function init(){
   [...$("tradeToggle").querySelectorAll("button")].forEach(btn=>btn.onclick=()=>{ state.tradeDecision=btn.dataset.value; if(state.tradeDecision==="no"){ state.tradeCount=0; state.tradeRows=[]; } renderConfigurator(); });
   $("tradeSkipHint").onclick = ()=>{ $("tradeSkipBanner").classList.remove("hidden"); };
 
-  $("backToCatalogBtn").onclick = ()=> showOnly("catalogView");
+  $("backToCatalogBtn").onclick = ()=>{
+    ensureStandaloneConfiguratorPlacement();
+    showOnly("catalogView");
+  };
   if($("summaryAddToCartBtn")){
     $("summaryAddToCartBtn").textContent = "Add to Cart";
     $("summaryAddToCartBtn").onclick = ()=>{ renderReview({commitCurrent:true}); showOnly("reviewView"); window.scrollTo({top:0,behavior:"smooth"}); };
@@ -4763,6 +5788,7 @@ function init(){
   }
   if($("summaryBackBtn")){
     $("summaryBackBtn").onclick = ()=>{
+      ensureStandaloneConfiguratorPlacement();
       showOnly("configuratorView", false);
       window.scrollTo({top:0,behavior:"smooth"});
     };
@@ -4831,6 +5857,20 @@ function init(){
     };
   }
 }
+
+
+// Force the new entry screen to be the first screen at startup
+window.addEventListener("load", ()=>{
+  try{
+    if(document.getElementById("entryView")){
+      screenHistory = ["entryView"];
+      setVisibleView("entryView");
+      try { history.replaceState({viewId:"entryView"}, "", "#entryView"); } catch(e) {}
+    }
+  }catch(e){
+    console.error("Entry screen startup guard failed", e);
+  }
+});
 
 init();
 
