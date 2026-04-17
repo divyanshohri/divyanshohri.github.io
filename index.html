@@ -2582,6 +2582,84 @@
     max-width:1280px;
   }
 
+
+  .review-safe-accordion{
+    margin:4px 0 10px;
+    border-top:1px solid var(--cb-line);
+  }
+  .review-safe-acc-item{
+    border-bottom:1px solid var(--cb-line);
+  }
+  .review-safe-acc-head{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:14px 0;
+    background:transparent;
+    border:0;
+    cursor:pointer;
+    text-align:left;
+    font:inherit;
+    color:#111827;
+  }
+  .review-safe-acc-left{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    min-width:0;
+  }
+  .review-safe-acc-icon{
+    width:22px;
+    height:22px;
+    border-radius:999px;
+    border:1px solid #c8d5e6;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    font-size:15px;
+    font-weight:900;
+    color:#475569;
+    flex:none;
+  }
+  .review-safe-acc-title{
+    font-size:15px;
+    font-weight:800;
+    color:#111827;
+  }
+  .review-safe-acc-value{
+    font-size:15px;
+    font-weight:900;
+    color:#111827;
+    flex:none;
+  }
+  .review-safe-acc-body{
+    display:none;
+    padding:0 0 14px 32px;
+  }
+  .review-safe-acc-item.open .review-safe-acc-body{
+    display:block;
+  }
+  .review-safe-breakdown-row{
+    display:flex;
+    justify-content:space-between;
+    gap:14px;
+    padding:5px 0;
+    font-size:14px;
+    color:#475569;
+  }
+  .review-safe-breakdown-row strong{
+    color:#111827;
+    font-weight:800;
+  }
+  .review-safe-breakdown-note{
+    margin-top:6px;
+    font-size:12px;
+    color:#64748b;
+    line-height:1.45;
+  }
+
 </style>
 </head>
 <body>
@@ -5089,6 +5167,46 @@ function renderReviewPlanModal(){
   };
 }
 
+
+function getMonthlyPlanOnly(snapshot){
+  return getPlanChargeTotal(snapshot);
+}
+function getMonthlyDeviceOnly(snapshot){
+  return getDeviceMonthlyCharge(snapshot);
+}
+function getMonthlyProtectionOnly(snapshot){
+  return 0;
+}
+function getMonthlyTaxesFeesOnly(snapshot){
+  return getMonthlyTaxesAndFees ? getMonthlyTaxesAndFees(snapshot) : getEstimatedTaxes(snapshot);
+}
+function getDueTodayDownOnly(snapshot){
+  return getDownPayment(snapshot);
+}
+function getDueTodayTaxesOnly(snapshot){
+  return typeof getDueTodayTaxes === "function" ? getDueTodayTaxes(snapshot) : 0;
+}
+function getDueTodayAppleCareOnly(snapshot){
+  return typeof getAppleCareDueToday === "function" ? getAppleCareDueToday(snapshot) : 0;
+}
+function getDueTodayPotentPromoCredit(snapshot){
+  return 0;
+}
+function reviewAccordionItem(title, valueText, bodyHtml, key){
+  return `
+    <div class="review-safe-acc-item" data-acc-key="${key}">
+      <button type="button" class="review-safe-acc-head">
+        <span class="review-safe-acc-left">
+          <span class="review-safe-acc-icon">+</span>
+          <span class="review-safe-acc-title">${title}</span>
+        </span>
+        <span class="review-safe-acc-value">${valueText}</span>
+      </button>
+      <div class="review-safe-acc-body">${bodyHtml}</div>
+    </div>
+  `;
+}
+
 function renderReview(options = {}){
   const commitCurrent = !!options.commitCurrent;
   if(commitCurrent && currentDevice() && isConfiguratorReady(state)){
@@ -5158,9 +5276,9 @@ function renderReview(options = {}){
             item.plan || null,
             item.orderType === "byod" ? "BYOD" : "Purchase"
           ].filter(Boolean).join(" • ");
-          const displayMonthly = monthlyDue(item);
+          const displayMonthly = getDeviceMonthlyCharge(item);
           const price = displayMonthly > 0 ? `${money(displayMonthly)}/mo` : money(totalDeviceCost(item));
-          const priceSub = displayMonthly > 0 ? "estimated monthly" : "paid today";
+          const priceSub = displayMonthly > 0 ? "device monthly" : "paid today";
 
           return `
             <div class="review-safe-card">
@@ -5212,14 +5330,39 @@ function renderReview(options = {}){
 
       <div class="review-safe-summary">
         <div class="review-safe-summary-title">Order summary</div>
-        <div class="review-safe-row"><span>Monthly due</span><strong>${money(totals.monthly)}</strong></div>
-        <div class="review-safe-row"><span>Down payment</span><strong>${money(totals.down)}</strong></div>
-        <div class="review-safe-row"><span>Taxes & fees</span><strong>${money(totals.tax)}</strong></div>
-        <div class="review-safe-row"><span>Due today taxes</span><strong>${money(cart.reduce((sum,item)=>sum + getDueTodayTaxes(item),0))}</strong></div>
-        <div class="review-safe-row"><span>Trade-in estimate</span><strong>${money(totals.trade)}</strong></div>
-        <div class="review-safe-row"><span>Applied promo</span><strong>${money(totals.promo)}</strong></div>
-        <div class="review-safe-row"><span>Due Today</span><strong>${money(cart.reduce((sum,item)=>sum + getDownPayment(item) + getDueTodayTaxes(item) + getAppleCareDueToday(item),0))}</strong></div>
-        <div class="review-safe-total"><span>Total device cost</span><strong>${money(totals.device)}</strong></div>
+        <div class="review-safe-accordion">
+          ${reviewAccordionItem(
+            "Monthly due",
+            money(totals.monthly),
+            `
+              <div class="review-safe-breakdown-row"><span>Device monthly payment</span><strong>${money(cart.reduce((sum,item)=>sum + getMonthlyDeviceOnly(item),0))}</strong></div>
+              <div class="review-safe-breakdown-row"><span>Plan cost</span><strong>${money(cart.reduce((sum,item)=>sum + getMonthlyPlanOnly(item),0))}</strong></div>
+              <div class="review-safe-breakdown-row"><span>Device protection</span><strong>${money(cart.reduce((sum,item)=>sum + getMonthlyProtectionOnly(item),0))}</strong></div>
+              <div class="review-safe-breakdown-row"><span>Taxes & fees</span><strong>${money(cart.reduce((sum,item)=>sum + getMonthlyTaxesFeesOnly(item),0))}</strong></div>
+            `,
+            "monthly"
+          )}
+          ${reviewAccordionItem(
+            "Due Today",
+            money(cart.reduce((sum,item)=>sum + getDueTodayDownOnly(item) + getDueTodayTaxesOnly(item) + getDueTodayAppleCareOnly(item) - getDueTodayPotentPromoCredit(item),0)),
+            `
+              <div class="review-safe-breakdown-row"><span>Down payment</span><strong>${money(cart.reduce((sum,item)=>sum + getDueTodayDownOnly(item),0))}</strong></div>
+              <div class="review-safe-breakdown-row"><span>Taxes & fees</span><strong>${money(cart.reduce((sum,item)=>sum + getDueTodayTaxesOnly(item),0))}</strong></div>
+              <div class="review-safe-breakdown-row"><span>AppleCare Plus</span><strong>${money(cart.reduce((sum,item)=>sum + getDueTodayAppleCareOnly(item),0))}</strong></div>
+              <div class="review-safe-breakdown-row"><span>Trade-in credit</span><strong>${money(cart.reduce((sum,item)=>sum + tradeTotalFromSnapshot(item),0))}</strong></div>
+              <div class="review-safe-breakdown-row"><span>Applied promo</span><strong>${money(totals.promo)}</strong></div>
+              <div class="review-safe-breakdown-row"><span>Potent promo credit</span><strong>-${money(cart.reduce((sum,item)=>sum + getDueTodayPotentPromoCredit(item),0))}</strong></div>
+              <div class="review-safe-breakdown-note">Trade-in credit and standard promo are informational only in Due Today. Potent promo credit reduces Due Today when applicable.</div>
+            `,
+            "due-today"
+          )}
+        </div>
+        <div class="review-safe-divider"></div>
+        <div class="review-safe-total">
+          <span>Total device cost</span>
+          <strong>${money(totals.device)}</strong>
+        </div>
+
         <div class="review-safe-actions">
           <button class="btn dashed" id="reviewAddMoreBtn">Add Another Device</button>
           <button class="btn" id="reviewConfigureQuoteBtn">Configure Quote</button>
@@ -5260,6 +5403,17 @@ function renderReview(options = {}){
       showOnly("configuratorView");
       renderConfigurator();
       window.scrollTo({top:0, behavior:"smooth"});
+    };
+  });
+
+  wrap.querySelectorAll(".review-safe-acc-head").forEach(btn=>{
+    btn.onclick = ()=>{
+      const item = btn.closest(".review-safe-acc-item");
+      if(!item) return;
+      const open = item.classList.contains("open");
+      item.classList.toggle("open", !open);
+      const icon = item.querySelector(".review-safe-acc-icon");
+      if(icon) icon.textContent = open ? "+" : "−";
     };
   });
 
