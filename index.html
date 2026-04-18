@@ -3127,23 +3127,70 @@
   }
 
 
+
+  .config-bottom-estimate{
+    margin-top:18px;padding:18px 20px;border:1px solid var(--cb-line);border-radius:16px;background:#fff;box-shadow:var(--cb-shadow);
+  }
+  .config-bottom-estimate-head{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+  }
+  .config-bottom-estimate-label{font-size:18px;font-weight:900;color:#111827}
+  .config-bottom-estimate-value{font-size:18px;font-weight:900;color:#2458cf;text-align:right;white-space:nowrap}
+  .config-bottom-estimate-promo{margin-top:14px;border-top:1px solid #e2e8f0;padding-top:14px}
+  .estimate-promo-static-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .estimate-promo-title{font-size:15px;font-weight:800;color:#111827}
+  .estimate-promo-value{font-size:14px;font-weight:900;color:#2458cf;text-align:right}
+  .estimate-promo-body-static{padding-top:10px}
+  .estimate-promo-row{display:flex;justify-content:space-between;gap:12px;padding:5px 0;font-size:14px;color:#475569}
+  .estimate-promo-row strong{color:#111827;font-weight:800}
+
   .cart-config-header-copy.compact,
   .line-config-copy.compact{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:16px;
-    padding:0 0 8px 0;
+    display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 0 8px 0;
   }
   .cart-config-header-copy.compact .cart-config-title,
   .line-config-copy.compact .line-config-title{
-    font-size:20px;
-    font-weight:900;
-    color:#111827;
+    font-size:20px;font-weight:900;color:#111827;
   }
-  .cart-config-title-row{
-    margin-top:4px !important;
+
+  .save-quote-overlay{
+    position:fixed;inset:0;background:rgba(15,23,42,.32);display:flex;align-items:center;justify-content:center;padding:24px;z-index:2000;
   }
+  .save-quote-overlay.hidden{display:none}
+  .save-quote-modal{
+    width:min(900px, 92vw);min-height:auto;background:#fff;border:1px solid #d7dee8;border-radius:24px;box-shadow:0 24px 64px rgba(15,23,42,.18);padding:28px 32px;position:relative;
+  }
+  .save-quote-close{
+    position:absolute;top:24px;right:24px;width:40px;height:40px;border:0;background:transparent;font-size:28px;line-height:1;color:#111827;cursor:pointer;
+  }
+  .save-quote-title{font-size:24px;line-height:1.15;font-weight:900;color:#111827;margin:40px 0 16px 0;max-width:680px}
+  .save-quote-copy{font-size:16px;line-height:1.55;color:#334155;margin:0 0 18px 0;max-width:760px}
+  .save-quote-checkrow{display:flex;align-items:center;gap:14px;margin:16px 0 0 0;font-size:17px;color:#111827}
+  .save-quote-checkbox{
+    width:32px;height:32px;border:1.5px solid #475569;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;background:#fff;cursor:pointer;flex:none;
+  }
+  .save-quote-checkbox input{width:18px;height:18px;accent-color:#2563eb}
+  .save-quote-email-block{margin:20px 0 0 0;max-width:100%}
+  .save-quote-email-title{font-size:17px;line-height:1.2;font-weight:800;color:#111827;margin-bottom:10px}
+  .save-quote-email-input{
+    width:100%;height:56px;border:1.5px solid #94a3b8;border-radius:10px;padding:0 16px;font-size:16px;color:#111827;outline:none;background:#fff;
+  }
+  .save-quote-email-input::placeholder{color:#6b7280}
+  .save-quote-extra-email{margin-top:12px}
+  .save-quote-add-email{margin-top:12px;border:0;background:transparent;color:#2458cf;font-size:15px;font-weight:800;cursor:pointer;padding:0}
+  .save-quote-actions,.save-quote-success-actions{
+    display:flex;justify-content:flex-end;align-items:center;gap:14px;margin-top:24px;flex-wrap:wrap;
+  }
+  .save-quote-cancel{border:0;background:transparent;color:#2458cf;font-size:17px;font-weight:800;cursor:pointer;padding:0 6px}
+  .save-quote-primary{
+    min-width:220px;height:52px;border-radius:10px;border:1px solid #2458cf;background:#2458cf;color:#fff;font-size:15px;font-weight:900;letter-spacing:.03em;cursor:pointer;padding:0 18px;
+  }
+  .save-quote-primary:disabled{opacity:.5;cursor:not-allowed}
+  .save-quote-success-icon{
+    width:56px;height:56px;border-radius:999px;background:#e8f7ee;color:#12803c;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900;margin:48px 0 14px 0;
+  }
+  .save-quote-success-title{font-size:24px;line-height:1.15;font-weight:900;color:#111827;margin-bottom:10px}
+  .save-quote-success-copy{font-size:16px;line-height:1.55;color:#334155;max-width:700px}
 
 </style>
 </head>
@@ -3576,8 +3623,17 @@
                 <div class="warn-banner hidden" id="tradeSkipBanner" style="margin-top:12px">Trade-in value cannot be estimated without the required details.</div>
               </div>
               <div class="config-bottom-estimate" id="configBottomEstimate">
-                <div class="config-bottom-estimate-label">Estimated cost</div>
-                <div class="config-bottom-estimate-value" id="configBottomEstimatePrice">$0.00</div>
+                <div class="config-bottom-estimate-head">
+                  <div class="config-bottom-estimate-label">Estimated cost</div>
+                  <div class="config-bottom-estimate-value" id="configBottomEstimatePrice">$0.00</div>
+                </div>
+                <div class="config-bottom-estimate-promo hidden" id="estimatePromoBox">
+                  <div class="estimate-promo-static-head">
+                    <span class="estimate-promo-title">Estimated promos</span>
+                    <span class="estimate-promo-value" id="estimatePromoValue">No promo applied</span>
+                  </div>
+                  <div class="estimate-promo-body-static" id="estimatePromoBody"></div>
+                </div>
               </div>
 
               <div class="actions" style="margin-top:8px">
@@ -3723,7 +3779,7 @@
           </div>
         </div>
 
-        <div class="appt-panel hidden" id="appointmentPanel">
+        <div class="appt-panel hidden" id="appointmentPanel" style="display:none">
           <div class="section-title">Appointment details</div>
           <div class="grid-2">
             <div class="field">
@@ -4253,13 +4309,6 @@ function isAppleDeviceSnapshot(snapshot){
   return text.includes("iphone") || text.includes("apple");
 }
 
-
-function isAppleDeviceSnapshot(snapshot){
-  const device = DEVICES[snapshot?.deviceId] || {};
-  const text = `${device.name || ""} ${snapshot?.deviceId || ""}`.toLowerCase();
-  return text.includes("iphone") || text.includes("apple");
-}
-
 function isApplePhoneSnapshot(snapshot){
   if(!isAppleDeviceSnapshot(snapshot)) return false;
   const device = DEVICES[snapshot?.deviceId] || {};
@@ -4364,6 +4413,7 @@ function resetApplication(){
   ensureStandaloneConfiguratorPlacement();
   renderCatalog();
   setVisibleView("entryView");
+  bindEntryActions();
 }
 
 
@@ -4544,6 +4594,36 @@ function renderByoInlineConfigurator(){
       window.scrollTo({top:0, behavior:"smooth"});
     };
   }
+}
+
+
+function bindEntryActions(){
+  const bindClick = (id, handler)=>{
+    const el = $(id);
+    if(!el || !el.parentNode) return;
+    const fresh = el.cloneNode(true);
+    el.parentNode.replaceChild(fresh, el);
+    fresh.addEventListener("click", handler);
+  };
+
+  bindClick("entryShopPhonesBtn", ()=> openCatalogForCategory("phones"));
+  bindClick("entryShopTabletsBtn", ()=> openCatalogForCategory("tablets"));
+  bindClick("entryShopWatchesBtn", ()=> openCatalogForCategory("watches"));
+  bindClick("entryBringYourOwnBtn", ()=>{
+    byoInlineCategory = "";
+    showOnly("byoChooserView");
+    renderByoInlineConfigurator();
+    const sel = $("byoDeviceTypeSelect");
+    if(sel) sel.value = "";
+    window.scrollTo({top:0, behavior:"smooth"});
+  });
+  bindClick("entryExploreDataBtn", ()=>{
+    dataOptionsCategory = "phones";
+    dataOptionsPlan = "Standard";
+    renderDataOptionsScreen();
+    showOnly("dataOptionsView");
+    window.scrollTo({top:0, behavior:"smooth"});
+  });
 }
 
 function ensureStandaloneConfiguratorPlacement(){
@@ -5111,6 +5191,20 @@ function renderConfigurator(){
 
   $("tradeSkipCard").classList.toggle("hidden", isByod() || !(state.tradeDecision==="yes" && state.tradeCount>0));
   $("tradeSkipBanner").classList.add("hidden");
+  const promoInfo = appliedPromoForSnapshot(state);
+  if($("estimatePromoBox")){
+    const breakdown = promoInfo && promoInfo.breakdown ? promoInfo.breakdown : null;
+    $("estimatePromoBox").classList.toggle("hidden", !promoInfo);
+    if($("estimatePromoValue")) $("estimatePromoValue").textContent = promoInfo ? `${money(promoInfo.totalCredit)} over 36 months` : "No promo applied";
+    if($("estimatePromoBody")){
+      $("estimatePromoBody").innerHTML = breakdown ? `
+        ${breakdown.tradeInDevices > 0 ? `<div class="estimate-promo-row"><span>Trade-in promo</span><strong>${money(breakdown.tradeInCredit)}</strong></div>` : ``}
+        ${breakdown.portingDevices > 0 ? `<div class="estimate-promo-row"><span>Porting promo</span><strong>${money(breakdown.portingCredit)}</strong></div>` : ``}
+        ${breakdown.dppDevices > 0 ? `<div class="estimate-promo-row"><span>DPP promo</span><strong>${money(breakdown.dppCredit)}</strong></div>` : ``}
+        <div class="estimate-promo-row"><span>Monthly credit</span><strong>${money(breakdown.monthlyCredit)}/mo</strong></div>
+      ` : ``;
+    }
+  }
 
   const ready = isConfiguratorReady(state);
   const continueBtn = $("configContinueBtn");
