@@ -3638,7 +3638,7 @@
 
               <div class="actions" style="margin-top:8px">
                 <button class="btn" id="backToCatalogBtn">Back to Catalog</button>
-                <button class="btn primary" id="configContinueBtn">Continue</button>
+                <button class="btn primary" id="configContinueBtn" disabled style="opacity:.55;cursor:not-allowed;" title="Complete the required selections before continuing.">Continue</button>
               </div>
 
             </div>
@@ -4373,26 +4373,82 @@ function isConfiguratorReady(snapshot=state){
   const device = DEVICES[snapshot.deviceId];
   if(!device) return false;
 
-  const payOk = snapshot.orderType === "byod"
-    ? snapshot.quantity > 0
-    : (snapshot.monthly + snapshot.retail === snapshot.quantity && snapshot.quantity > 0);
-  const protectionIncluded = (snapshot.category === "tablets" || snapshot.category === "watches") ? hasProPhoneOnAccount() : snapshot.plan === "Pro";
-  const protectionOk = protectionIncluded
-    ? true
-    : (snapshot.protectionDecision !== null && (snapshot.protectionDecision === "no" || snapshot.protectionCount <= snapshot.quantity));
-  const portOk = snapshot.category !== "phones"
-    ? true
-    : (snapshot.portDecision !== null && (snapshot.portDecision === "no" || snapshot.portCount <= snapshot.quantity));
-  const tradeOk = snapshot.orderType === "byod"
-    ? true
-    : (snapshot.tradeDecision !== null && (snapshot.tradeDecision === "no" || snapshot.tradeCount <= snapshot.quantity));
-  const connectivityOk = snapshot.category !== "watches" || !!snapshot.connectivity;
+  const qty = Math.max(0, Number(snapshot.quantity || 0));
+  const monthly = Math.max(0, Number(snapshot.monthly || 0));
+  const retail = Math.max(0, Number(snapshot.retail || 0));
+  const protectionCount = Math.max(0, Number(snapshot.protectionCount || 0));
+  const appleCareCount = Math.max(0, Number(snapshot.appleCareCount || 0));
+  const portCount = Math.max(0, Number(snapshot.portCount || 0));
+  const tradeCount = Math.max(0, Number(snapshot.tradeCount || 0));
 
-  const appleCareOk = (!isApplePhoneSnapshot(snapshot) || snapshot.orderType === "byod")
-    ? true
-    : (snapshot.appleCareDecision !== null && (snapshot.appleCareDecision === "no" || snapshot.appleCareCount <= snapshot.quantity));
+  const isVisible = (id)=>{
+    const el = $(id);
+    return !!(el && !el.classList.contains("hidden"));
+  };
 
-  return snapshot.quantity > 0 && !!snapshot.plan && payOk && tradeOk && protectionOk && appleCareOk && portOk && connectivityOk;
+  // Quantity is always required
+  if(qty <= 0) return false;
+  if(qty >= 11) return false;
+  if(snapshot.category === "tablets" && qty > 6) return false;
+
+  // Device attributes only matter if that panel is visible
+  if(isVisible("attrPanel")){
+    if(!snapshot.color || !snapshot.storage || !snapshot.sim) return false;
+  }
+
+  // Payment only matters if payment panel is visible
+  if(isVisible("paymentPanel")){
+    if(monthly + retail !== qty) return false;
+    if(monthly < 0 || retail < 0) return false;
+  }
+
+  // Connectivity only matters if visible
+  if(isVisible("connectivityPanel")){
+    if(!snapshot.connectivity) return false;
+  }
+
+  // Plan only matters if plan panel is visible, otherwise allow inherited/forced plan logic
+  if(isVisible("planPanel")){
+    if(snapshot.category === "phones" && !["Standard","Pro"].includes(snapshot.plan)) return false;
+    if(snapshot.category === "tablets" && snapshot.plan !== "Tablet Plan") return false;
+    if(snapshot.category === "watches" && snapshot.plan !== "Watch Plan ($10)") return false;
+  } else {
+    if(snapshot.category === "phones" && !snapshot.plan) return false;
+  }
+
+  // Protection only matters if the actual decision block is visible
+  if(isVisible("protectionBlock")){
+    if(!["yes","no"].includes(snapshot.protectionDecision)) return false;
+    if(snapshot.protectionDecision === "yes"){
+      if(protectionCount <= 0 || protectionCount > qty) return false;
+    }
+  }
+
+  // AppleCare only matters if that panel is visible
+  if(isVisible("appleCarePanel")){
+    if(!["yes","no"].includes(snapshot.appleCareDecision)) return false;
+    if(snapshot.appleCareDecision === "yes"){
+      if(appleCareCount <= 0 || appleCareCount > qty) return false;
+    }
+  }
+
+  // Porting only matters if that panel is visible
+  if(isVisible("portPanel")){
+    if(!["yes","no"].includes(snapshot.portDecision)) return false;
+    if(snapshot.portDecision === "yes"){
+      if(portCount <= 0 || portCount > qty) return false;
+    }
+  }
+
+  // Trade-in only matters if that panel is visible
+  if(isVisible("tradePanel")){
+    if(!["yes","no"].includes(snapshot.tradeDecision)) return false;
+    if(snapshot.tradeDecision === "yes"){
+      if(tradeCount <= 0 || tradeCount > qty) return false;
+    }
+  }
+
+  return true;
 }
 function isLineByod(line){
   return !!line && (
@@ -5211,16 +5267,60 @@ function renderConfigurator(){
   if(continueBtn){
     continueBtn.disabled = !ready;
     continueBtn.style.opacity = ready ? "1" : ".55";
+    continueBtn.style.cursor = ready ? "pointer" : "not-allowed";
     continueBtn.title = ready ? "" : "Complete the required selections before continuing.";
+    continueBtn.setAttribute("aria-disabled", ready ? "false" : "true");
     continueBtn.textContent = state._cartId ? "Update Quote" : "Continue";
   }
 }
 
+
+function appliedPromoForSnapshot(snapshot){
+  if(!snapshot || snapshot.category !== "phones") return null;
+
+  const qty = Math.max(0, Number(snapshot.quantity || 0));
+  const monthly = Math.max(0, Number(snapshot.monthly || 0));
+  const portCount = Math.max(0, Number(snapshot.portCount || 0));
+  const tradeCount = Math.max(0, Number(snapshot.tradeCount || 0));
+
+  const monthlyEligibleDevices = Math.min(qty, monthly);
+  const tradeInDevices = Math.min(monthlyEligibleDevices, tradeCount);
+  const remainingAfterTrade = Math.max(0, monthlyEligibleDevices - tradeInDevices);
+  const portingDevices = Math.min(remainingAfterTrade, portCount);
+  const remainingAfterPort = Math.max(0, monthlyEligibleDevices - tradeInDevices - portingDevices);
+  const dppDevices = remainingAfterPort;
+
+  const tradeInCredit = tradeInDevices * 830;
+  const portingCredit = portingDevices * 500;
+  const dppCredit = dppDevices * 200;
+  const totalCredit = tradeInCredit + portingCredit + dppCredit;
+  const monthlyCredit = totalCredit / 36;
+
+  if(totalCredit <= 0) return null;
+
+  let title = "Applied promo";
+  if(tradeInCredit > 0) title = "Trade-in promo";
+  else if(portingCredit > 0) title = "Porting promo";
+  else if(dppCredit > 0) title = "Device payment promo";
+
+  return {
+    title,
+    totalCredit,
+    breakdown: {
+      tradeInDevices,
+      portingDevices,
+      dppDevices,
+      tradeInCredit,
+      portingCredit,
+      dppCredit,
+      monthlyCredit
+    }
+  };
+}
+
 function promoValueForSnapshot(item){
-  if(item.category !== "phones") return 0;
-  const promos = (PROMOS[item.deviceId] || []).filter(p => p.eligible(item));
-  const best = promos.sort((a,b)=>b.totalCredit-a.totalCredit)[0];
-  return best ? best.totalCredit : 0;
+  const promo = appliedPromoForSnapshot(item);
+  return promo ? promo.totalCredit : 0;
 }
 
 function renderCartItems(){
@@ -6776,7 +6876,8 @@ function init(){
   }
   if($("configContinueBtn")){
     $("configContinueBtn").onclick = ()=>{
-      if(!isConfiguratorReady(state)){
+      const ready = isConfiguratorReady(state);
+      if(!ready){
         renderConfigurator();
         return;
       }
