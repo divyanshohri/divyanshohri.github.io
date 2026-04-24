@@ -1817,6 +1817,9 @@
   .plan-card.active .plan-copy{
     color:var(--cb-ink) !important;
   }
+  .plan-card.hidden-plan-option{
+    display:none !important;
+  }
 
 
   .zoe-config-page{background:#f6f7fb;min-height:100vh}
@@ -5177,7 +5180,7 @@ function renderConfigurator(){
   if(isTablet()){
     $("planHeading").textContent = "Tablet plan";
     $("planSub").textContent = "Only the tablet plan applies for this configuration.";
-    $("planStandard").classList.add("hidden");
+    $("planStandard").classList.add("hidden"); $("planStandard").classList.add("hidden-plan-option");
     $("planPro").classList.remove("hidden");
     $("planPro").querySelector(".plan-name").textContent = "Tablet Plan";
     $("planPro").querySelector(".plan-copy").textContent = "Single applicable tablet plan for this configuration.";
@@ -5186,7 +5189,7 @@ function renderConfigurator(){
   } else if(isWatch()){
     $("planHeading").textContent = "Watch plan";
     $("planSub").textContent = "Only the watch plan applies for this configuration.";
-    $("planStandard").classList.add("hidden");
+    $("planStandard").classList.add("hidden"); $("planStandard").classList.add("hidden-plan-option");
     $("planPro").classList.remove("hidden");
     $("planPro").querySelector(".plan-name").textContent = "Watch Plan";
     $("planPro").querySelector(".plan-copy").textContent = "$10 watch plan for each selected watch.";
@@ -5195,7 +5198,7 @@ function renderConfigurator(){
   } else {
     $("planHeading").textContent = "Plan type";
     $("planSub").textContent = "Choose Standard or Pro.";
-    $("planStandard").classList.remove("hidden");
+    $("planStandard").classList.remove("hidden"); $("planStandard").classList.remove("hidden-plan-option");
     $("planPro").classList.remove("hidden");
     $("planStandard").querySelector(".plan-name").textContent = "Standard";
     $("planStandard").querySelector(".plan-copy").textContent = "Standard plan with optional XMC.";
