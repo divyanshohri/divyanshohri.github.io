@@ -258,7 +258,7 @@
     border:1px solid var(--cb-line);border-radius:18px;background:#fff;padding:16px
   }
   .cart-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
-  .cart-name{font-size:18px;font-weight:900}
+  .cart-name{font-size:19px;font-weight:900}
   .cart-meta{font-size:13px;color:var(--cb-muted);margin-top:4px}
   .cart-pill{
     padding:6px 10px;border-radius:999px;background:#eef5ff;color:var(--cb-blue);font-size:12px;font-weight:900;white-space:nowrap
@@ -1914,6 +1914,19 @@
   }
   .review-safe-thumb svg{max-width:100%;height:auto}
   .review-safe-name{font-size:18px;font-weight:900;color:#111827}
+  .review-safe-name-link{
+    border:0;
+    background:transparent;
+    padding:0;
+    margin:0;
+    text-align:left;
+    cursor:pointer;
+    font:inherit;
+  }
+  .review-safe-name-link:hover{
+    text-decoration:underline;
+    text-underline-offset:2px;
+  }
   .review-safe-meta{margin-top:6px;font-size:13px;color:#64748b;line-height:1.45}
   .review-safe-links{margin-top:12px;display:flex;gap:16px;flex-wrap:wrap}
   .review-safe-links button{
@@ -1932,6 +1945,9 @@
   }
   .review-safe-money-cell{padding:14px 16px;border-right:1px solid #e6edf5}
   .review-safe-money-cell:last-child{border-right:0}
+  .review-safe-money.byod{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .review-safe-meta.byod{max-width:560px}
+  .review-safe-price.byod .sub{text-transform:none;color:#64748b}
   .review-safe-money-k{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#64748b;font-weight:800}
   .review-safe-money-v{margin-top:6px;font-size:18px;font-weight:900;color:#111827}
   .review-safe-bottom{
@@ -1943,18 +1959,27 @@
   .review-safe-summary{
     background:#fff;border:1px solid var(--cb-line);border-radius:18px;box-shadow:var(--cb-shadow);padding:18px;position:sticky;top:86px;
   }
-  .review-safe-summary-title{font-size:20px;font-weight:900;color:#111827;margin-bottom:14px}
+  .review-safe-summary-title{font-size:22px;font-weight:900;color:#111827;margin-bottom:16px}
   .review-safe-row{display:flex;justify-content:space-between;gap:16px;margin-bottom:12px;font-size:14px;color:#111827}
   .review-safe-total{
     display:flex;justify-content:space-between;gap:16px;margin-top:14px;padding-top:14px;border-top:1px solid var(--cb-line);
     font-size:22px;font-weight:900;color:#111827;
   }
   
+.review-safe-section-label{
+  margin-top:18px;
+  margin-bottom:10px;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:#6b7280;
+}
 .review-safe-actions{
   display:grid;
   grid-template-columns:1fr;
   gap:10px;
-  margin-top:18px;
+  margin-top:16px;
 }
 .review-safe-actions .btn{
   min-height:48px;
@@ -3195,6 +3220,1223 @@
   .save-quote-success-title{font-size:24px;line-height:1.15;font-weight:900;color:#111827;margin-bottom:10px}
   .save-quote-success-copy{font-size:16px;line-height:1.55;color:#334155;max-width:700px}
 
+
+
+  /* stability + modern UI refinements */
+  button:focus-visible,
+  select:focus-visible,
+  input:focus-visible{
+    outline:none;
+    box-shadow:0 0 0 4px rgba(13,98,255,.16);
+    border-color:#0d62ff !important;
+  }
+  select,
+  input[type=text]{
+    transition:border-color .18s ease, box-shadow .18s ease, background-color .18s ease;
+  }
+  .counter{
+    background:#f8fbff;
+    border-color:#d7e2f2;
+  }
+  .counter button{
+    color:#0d62ff;
+    font-weight:900;
+  }
+  .counter button:hover:not(:disabled){
+    background:#eef5ff;
+  }
+  .counter button:disabled{
+    opacity:.38;
+    cursor:not-allowed;
+    background:#f8fafc;
+    color:#94a3b8;
+  }
+  .counter .value{
+    background:#fff;
+    color:#111827;
+  }
+  .qty-picker{
+    display:grid;
+    gap:10px;
+  }
+  .qty-select-shell{
+    position:relative;
+  }
+  .qty-select-shell.custom-active .qty-select{
+    display:none;
+  }
+  .qty-custom-wrap{
+    position:relative;
+  }
+  .qty-select-shell:not(.custom-active) .qty-custom-wrap{
+    display:none;
+  }
+  .qty-select,
+  .qty-custom-input{
+    width:100%;
+    min-height:50px;
+    border:1px solid #cbd5e1;
+    border-radius:14px;
+    background:#fff;
+    color:#111827;
+    font-size:15px;
+    font-weight:800;
+    padding:0 16px;
+  }
+  .qty-select{
+    appearance:none;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    padding-right:46px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 20 20' fill='none'%3E%3Cpath d='M5 7.5L10 12.5L15 7.5' stroke='%230d62ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 14px center;
+  }
+  .qty-custom-input{
+    padding-right:84px;
+  }
+  .qty-custom-chip{
+    position:absolute;
+    right:10px;
+    top:50%;
+    transform:translateY(-50%);
+    display:inline-flex;
+    align-items:center;
+    min-height:30px;
+    padding:0 10px;
+    border-radius:999px;
+    background:#eef5ff;
+    color:#0d62ff;
+    font-size:11px;
+    font-weight:900;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    pointer-events:none;
+  }
+  .qty-helper{
+    color:#64748b;
+    font-size:13px;
+    line-height:1.45;
+  }
+  .qty-picker-title-row{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:12px;
+  }
+  .qty-limit-badge{
+    display:inline-flex;
+    align-items:center;
+    min-height:26px;
+    padding:0 10px;
+    border-radius:999px;
+    background:#eef5ff;
+    color:#0d62ff;
+    font-size:11px;
+    font-weight:900;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    white-space:nowrap;
+  }
+  .data-plan-grid.single-plan{
+    grid-template-columns:1fr;
+    max-width:720px;
+  }
+  .data-plan-card.hidden{
+    display:none !important;
+  }
+  .data-plan-card.single-only{
+    min-height:320px;
+  }
+  .data-plan-card.single-only .data-plan-sub{
+    max-width:540px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+  .data-plan-card.single-only .data-plan-features{
+    max-width:520px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+
+.save-quote-inline-error{
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:12px;
+  background:#fff4f4;
+  border:1px solid #f2c3c3;
+  color:#b42318;
+  font-size:13px;
+  font-weight:700;
+}
+.save-quote-remove-email{
+  border:0;
+  background:transparent;
+  color:#3558f5;
+  font-weight:800;
+  cursor:pointer;
+  padding:0 6px;
+}
+.save-quote-remove-email:hover{
+  text-decoration:underline;
+}
+
+/* stage 1 design-system polish */
+:root{
+  --ui-radius-card: 18px;
+  --ui-radius-control: 14px;
+  --ui-radius-pill: 999px;
+  --ui-shadow-card: 0 10px 24px rgba(15,23,42,.06);
+  --ui-shadow-soft: 0 6px 16px rgba(15,23,42,.05);
+  --ui-border-soft: 1px solid #dfe7f1;
+  --ui-title: #0f172a;
+  --ui-subtle: #64748b;
+  --ui-surface-2: #fbfcfe;
+}
+
+.page .card,
+.review-safe-card,
+.review-safe-summary,
+.final-read-card,
+.final-mini-card,
+.final-plan-card,
+.final-agreement-card,
+.plan-card,
+.line-card-summary,
+.rebuild-edit-device,
+.rebuild-edit-main,
+.rebuild-edit-side,
+.modal-card{
+  border-radius: var(--ui-radius-card) !important;
+  border: var(--ui-border-soft) !important;
+  box-shadow: var(--ui-shadow-card) !important;
+}
+
+.review-safe-card,
+.plan-card,
+.final-read-card,
+.final-mini-card,
+.final-plan-card,
+.final-agreement-card,
+.modal-card{
+  background:#fff;
+}
+
+.btn{
+  border-radius: var(--ui-radius-control) !important;
+  min-height: 46px;
+  font-weight: 800;
+  box-shadow: var(--ui-shadow-soft);
+}
+
+.btn:not(.primary){
+  border: 1.5px solid #d8e1ec;
+  background:#fff;
+}
+
+.btn.primary{
+  box-shadow: 0 10px 22px rgba(37,88,235,.20);
+}
+
+.review-safe-actions .btn,
+.cart-header-add-btn,
+.cart-header-eligibility,
+.cart-item-edit,
+.line-card-link,
+.plan-choice,
+.plan-modal-close,
+.review-plan-option,
+.review-plan-modal-close{
+  border-radius: var(--ui-radius-control);
+}
+
+.review-safe-title,
+.cart-header-title,
+.rebuild-edit-title,
+.final-checkout-title,
+.review-safe-summary-title,
+.plan-title,
+.plan-group-head{
+  color: var(--ui-title);
+  letter-spacing: -.01em;
+}
+
+.review-safe-sub,
+.cart-meta,
+.review-safe-meta,
+.final-read-copy,
+.review-safe-breakdown-note,
+.modal-sub,
+.card-sub,
+.line-card-meta,
+.line-card-submeta{
+  color: var(--ui-subtle) !important;
+}
+
+.review-safe-card,
+.cart-item,
+.line-card-summary{
+  overflow:hidden;
+}
+
+.review-safe-top,
+.cart-top,
+.rebuild-edit-head,
+.plan-header,
+.modal-header{
+  align-items:flex-start;
+}
+
+.review-safe-money,
+.final-plan-section,
+.rebuild-trade-box,
+.rebuild-byod-imei-box{
+  background: var(--ui-surface-2);
+}
+
+.review-safe-money-cell,
+.cart-metric,
+.cart-detail,
+.final-plan-section,
+.final-read-card,
+.final-mini-card,
+.final-plan-card,
+.final-agreement-card{
+  padding: 16px;
+}
+
+.section-title,
+.final-section-label,
+.review-safe-section-label,
+.final-summary-brand,
+.final-plan-brand{
+  letter-spacing:.08em;
+  font-weight:900;
+}
+
+.review-safe-links button,
+.line-card-link,
+.cart-item-edit{
+  text-underline-offset:2px;
+}
+
+.attention-badge{
+  border-radius:999px;
+  font-weight:800;
+}
+
+.attention-badge.ok,
+.status-banner{
+  box-shadow: inset 0 0 0 1px rgba(16,185,129,.14);
+}
+
+.warn-banner{
+  box-shadow: inset 0 0 0 1px rgba(245,158,11,.16);
+}
+
+input,
+select,
+textarea{
+  border-radius:12px;
+}
+
+@media (max-width: 820px){
+  .review-safe-card,
+  .plan-card,
+  .modal-card,
+  .rebuild-edit-device,
+  .rebuild-edit-main,
+  .rebuild-edit-side{
+    border-radius:16px !important;
+  }
+}
+
+
+/* stage 2 configurator UI cleanup */
+.zoe-section.card,
+.configurator-shell .card,
+.card.zoe-section{
+  padding:20px;
+}
+
+.zoe-label{
+  font-size:15px;
+  font-weight:900;
+  color:#0f172a;
+  margin-bottom:4px;
+}
+
+.card-sub{
+  font-size:13px;
+  line-height:1.45;
+  color:#64748b;
+}
+
+.step-dot{
+  width:30px;
+  height:30px;
+  border-radius:999px;
+  background:#eef4ff;
+  border:1px solid #cfe0ff;
+  color:#3558f5;
+  font-size:13px;
+  font-weight:900;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 auto;
+}
+
+.zoe-inline-title-wrap{
+  align-items:flex-start;
+  gap:12px;
+}
+
+.counter{
+  min-height:44px;
+  border-radius:14px;
+  border:1px solid #d9e3ef;
+  background:#fff;
+  overflow:hidden;
+}
+.counter button{
+  width:42px;
+  height:42px;
+  font-size:18px;
+  font-weight:900;
+}
+.counter .value{
+  min-width:44px;
+  font-size:17px;
+  font-weight:900;
+}
+
+.status-banner,
+.warn-banner{
+  border-radius:14px;
+  padding:12px 14px;
+  font-size:13px;
+  line-height:1.45;
+  font-weight:700;
+}
+
+.status-banner{
+  background:#f0fbf7;
+  color:#0f766e;
+  border:1px solid #bfe9dd;
+}
+
+.warn-banner{
+  background:#fff8eb;
+  color:#b45309;
+  border:1px solid #f4d7a3;
+}
+
+.field label{
+  font-size:13px;
+  font-weight:800;
+  color:#334155;
+  margin-bottom:7px;
+  display:block;
+}
+
+.field input,
+.field select,
+.field textarea{
+  min-height:46px;
+  border:1px solid #d7e0eb;
+  background:#fff;
+}
+
+.toggle-wrap,
+.zoe-pay-card,
+.cart-metric,
+.cart-detail{
+  border-radius:16px;
+}
+
+.zoe-pay-card{
+  border:1px solid #dde6f2;
+  background:#fbfcfe;
+  padding:16px;
+}
+
+.info-k{
+  font-size:11px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:#64748b;
+  font-weight:800;
+}
+
+.qty-helper,
+.helper-text,
+.field-help{
+  font-size:12px;
+  color:#64748b;
+  line-height:1.45;
+}
+
+#configContinueBtn[disabled],
+#configContinueBtn.disabled{
+  opacity:.55;
+  box-shadow:none !important;
+}
+
+#configContinueBtn:not([disabled]){
+  box-shadow:0 10px 22px rgba(37,88,235,.22);
+}
+
+@media (max-width: 820px){
+  .zoe-section.card,
+  .configurator-shell .card,
+  .card.zoe-section{
+    padding:16px;
+  }
+  .counter button{
+    width:40px;
+    height:40px;
+  }
+}
+
+
+/* quantity/select dropdown icon polish */
+.field select,
+select{
+  appearance:none;
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, #64748b 50%),
+    linear-gradient(135deg, #64748b 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) calc(50% - 3px),
+    calc(100% - 12px) calc(50% - 3px);
+  background-size:6px 6px, 6px 6px;
+  background-repeat:no-repeat;
+  padding-right:34px;
+}
+
+
+/* stage 3 quote review cleanup */
+.review-safe-shell{
+  gap:24px !important;
+}
+
+.review-safe-list{
+  display:grid;
+  gap:18px;
+}
+
+.review-safe-card{
+  transition:box-shadow .18s ease, transform .18s ease;
+}
+
+.review-safe-card:hover{
+  box-shadow:0 14px 28px rgba(15,23,42,.08) !important;
+}
+
+.review-safe-top{
+  padding:18px 18px 0;
+  display:grid;
+  grid-template-columns:88px minmax(0,1fr) auto;
+  gap:16px;
+}
+
+.review-safe-thumb{
+  width:88px;
+  height:88px;
+  border-radius:18px;
+  background:linear-gradient(180deg,#f8fbff,#eef4ff);
+}
+
+.review-safe-name{
+  line-height:1.15;
+}
+
+.review-safe-meta{
+  margin-top:8px;
+  font-size:13px;
+  line-height:1.5;
+}
+
+.review-safe-links{
+  margin-top:10px;
+  gap:14px;
+}
+
+.review-safe-links button{
+  font-size:12px;
+}
+
+.review-safe-price{
+  min-width:190px;
+}
+
+.review-safe-price .k{
+  font-size:12px;
+  color:#64748b;
+}
+
+.review-safe-price .v{
+  margin-top:4px;
+  font-size:24px;
+  line-height:1.05;
+}
+
+.review-safe-price .sub{
+  margin-top:4px;
+  color:#64748b;
+}
+
+.review-safe-money{
+  margin-top:18px;
+  border-top:1px solid #e8eef6;
+}
+
+.review-safe-money-cell{
+  min-height:88px;
+}
+
+.review-safe-bottom{
+  padding:14px 18px 18px;
+  color:#334155;
+}
+
+.review-safe-summary{
+  padding:20px;
+}
+
+.review-safe-summary-title{
+  margin-bottom:16px;
+}
+
+.review-safe-accordion{
+  display:grid;
+  gap:10px;
+}
+
+.review-safe-acc-item{
+  border:1px solid #dfe7f1;
+  border-radius:16px;
+  background:#fbfcfe;
+  overflow:hidden;
+}
+
+.review-safe-acc-head{
+  padding:14px 16px;
+  background:#fff;
+}
+
+.review-safe-acc-title{
+  color:#0f172a;
+}
+
+.review-safe-acc-value{
+  color:#0f172a;
+}
+
+.review-safe-breakdown-body{
+  padding:14px 16px 16px;
+}
+
+.review-safe-breakdown-row{
+  padding:8px 0;
+}
+
+.review-safe-actions{
+  gap:12px;
+}
+
+.review-safe-actions .btn{
+  min-height:50px;
+}
+
+.review-safe-actions #reviewMoveBtn{
+  box-shadow:0 12px 24px rgba(37,88,235,.20);
+}
+
+.review-safe-section-label{
+  margin-top:20px;
+  margin-bottom:12px;
+}
+
+@media (max-width: 1100px){
+  .review-safe-top{
+    grid-template-columns:72px minmax(0,1fr);
+  }
+  .review-safe-price{
+    grid-column:2;
+    min-width:0;
+    text-align:left;
+  }
+}
+
+@media (max-width: 820px){
+  .review-safe-top{
+    padding:16px 16px 0;
+    gap:14px;
+  }
+  .review-safe-thumb{
+    width:72px;
+    height:72px;
+    border-radius:16px;
+  }
+  .review-safe-price .v{
+    font-size:22px;
+  }
+  .review-safe-bottom{
+    padding:14px 16px 16px;
+  }
+}
+
+
+/* stage 4 your cart / line-level cleanup */
+.line-summary-shell{
+  display:grid;
+  gap:18px;
+}
+
+.cart-header-shell{
+  padding:4px 0 2px;
+  align-items:flex-start;
+}
+
+.cart-header-title{
+  font-size:34px;
+  line-height:1.05;
+  letter-spacing:-.01em;
+  color:#0f172a;
+}
+
+.cart-header-actions{
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.cart-header-add-btn,
+.cart-header-eligibility{
+  min-height:46px;
+  border-radius:14px;
+  box-shadow:0 6px 16px rgba(15,23,42,.05);
+}
+
+.plan-card{
+  padding:20px;
+}
+
+.plan-header{
+  margin-bottom:8px;
+}
+
+.plan-title{
+  font-size:24px;
+  line-height:1.1;
+}
+
+.plan-group{
+  margin-top:18px;
+  padding-top:18px;
+  border-top:1px solid #e6edf5;
+}
+
+.plan-group:first-of-type{
+  margin-top:14px;
+}
+
+.plan-group-head{
+  display:inline-flex;
+  align-items:center;
+  min-height:28px;
+  padding:0 12px;
+  border-radius:999px;
+  background:#eef4ff;
+  color:#3558f5;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  margin-bottom:14px;
+}
+
+.line-list{
+  display:grid;
+  gap:14px;
+}
+
+.line-card-summary{
+  display:grid;
+  grid-template-columns:56px minmax(0,1fr) auto;
+  gap:16px;
+  padding:18px;
+  border:1px solid #dfe7f1;
+  border-radius:18px;
+  background:#fff;
+  box-shadow:0 8px 20px rgba(15,23,42,.05);
+}
+
+.line-card-icon{
+  width:56px;
+  height:56px;
+  border-radius:16px;
+  background:linear-gradient(180deg,#f8fbff,#eef4ff);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+}
+
+.line-card-name{
+  font-size:18px;
+  font-weight:900;
+  color:#0f172a;
+  line-height:1.1;
+}
+
+.line-card-meta{
+  margin-top:4px;
+  color:#475569;
+  line-height:1.4;
+}
+
+.line-card-submeta{
+  margin-top:4px;
+  color:#64748b;
+  font-size:13px;
+}
+
+.line-card-links{
+  margin-top:10px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+}
+
+.line-card-link{
+  font-size:12px;
+  font-weight:800;
+  text-decoration:underline;
+  text-underline-offset:2px;
+}
+
+.attention-badge{
+  display:inline-flex;
+  align-items:center;
+  min-height:28px;
+  padding:0 12px;
+  margin-top:10px;
+  border-radius:999px;
+  font-size:12px;
+  line-height:1.2;
+}
+
+.attention-badge.ok{
+  background:#eefaf4;
+  color:#147a52;
+  border:1px solid #c9ecd8;
+}
+
+.attention-badge:not(.ok){
+  background:#fff7ed;
+  color:#b45309;
+  border:1px solid #f3d3a3;
+}
+
+.line-card-summary strong{
+  font-size:20px;
+  color:#0f172a;
+}
+
+.line-card-summary span{
+  color:#64748b;
+}
+
+.line-summary-footer,
+.checkout-status,
+#lineSummaryFooter{
+  margin-top:4px;
+}
+
+@media (max-width: 980px){
+  .line-card-summary{
+    grid-template-columns:56px minmax(0,1fr);
+  }
+}
+
+@media (max-width: 820px){
+  .cart-header-title{
+    font-size:30px;
+  }
+  .plan-card{
+    padding:16px;
+  }
+  .line-card-summary{
+    padding:16px;
+    gap:14px;
+  }
+}
+
+
+/* stage 5 modal and handoff cleanup */
+.modal-card{
+  width:min(760px,100%);
+  padding:24px;
+}
+
+.modal-header{
+  gap:16px;
+  margin-bottom:6px;
+}
+
+.modal-icon{
+  width:44px;
+  height:44px;
+  border-radius:14px;
+  box-shadow:0 8px 18px rgba(16,58,143,.16);
+}
+
+.modal-title{
+  font-size:21px;
+  line-height:1.1;
+  color:#0f172a;
+}
+
+.modal-sub{
+  line-height:1.5;
+  max-width:560px;
+}
+
+.modal-info{
+  margin-top:16px;
+  border-radius:16px;
+  background:#fff;
+  border:1px solid #dfe7f1;
+  box-shadow:0 8px 20px rgba(15,23,42,.04);
+}
+
+.modal-info-title{
+  font-size:14px;
+  margin-bottom:12px;
+}
+
+.modal-bullets{
+  gap:14px;
+}
+
+.modal-bullet{
+  line-height:1.5;
+}
+
+.confirm-list{
+  gap:12px;
+  margin-top:14px;
+}
+
+.confirm-item{
+  border:1px solid #dfe7f1;
+  border-radius:14px;
+  background:#fbfcfe;
+  padding:14px 14px;
+}
+
+.confirm-item label{
+  line-height:1.45;
+}
+
+.modal-actions{
+  gap:12px;
+  margin-top:18px;
+}
+
+.save-quote-card,
+.save-quote-modal-card,
+#saveQuoteOverlay .modal-card{
+  width:min(680px,100%);
+}
+
+.save-quote-email-row,
+.save-quote-extra-email{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:10px;
+}
+
+.save-quote-email-input{
+  flex:1 1 auto;
+  min-height:46px;
+  border:1px solid #d7e0eb;
+  border-radius:14px;
+  padding:0 14px;
+  background:#fff;
+}
+
+.save-quote-success{
+  text-align:left;
+}
+
+.save-quote-inline-error{
+  border-radius:14px;
+  line-height:1.45;
+}
+
+.handoff-shell{
+  padding:28px 20px 44px;
+}
+
+.handoff-card{
+  border-radius:22px;
+  border:1px solid #dfe7f1;
+  box-shadow:0 14px 30px rgba(15,23,42,.06);
+  padding:26px;
+  background:#fff;
+}
+
+.handoff-title{
+  font-size:32px;
+  line-height:1.05;
+  letter-spacing:-.01em;
+  color:#0f172a;
+}
+
+.handoff-sub{
+  margin-top:10px;
+  max-width:780px;
+  line-height:1.55;
+  color:#64748b;
+}
+
+.handoff-grid{
+  gap:18px;
+  margin-top:22px;
+}
+
+.handoff-option{
+  border-radius:18px;
+  border:1px solid #dfe7f1;
+  box-shadow:0 10px 24px rgba(15,23,42,.05);
+  padding:22px;
+  background:#fff;
+}
+
+.handoff-option-title{
+  font-size:21px;
+  line-height:1.15;
+  color:#0f172a;
+}
+
+.handoff-option-copy{
+  margin-top:8px;
+  line-height:1.5;
+  color:#64748b;
+}
+
+.handoff-list{
+  margin-top:14px;
+  padding-left:18px;
+  color:#334155;
+  line-height:1.55;
+}
+
+.handoff-actions{
+  margin-top:18px;
+  gap:12px;
+}
+
+.appt-panel{
+  margin-top:18px;
+  border-radius:18px;
+  border:1px solid #dfe7f1;
+  background:#fbfcfe;
+  padding:18px;
+}
+
+#appointmentPanel .field label{
+  margin-bottom:6px;
+}
+
+@media (max-width: 820px){
+  .modal-card{
+    padding:18px;
+    border-radius:18px !important;
+  }
+  .handoff-card{
+    padding:20px;
+    border-radius:18px;
+  }
+  .handoff-title{
+    font-size:28px;
+  }
+}
+
+
+/* stage 6 final checkout polish */
+.final-checkout-page{
+  background:linear-gradient(180deg,#f7f9fc 0%, #f3f6fb 100%);
+}
+
+.final-checkout-topbar{
+  height:44px;
+}
+
+.final-checkout-shell{
+  max-width:1040px;
+  padding-top:30px;
+}
+
+.final-checkout-title{
+  font-size:34px;
+  line-height:1.05;
+  letter-spacing:-.01em;
+  color:#0f172a;
+  margin-bottom:20px;
+}
+
+.final-read-card,
+.final-mini-card,
+.final-plan-card,
+.final-agreement-card{
+  border-radius:18px;
+  border:1px solid #dfe7f1;
+  box-shadow:0 12px 28px rgba(15,23,42,.05);
+  padding:20px;
+}
+
+.final-pill{
+  min-height:26px;
+  padding:0 12px;
+  border-radius:999px;
+  background:#eef4ff;
+  border:1px solid #d5e3ff;
+  color:#3558f5;
+}
+
+.final-read-copy{
+  line-height:1.6;
+  color:#475569;
+}
+
+.final-section-title{
+  font-size:26px;
+  line-height:1.1;
+  margin-bottom:16px;
+  color:#0f172a;
+}
+
+.final-section-label,
+.final-summary-brand,
+.final-plan-brand{
+  margin:18px 0 10px;
+}
+
+.final-summary-row,
+.final-mini-row{
+  min-height:26px;
+  align-items:center;
+}
+
+.final-summary-row{
+  font-size:14px;
+  color:#0f172a;
+}
+
+.final-summary-row.muted{
+  color:#64748b;
+}
+
+.final-plan-items,
+.final-device-items{
+  display:grid;
+  gap:12px;
+}
+
+.final-line-item{
+  display:grid;
+  grid-template-columns:56px minmax(0,1fr) auto;
+  gap:14px;
+  align-items:start;
+  padding:14px;
+  border:1px solid #e6edf5;
+  border-radius:16px;
+  background:#fbfcfe;
+}
+
+.final-line-thumb{
+  width:56px;
+  height:56px;
+  border-radius:16px;
+  background:linear-gradient(180deg,#f8fbff,#eef4ff);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+
+.final-line-name{
+  font-size:16px;
+  font-weight:900;
+  color:#0f172a;
+  line-height:1.15;
+}
+
+.final-line-meta{
+  margin-top:4px;
+  color:#64748b;
+  line-height:1.45;
+  font-size:13px;
+}
+
+.final-line-price{
+  font-size:18px;
+  font-weight:900;
+  color:#0f172a;
+  white-space:nowrap;
+}
+
+.final-id-block,
+#finalIdBlock{
+  border-radius:16px;
+  border:1px solid #dfe7f1;
+  background:#fbfcfe;
+  padding:16px;
+  color:#475569;
+  line-height:1.55;
+}
+
+.final-agreement-card .btn,
+#finalAgreementContinueBtn{
+  min-height:50px;
+  border-radius:14px;
+}
+
+#finalAgreementContinueBtn{
+  box-shadow:0 12px 24px rgba(37,88,235,.20);
+}
+
+@media (max-width: 820px){
+  .final-checkout-shell{
+    padding-top:24px;
+  }
+  .final-checkout-title{
+    font-size:30px;
+  }
+  .final-read-card,
+  .final-mini-card,
+  .final-plan-card,
+  .final-agreement-card{
+    padding:16px;
+    border-radius:16px;
+  }
+  .final-line-item{
+    grid-template-columns:56px minmax(0,1fr);
+  }
+  .final-line-price{
+    grid-column:2;
+    white-space:normal;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -3433,8 +4675,21 @@
                 </div>
                 <div class="zoe-grid-2" style="margin-top:14px">
                   <div class="field">
-                    <label id="qtyLabel">Devices being purchased</label>
-                    <div class="counter"><button id="qtyMinus">−</button><div class="value" id="qtyValue">0</div><button id="qtyPlus">+</button></div>
+                    <div class="qty-picker-title-row">
+                      <label id="qtyLabel">Devices being purchased</label>
+                      <div class="qty-limit-badge" id="qtyLimitBadge">Up to 10</div>
+                    </div>
+                    <div class="qty-picker">
+                      <div class="qty-select-shell" id="qtySelectShell">
+                        <select id="qtySelect" class="qty-select" aria-describedby="qtyHelperText"></select>
+                        <div class="qty-custom-wrap hidden" id="qtyCustomWrap">
+                          <label class="hidden" for="qtyCustomInput">Custom quantity</label>
+                          <input type="text" id="qtyCustomInput" class="qty-custom-input" inputmode="numeric" maxlength="2" placeholder="Enter quantity">
+                          <span class="qty-custom-chip">Manual</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="qty-helper" id="qtyHelperText" style="margin-top:10px">Choose the quantity from the dropdown.</div>
                   </div>
                   <div class="info-tile" id="baseTotalTile">
                     <div class="info-k">Base device total</div>
@@ -3449,13 +4704,21 @@
                   <div class="step-dot" id="connectivityStep">4</div>
                   <div>
                     <div class="zoe-label">Device connectivity</div>
-                    <div class="card-sub">Choose whether the watch is standalone or paired with the host line.</div>
+                    <div class="card-sub">Split the selected watch quantity between paired and standalone. The total must match the selected watch quantity.</div>
                   </div>
                 </div>
-                <div class="field" style="margin-top:14px">
-                  <label>Connectivity</label>
-                  <select id="connectivitySelect"></select>
+                <div class="section-title" id="connectivityBadge" style="margin-top:12px">Needs adjustment</div>
+                <div class="zoe-grid-2" id="connectivityGrid" style="margin-top:14px">
+                  <div class="zoe-pay-card">
+                    <div class="info-k">Paired</div>
+                    <div class="counter" style="margin-top:10px"><button id="pairedMinus">−</button><div class="value" id="pairedValue">0</div><button id="pairedPlus">+</button></div>
+                  </div>
+                  <div class="zoe-pay-card">
+                    <div class="info-k">Standalone</div>
+                    <div class="counter" style="margin-top:10px"><button id="standaloneMinus">−</button><div class="value" id="standaloneValue">0</div><button id="standalonePlus">+</button></div>
+                  </div>
                 </div>
+                <div class="warn-banner" id="connectivityStatus" style="margin-top:14px">Set Paired and Standalone so the total matches the selected watch quantity.</div>
               </div>
 
               <div class="zoe-section card hidden" id="promoPanel">
@@ -3719,7 +4982,7 @@
         <div class="modal-icon">◌</div>
         <div>
           <h2 class="modal-title">Customer Verbal Confirmation</h2>
-          <div class="modal-sub">Read the following to the customer and confirm their acknowledgment.</div>
+          <div class="modal-sub">Read the following to the customer and confirm their acknowledgment before moving forward.</div>
         </div>
       </div>
 
@@ -3752,7 +5015,7 @@
     <div class="handoff-shell">
       <div class="handoff-card">
         <h1 class="handoff-title">Choose the handoff path</h1>
-        <div class="handoff-sub">Verbal consent is complete. Decide whether the order should be transferred to Asurion now or scheduled for a later appointment.</div>
+        <div class="handoff-sub">Verbal confirmation is complete. Decide whether the order should move to Asurion now or be scheduled for a later appointment.</div>
 
         <div class="handoff-grid">
           <div class="handoff-option">
@@ -3811,7 +5074,7 @@
     <div class="final-checkout-page">
       <div class="final-checkout-topbar"></div>
       <div class="container final-checkout-shell">
-        <div class="final-checkout-title" id="finalCheckoutTitle">Ok CBM, let’s review your order</div>
+        <div class="final-checkout-title" id="finalCheckoutTitle">Let’s review your order</div>
 
         <div class="final-read-card">
           <div class="final-pill">Read to customer</div>
@@ -4124,12 +5387,15 @@ const initialState = () => ({
   deviceId:"",
   orderType:"purchase",
   quantity:0,
+  quantityInputMode:"select",
   monthly:0,
   retail:0,
   color:"",
   storage:"",
   sim:"",
   connectivity:"",
+  pairedCount:0,
+  standaloneCount:0,
   plan:"",
   protectionDecision:null,
   protectionCount:0,
@@ -4183,7 +5449,14 @@ function money(n){
   return "$" + (Number.isFinite(value) ? value : 0).toFixed(2);
 }
 
-function hasProPhoneOnAccount(){ return true; }
+function hasProPhoneOnAccount(){
+  return Array.isArray(cart) && cart.some(item =>
+    item &&
+    item.category === "phones" &&
+    item.plan === "Pro" &&
+    Number(item.quantity || 0) > 0
+  );
+}
 
 function getDeviceBasePrice(deviceId){
   return Number(DEVICES[deviceId]?.basePrice || 0);
@@ -4225,6 +5498,8 @@ function normalizeSnapshot(snapshot){
   snapshot.tradeCount = toInt(snapshot.tradeCount);
   snapshot.protectionCount = toInt(snapshot.protectionCount);
   snapshot.appleCareCount = toInt(snapshot.appleCareCount);
+  snapshot.pairedCount = toInt(snapshot.pairedCount);
+  snapshot.standaloneCount = toInt(snapshot.standaloneCount);
   if(snapshot.appleCareDecision === undefined) snapshot.appleCareDecision = null;
   if(!isApplePhoneSnapshot(snapshot) || snapshot.orderType === "byod"){
     snapshot.appleCareDecision = "no";
@@ -4238,6 +5513,18 @@ function normalizeSnapshot(snapshot){
     if(!device.connectivity.includes(snapshot.connectivity)) snapshot.connectivity = device.connectivity[0] || "";
   } else {
     snapshot.connectivity = "";
+  }
+
+  if(snapshot.category === "watches"){
+    snapshot.pairedCount = Math.min(snapshot.pairedCount, snapshot.quantity);
+    snapshot.standaloneCount = Math.min(snapshot.standaloneCount, snapshot.quantity);
+    if(snapshot.pairedCount + snapshot.standaloneCount > snapshot.quantity){
+      snapshot.standaloneCount = Math.max(0, snapshot.quantity - snapshot.pairedCount);
+    }
+    snapshot.connectivity = getWatchConnectivityState(snapshot).label;
+  } else {
+    snapshot.pairedCount = 0;
+    snapshot.standaloneCount = 0;
   }
 
   if(snapshot.orderType === "byod"){
@@ -4299,6 +5586,101 @@ function getDeviceMonthlyCharge(snapshot){
   const promoMonthly = snapshot?.category === "phones" ? (promoValueForSnapshot(snapshot) / 36) : 0;
   return Math.max(0, gross - promoMonthly);
 }
+
+function getProtectionState(snapshot, cartRef=cart){
+  const category = snapshot?.category || "";
+  const plan = snapshot?.plan || "";
+  const proPhoneInCart = Array.isArray(cartRef) && cartRef.some(entry =>
+    entry &&
+    entry.category === "phones" &&
+    entry.plan === "Pro" &&
+    Number(entry.quantity || 0) > 0
+  );
+
+  if(category === "phones"){
+    if(plan === "Pro"){
+      return { included:true, selectable:false, reason:"included_with_pro_phone", monthlyPerDevice:0 };
+    }
+    const monthlyPerDevice = snapshot?.deviceId === "byod" ? 0 : (String(snapshot?.deviceId || "").toLowerCase().includes("iphone") ? 19 : 11);
+    return { included:false, selectable:true, reason:"optional_phone_xmc", monthlyPerDevice };
+  }
+
+  if(category === "tablets" || category === "watches"){
+    if(proPhoneInCart){
+      return { included:true, selectable:false, reason:"included_via_pro_phone_in_cart", monthlyPerDevice:0 };
+    }
+    return { included:false, selectable:true, reason:"optional_connected_device_xmc", monthlyPerDevice:0 };
+  }
+
+  return { included:false, selectable:false, reason:"not_applicable", monthlyPerDevice:0 };
+}
+
+function getPromoAllocation(snapshot){
+  const qty = Math.max(0, Number(snapshot?.quantity || 0));
+  const monthly = Math.max(0, Number(snapshot?.monthly || 0));
+  const portCount = Math.max(0, Number(snapshot?.portCount || 0));
+  const tradeCount = Math.max(0, Number(snapshot?.tradeCount || 0));
+
+  const monthlyEligibleDevices = Math.min(qty, monthly);
+  const tradeInDevices = Math.min(monthlyEligibleDevices, tradeCount);
+  const remainingAfterTrade = Math.max(0, monthlyEligibleDevices - tradeInDevices);
+  const portingDevices = Math.min(remainingAfterTrade, portCount);
+  const remainingAfterPort = Math.max(0, monthlyEligibleDevices - tradeInDevices - portingDevices);
+  const dppDevices = remainingAfterPort;
+
+  const tradeInCredit = tradeInDevices * 830;
+  const portingCredit = portingDevices * 500;
+  const dppCredit = dppDevices * 200;
+  const totalCredit = tradeInCredit + portingCredit + dppCredit;
+  const monthlyCredit = totalCredit / 36;
+
+  let title = "Applied promo";
+  if(tradeInCredit > 0) title = "Trade-in promo";
+  else if(portingCredit > 0) title = "Porting promo";
+  else if(dppCredit > 0) title = "Device payment promo";
+
+  return {
+    title,
+    tradeInDevices,
+    portingDevices,
+    dppDevices,
+    tradeInCredit,
+    portingCredit,
+    dppCredit,
+    totalCredit,
+    monthlyCredit
+  };
+}
+
+function getLineCostBreakdown(snapshot, cartRef=cart){
+  const planCost = getPlanChargeTotal(snapshot);
+  const deviceMonthly = getDeviceMonthlyCharge(snapshot);
+  const downPayment = getDownPayment(snapshot);
+  const protectionRule = getProtectionState(snapshot, cartRef);
+  const selectedProtectionCount = protectionRule.included ? 0 : Math.max(0, Number(snapshot?.protectionCount || 0));
+  const protectionMonthly = selectedProtectionCount * protectionRule.monthlyPerDevice;
+  const appleCareDueToday = getAppleCareDueToday(snapshot);
+  const monthlyTaxes = getMonthlyTaxesAndFees(snapshot);
+  const dueTodayTaxes = getDueTodayTaxes(snapshot);
+  const promo = getPromoAllocation(snapshot);
+
+  return {
+    planCost,
+    deviceMonthly,
+    downPayment,
+    protectionIncluded: protectionRule.included,
+    protectionMonthly,
+    appleCareDueToday,
+    monthlyTaxes,
+    dueTodayTaxes,
+    dueTodayTotal: downPayment + appleCareDueToday + dueTodayTaxes,
+    monthlyTotal: planCost + deviceMonthly + protectionMonthly + monthlyTaxes,
+    promoTitle: promo.title,
+    promoTotalCredit: promo.totalCredit,
+    promoMonthlyCredit: promo.monthlyCredit
+  };
+}
+
 function getPlanChargeTotal(snapshot){
   return getPlanMonthlyCharge(snapshot?.plan) * Math.max(0, Number(snapshot?.quantity || 0));
 }
@@ -4371,6 +5753,44 @@ function getEstimatedTaxes(snapshot){
 function getDueToday(snapshot){
   return getDownPayment(snapshot) + getAppleCareDueToday(snapshot) + getDueTodayTaxes(snapshot);
 }
+function getWatchConnectivityState(snapshot=state){
+  const qty = Math.max(0, Number(snapshot?.quantity || 0));
+  const paired = Math.max(0, Number(snapshot?.pairedCount || 0));
+  const standalone = Math.max(0, Number(snapshot?.standaloneCount || 0));
+  const total = paired + standalone;
+  const balanced = qty > 0 && total === qty;
+  const label = paired > 0 && standalone > 0 ? "Mixed" : paired > 0 ? "Paired with host line" : "Standalone";
+  return { qty, paired, standalone, total, balanced, label };
+}
+
+function getWatchStepLabels(snapshot=state){
+  if(snapshot?.category !== "watches") return null;
+  return snapshot?.orderType === "byod"
+    ? { qty:1, attr:2, connectivity:3, plan:4, protection:5 }
+    : { attr:1, qty:2, payment:3, connectivity:4, plan:5, protection:6, trade:7 };
+}
+
+function getConfiguratorPanelState(snapshot=state){
+  const qty = Math.max(0, Number(snapshot?.quantity || 0));
+  const byod = snapshot?.orderType === "byod";
+  const phone = snapshot?.category === "phones";
+  const tablet = snapshot?.category === "tablets";
+  const watch = snapshot?.category === "watches";
+  const planLockedFromEntry = phone && !!entryPlanPreference && ["Standard","Pro"].includes(entryPlanPreference) && !byod;
+
+  return {
+    attrVisible: !byod,
+    paymentVisible: !byod,
+    connectivityVisible: watch,
+    planVisible: !(planLockedFromEntry && phone),
+    portVisible: phone,
+    tradeVisible: !byod,
+    appleCareVisible: isApplePhoneSnapshot(snapshot) && !byod,
+    protectionIncluded: (tablet || watch) ? hasProPhoneOnAccount() : snapshot?.plan === "Pro",
+    qtyValid: qty > 0 && qty < 11 && !(tablet && qty > 6)
+  };
+}
+
 function isConfiguratorReady(snapshot=state){
   normalizeSnapshot(snapshot);
   const device = DEVICES[snapshot.deviceId];
@@ -4383,72 +5803,53 @@ function isConfiguratorReady(snapshot=state){
   const appleCareCount = Math.max(0, Number(snapshot.appleCareCount || 0));
   const portCount = Math.max(0, Number(snapshot.portCount || 0));
   const tradeCount = Math.max(0, Number(snapshot.tradeCount || 0));
+  const pairedCount = Math.max(0, Number(snapshot.pairedCount || 0));
+  const standaloneCount = Math.max(0, Number(snapshot.standaloneCount || 0));
+  const watchState = getWatchConnectivityState(snapshot);
 
-  const isVisible = (id)=>{
-    const el = $(id);
-    return !!(el && !el.classList.contains("hidden"));
-  };
+  const panelState = getConfiguratorPanelState(snapshot);
 
-  // Quantity is always required
-  if(qty <= 0) return false;
-  if(qty >= 11) return false;
-  if(snapshot.category === "tablets" && qty > 6) return false;
+  if(!panelState.qtyValid) return false;
 
-  // Device attributes only matter if that panel is visible
-  if(isVisible("attrPanel")){
+  if(panelState.attrVisible){
     if(!snapshot.color || !snapshot.storage || !snapshot.sim) return false;
   }
 
-  // Payment only matters if payment panel is visible
-  if(isVisible("paymentPanel")){
+  if(panelState.paymentVisible){
     if(monthly + retail !== qty) return false;
     if(monthly < 0 || retail < 0) return false;
   }
 
-  // Connectivity only matters if visible
-  if(isVisible("connectivityPanel")){
-    if(!snapshot.connectivity) return false;
+  if(panelState.connectivityVisible){
+    if(!watchState.balanced) return false;
   }
 
-  // Plan only matters if plan panel is visible, otherwise allow inherited/forced plan logic
-  if(isVisible("planPanel")){
+  if(panelState.planVisible){
     if(snapshot.category === "phones" && !["Standard","Pro"].includes(snapshot.plan)) return false;
     if(snapshot.category === "tablets" && snapshot.plan !== "Tablet Plan") return false;
     if(snapshot.category === "watches" && snapshot.plan !== "Watch Plan ($10)") return false;
-  } else {
-    if(snapshot.category === "phones" && !snapshot.plan) return false;
+  } else if(snapshot.category === "phones" && !snapshot.plan){
+    return false;
   }
 
-  // Protection only matters if the actual decision block is visible
-  if(isVisible("protectionBlock")){
+  if(!panelState.protectionIncluded){
     if(!["yes","no"].includes(snapshot.protectionDecision)) return false;
-    if(snapshot.protectionDecision === "yes"){
-      if(protectionCount <= 0 || protectionCount > qty) return false;
-    }
+    if(snapshot.protectionDecision === "yes" && (protectionCount <= 0 || protectionCount > qty)) return false;
   }
 
-  // AppleCare only matters if that panel is visible
-  if(isVisible("appleCarePanel")){
+  if(panelState.appleCareVisible){
     if(!["yes","no"].includes(snapshot.appleCareDecision)) return false;
-    if(snapshot.appleCareDecision === "yes"){
-      if(appleCareCount <= 0 || appleCareCount > qty) return false;
-    }
+    if(snapshot.appleCareDecision === "yes" && (appleCareCount <= 0 || appleCareCount > qty)) return false;
   }
 
-  // Porting only matters if that panel is visible
-  if(isVisible("portPanel")){
+  if(panelState.portVisible){
     if(!["yes","no"].includes(snapshot.portDecision)) return false;
-    if(snapshot.portDecision === "yes"){
-      if(portCount <= 0 || portCount > qty) return false;
-    }
+    if(snapshot.portDecision === "yes" && (portCount <= 0 || portCount > qty)) return false;
   }
 
-  // Trade-in only matters if that panel is visible
-  if(isVisible("tradePanel")){
+  if(panelState.tradeVisible){
     if(!["yes","no"].includes(snapshot.tradeDecision)) return false;
-    if(snapshot.tradeDecision === "yes"){
-      if(tradeCount <= 0 || tradeCount > qty) return false;
-    }
+    if(snapshot.tradeDecision === "yes" && (tradeCount <= 0 || tradeCount > qty)) return false;
   }
 
   return true;
@@ -4460,6 +5861,127 @@ function isLineByod(line){
     /^(byod|byot|byow)$/i.test(line.deviceId || "")
   );
 }
+function getQuantityLimitForState(snapshot = state){
+  return snapshot?.category === "tablets" ? 6 : 10;
+}
+function getQuantityInputMode(snapshot = state){
+  if(snapshot?.category === "tablets") return "select";
+  return snapshot?.quantityInputMode === "custom" ? "custom" : "select";
+}
+function getQuantitySelectMode(snapshot = state){
+  const qty = Number(snapshot?.quantity || 0);
+  const limit = getQuantityLimitForState(snapshot);
+  if(getQuantityInputMode(snapshot) === "custom") return "custom";
+  if(qty <= 0) return "";
+  if(snapshot?.category === "tablets") return String(Math.min(qty, limit));
+  return qty >= limit ? "custom" : String(qty);
+}
+function buildQuantityOptions(snapshot = state){
+  const limit = getQuantityLimitForState(snapshot);
+  const options = ['<option value="">Select quantity</option>'];
+  const dropdownMax = snapshot?.category === "tablets" ? limit : Math.max(1, limit - 1);
+  for(let i=1;i<=dropdownMax;i++) options.push(`<option value="${i}">${i}</option>`);
+  if(snapshot?.category !== "tablets") options.push('<option value="custom">10+</option>');
+  return options.join("");
+}
+function commitCustomQuantity(rawValue){
+  const digits = String(rawValue || "").replace(/\D/g, "").slice(0, 2);
+  state.quantityInputMode = state.category === "tablets" ? "select" : "custom";
+  state.quantity = digits ? Number(digits) : 0;
+  normalizeState();
+  renderConfigurator();
+  if(state.category !== "tablets" && $("qtyCustomInput")){
+    setTimeout(()=>{
+      if($("qtyCustomInput")){
+        $("qtyCustomInput").focus();
+        $("qtyCustomInput").select();
+      }
+    }, 0);
+  }
+}
+function renderQuantityPicker(){
+  const select = $("qtySelect");
+  if(!select) return;
+  const selectShell = $("qtySelectShell");
+  const customWrap = $("qtyCustomWrap");
+  const customInput = $("qtyCustomInput");
+  const helper = $("qtyHelperText");
+  const limitBadge = $("qtyLimitBadge");
+  const limit = getQuantityLimitForState(state);
+  const isCustom = getQuantityInputMode(state) === "custom";
+  select.innerHTML = buildQuantityOptions(state);
+  select.value = getQuantitySelectMode(state);
+  if(limitBadge) limitBadge.textContent = state.category === "tablets" ? "Up to 6" : "10+ supported";
+  if(helper){
+    helper.textContent = state.category === "tablets"
+      ? "Tablets in this flow are currently limited to 6 per configuration."
+      : "";
+  }
+  if(selectShell) selectShell.classList.toggle("custom-active", isCustom);
+  if(customWrap) customWrap.classList.toggle("hidden", !isCustom);
+  if(customInput){
+    customInput.value = isCustom && Number(state.quantity || 0) > 0 ? String(state.quantity) : "";
+    customInput.oninput = (e)=>{
+      const digits = e.target.value.replace(/\D/g, "").slice(0, 2);
+      e.target.value = digits;
+      state.quantity = digits ? Number(digits) : 0;
+      normalizeState();
+    };
+    customInput.onblur = ()=> commitCustomQuantity(customInput.value);
+    customInput.onkeydown = (e)=>{
+      if(e.key === "Enter"){
+        e.preventDefault();
+        commitCustomQuantity(customInput.value);
+      }
+    };
+  }
+  select.onchange = ()=>{
+    if(select.value === ""){
+      state.quantity = 0;
+      normalizeState();
+      renderConfigurator();
+      return;
+    }
+    if(select.value === "custom"){
+      state.quantityInputMode = "custom";
+      state.quantity = Number(state.quantity || 0) >= limit ? Number(state.quantity || 0) : limit;
+      normalizeState();
+      renderConfigurator();
+      setTimeout(()=>{
+        if($("qtyCustomInput")){
+          $("qtyCustomInput").focus();
+          $("qtyCustomInput").select();
+        }
+      }, 0);
+      return;
+    }
+    state.quantityInputMode = "select";
+    state.quantity = Number(select.value || 0);
+    normalizeState();
+    renderConfigurator();
+  };
+}
+function syncCounterButtons(minusId, plusId, value, max){
+  const minus = $(minusId);
+  const plus = $(plusId);
+  if(!minus || !plus) return;
+  const current = Math.max(0, Number(value || 0));
+  const upper = Math.max(0, Number(max || 0));
+  minus.disabled = current <= 0;
+  plus.disabled = current >= upper;
+  minus.setAttribute("aria-disabled", minus.disabled ? "true" : "false");
+  plus.setAttribute("aria-disabled", plus.disabled ? "true" : "false");
+}
+function syncConfiguratorCounterButtons(){
+  syncCounterButtons("monthlyMinus","monthlyPlus", state.monthly, Math.max(0, state.quantity - state.retail));
+  syncCounterButtons("retailMinus","retailPlus", state.retail, Math.max(0, state.quantity - state.monthly));
+  syncCounterButtons("portMinus","portPlus", state.portCount, state.quantity);
+  syncCounterButtons("tradeMinus","tradePlus", state.tradeCount, state.quantity);
+  syncCounterButtons("protectionMinus","protectionPlus", state.protectionCount, state.quantity);
+  syncCounterButtons("appleCareMinus","appleCarePlus", state.appleCareCount, state.quantity);
+  syncCounterButtons("pairedMinus","pairedPlus", state.pairedCount, Math.max(0, state.quantity - Number(state.standaloneCount || 0)));
+  syncCounterButtons("standaloneMinus","standalonePlus", state.standaloneCount, Math.max(0, state.quantity - Number(state.pairedCount || 0)));
+}
 function resetApplication(){
   state = initialState();
   cart = [];
@@ -4468,13 +5990,71 @@ function resetApplication(){
   activeLineEditIndex = null;
   activePlanModalIndex = null;
   pendingPlanSelection = null;
+  reviewPlanChangeIndex = null;
+  reviewPlanSelection = null;
   byoInlineCategory = "";
+  entryPlanPreference = "";
+  dataOptionsCategory = "phones";
+  dataOptionsPlan = "Standard";
+  resetTransientUi();
   ensureStandaloneConfiguratorPlacement();
   renderCatalog();
   setVisibleView("entryView");
   bindEntryActions();
 }
 
+
+function resetTransientUi(){
+  const reviewOverlay = document.getElementById("reviewPlanModalOverlay");
+  if(reviewOverlay) reviewOverlay.remove();
+  const planOverlay = document.getElementById("planModalOverlay");
+  if(planOverlay) planOverlay.remove();
+  if($("saveQuoteOverlay")) $("saveQuoteOverlay").classList.add("hidden");
+  if($("appointmentPanel")){
+    $("appointmentPanel").classList.add("hidden");
+    $("appointmentPanel").style.display = "none";
+  }
+  ["appointmentDate","appointmentTime","appointmentNotes"].forEach(id=>{
+    if($(id)) $(id).value = "";
+  });
+  hideConciergeModal();
+}
+
+function resetWorkingStateForNewLine(){
+  state = initialState();
+  activeLineEditIndex = null;
+  activePlanModalIndex = null;
+  pendingPlanSelection = null;
+  reviewPlanChangeIndex = null;
+  reviewPlanSelection = null;
+  byoInlineCategory = "";
+  entryPlanPreference = "";
+  ensureStandaloneConfiguratorPlacement();
+  resetTransientUi();
+}
+
+function goToEntryStart(push=true){
+  resetWorkingStateForNewLine();
+  renderCatalog();
+  bindEntryActions();
+  if(push){
+    screenHistory = ["entryView"];
+    try { history.replaceState({viewId:"entryView"}, "", "#entryView"); } catch(e) {}
+  }
+  showOnly("entryView", false);
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function openReviewItemInConfigurator(idx, push=true){
+  const item = cart[idx];
+  if(!item) return;
+  state = JSON.parse(JSON.stringify(item));
+  normalizeState();
+  ensureStandaloneConfiguratorPlacement();
+  showOnly("configuratorView", push);
+  renderConfigurator();
+  window.scrollTo({top:0, behavior:"smooth"});
+}
 
 function setVisibleView(viewId){
   ["entryView","byoChooserView","dataOptionsView","catalogView","configuratorView","lineEditView","reviewView","handoffDecisionView","finalCheckoutView","successView","asurionView","eligibilityView","configSummaryView"].forEach(id=>{
@@ -4589,6 +6169,8 @@ function initByoStateForCategory(category){
   state.storage = d?.storages?.[0] || "";
   state.sim = d?.sims?.[0] || "";
   state.connectivity = d?.connectivity?.[0] || "";
+  state.pairedCount = 0;
+  state.standaloneCount = 0;
   if(category === "phones"){
     state.plan = entryPlanPreference && ["Standard","Pro"].includes(entryPlanPreference) ? entryPlanPreference : "Standard";
   } else if(category === "tablets"){
@@ -4665,10 +6247,20 @@ function bindEntryActions(){
     fresh.addEventListener("click", handler);
   };
 
-  bindClick("entryShopPhonesBtn", ()=> openCatalogForCategory("phones"));
-  bindClick("entryShopTabletsBtn", ()=> openCatalogForCategory("tablets"));
-  bindClick("entryShopWatchesBtn", ()=> openCatalogForCategory("watches"));
+  bindClick("entryShopPhonesBtn", ()=>{
+    entryPlanPreference = "";
+    openCatalogForCategory("phones");
+  });
+  bindClick("entryShopTabletsBtn", ()=>{
+    entryPlanPreference = "";
+    openCatalogForCategory("tablets");
+  });
+  bindClick("entryShopWatchesBtn", ()=>{
+    entryPlanPreference = "";
+    openCatalogForCategory("watches");
+  });
   bindClick("entryBringYourOwnBtn", ()=>{
+    entryPlanPreference = "";
     byoInlineCategory = "";
     showOnly("byoChooserView");
     renderByoInlineConfigurator();
@@ -4720,41 +6312,118 @@ function renderDataOptionsScreen(){
   const isPhones = dataOptionsCategory === "phones";
   const isTablets = dataOptionsCategory === "tablets";
   const isWatches = dataOptionsCategory === "watches";
+  const standardCard = $("dataPlanStandardCard");
+  const proCard = $("dataPlanProCard");
+  const grid = document.querySelector(".data-plan-grid");
 
   if($("dataTabPhones")) $("dataTabPhones").classList.toggle("active", isPhones);
   if($("dataTabTablets")) $("dataTabTablets").classList.toggle("active", isTablets);
   if($("dataTabWatches")) $("dataTabWatches").classList.toggle("active", isWatches);
 
-  if($("dataPlanStandardCard")) $("dataPlanStandardCard").classList.toggle("active", dataOptionsPlan === "Standard");
-  if($("dataPlanProCard")) $("dataPlanProCard").classList.toggle("active", dataOptionsPlan === "Pro");
+  const setCardContent = (card, config)=>{
+    if(!card || !config) return;
+    const badge = card.querySelector(".data-plan-badge");
+    const icon = card.querySelector(".data-plan-infinity");
+    const name = card.querySelector(".data-plan-name");
+    const price = card.querySelector(".data-plan-price");
+    const sub = card.querySelector(".data-plan-sub");
+    const featureLabels = [...card.querySelectorAll(".data-plan-feature span:last-child")];
+    card.classList.toggle("active", !!config.active);
+    card.classList.toggle("single-only", !!config.singleOnly);
+    card.classList.toggle("hidden", !!config.hidden);
+    if(badge){
+      badge.textContent = config.badge || "";
+      badge.style.display = config.badge ? "inline-flex" : "none";
+    }
+    if(icon) icon.textContent = config.icon || "∞";
+    if(name) name.textContent = config.name || "";
+    if(price) price.innerHTML = `$${Number(config.price || 0).toFixed(0)}<small>/mo</small>`;
+    if(sub) sub.textContent = config.sub || "";
+    featureLabels.forEach((el, idx)=>{
+      el.textContent = (config.features && config.features[idx]) ? config.features[idx] : "";
+    });
+  };
 
-  const planNameA = isPhones ? "Standard" : isTablets ? "Tablet Standard" : "Watch Standard";
-  const planNameB = isPhones ? "Pro" : isTablets ? "Tablet Pro" : "Watch Pro";
-
-  const priceA = isPhones ? 5 : isTablets ? 5 : 5;
-  const priceB = isPhones ? 10 : isTablets ? 10 : 10;
-
-  const activePrice = dataOptionsPlan === "Pro" ? priceB : priceA;
-
-  if($("dataPlanStandardCard")) {
-    const name = $("dataPlanStandardCard").querySelector(".data-plan-name");
-    const price = $("dataPlanStandardCard").querySelector(".data-plan-price");
-    if(name) name.textContent = "Standard";
-    if(price) price.innerHTML = `$${priceA}<small>/mo</small>`;
+  if(isPhones){
+    if(dataOptionsPlan !== "Standard" && dataOptionsPlan !== "Pro") dataOptionsPlan = "Standard";
+    if(grid) grid.classList.remove("single-plan");
+    setCardContent(standardCard, {
+      active:dataOptionsPlan === "Standard",
+      hidden:false,
+      singleOnly:false,
+      badge:"Best deal!",
+      icon:"∞",
+      name:"Standard",
+      price:5,
+      sub:"Add another line using the same flow afterward.",
+      features:[
+        "Core data option for the selected device type",
+        "Recommended for lower-cost line additions"
+      ]
+    });
+    setCardContent(proCard, {
+      active:dataOptionsPlan === "Pro",
+      hidden:false,
+      singleOnly:false,
+      badge:"",
+      icon:"∞",
+      name:"Pro",
+      price:10,
+      sub:"Add another line using the same flow afterward.",
+      features:[
+        "Higher-tier data option for the selected device type",
+        "Best when the customer wants the premium line setup"
+      ]
+    });
+    if($("dataFooterMainPrice")) $("dataFooterMainPrice").textContent = `$${(dataOptionsPlan === "Pro" ? 10 : 5).toFixed(2)}`;
+    if($("dataFooterChip")) $("dataFooterChip").textContent = `Add another line for +$${dataOptionsPlan === "Pro" ? 10 : 5}/mo`;
+    if($("dataFooterCopy")) $("dataFooterCopy").textContent = `${dataOptionsPlan} is $${dataOptionsPlan === "Pro" ? 10 : 5}/mo for the selected phone line in this conceptual flow. Taxes, fees, and equipment not included.`;
+    return;
   }
-  if($("dataPlanProCard")) {
-    const name = $("dataPlanProCard").querySelector(".data-plan-name");
-    const price = $("dataPlanProCard").querySelector(".data-plan-price");
-    if(name) name.textContent = "Pro";
-    if(price) price.innerHTML = `$${priceB}<small>/mo</small>`;
+
+  dataOptionsPlan = "Standard";
+  if(grid) grid.classList.add("single-plan");
+
+  if(isTablets){
+    setCardContent(standardCard, {
+      active:true,
+      hidden:false,
+      singleOnly:true,
+      badge:"Available plan",
+      icon:"▭",
+      name:"Tablet Plan",
+      price:0,
+      sub:"Tablets use a single applicable plan in this flow, so there is no separate Standard or Pro choice here.",
+      features:[
+        "Single applicable tablet line setup",
+        "Plan is applied automatically when you continue to the tablet catalog"
+      ]
+    });
+    setCardContent(proCard, {hidden:true});
+    if($("dataFooterMainPrice")) $("dataFooterMainPrice").textContent = `$0.00`;
+    if($("dataFooterChip")) $("dataFooterChip").textContent = `Tablet plan applied automatically`;
+    if($("dataFooterCopy")) $("dataFooterCopy").textContent = `Tablet lines use the single tablet plan in this flow. Taxes, fees, and equipment are not included in the estimate.`;
+    return;
   }
 
-  if($("dataFooterMainPrice")) $("dataFooterMainPrice").textContent = `$${activePrice.toFixed(2)}`;
-  if($("dataFooterChip")) $("dataFooterChip").textContent = `Add another line for +$${activePrice}/mo`;
-  if($("dataFooterCopy")) {
-    const categoryLabel = isPhones ? "phone" : isTablets ? "tablet" : "smartwatch";
-    $("dataFooterCopy").textContent = `${dataOptionsPlan} is $${activePrice}/mo for the selected ${categoryLabel} line in this conceptual flow. Taxes, fees, and equipment not included.`;
-  }
+  setCardContent(standardCard, {
+    active:true,
+    hidden:false,
+    singleOnly:true,
+    badge:"Available plan",
+    icon:"⌚",
+    name:"Watch Plan",
+    price:10,
+    sub:"Smartwatch lines use one applicable watch plan here, with paired or standalone setup handled later in the configurator.",
+    features:[
+      "Single applicable smartwatch line plan",
+      "Supports paired or standalone watch setup in the next step"
+    ]
+  });
+  setCardContent(proCard, {hidden:true});
+  if($("dataFooterMainPrice")) $("dataFooterMainPrice").textContent = `$10.00`;
+  if($("dataFooterChip")) $("dataFooterChip").textContent = `Watch plan applied automatically`;
+  if($("dataFooterCopy")) $("dataFooterCopy").textContent = `Watch lines use the single watch plan in this flow. Taxes, fees, and equipment are not included in the estimate.`;
 }
 
 function renderTypeTabs(){
@@ -4840,6 +6509,8 @@ function renderCatalog(){
       state.storage = d.storages[0] || "";
       state.sim = d.sims[0] || "";
       state.connectivity = d.connectivity ? d.connectivity[0] : "";
+      state.pairedCount = 0;
+      state.standaloneCount = 0;
       if(state.category === "phones" && entryPlanPreference && ["Standard","Pro"].includes(entryPlanPreference)){
         state.plan = entryPlanPreference;
       } else if(state.category === "tablets" && entryPlanPreference === "Tablet Plan"){
@@ -4875,7 +6546,13 @@ function updatePlanUi(){
   $("planPro").classList.toggle("active", state.plan==="Pro" || state.plan==="Tablet Plan" || state.plan==="Watch Plan ($10)");
 }
 function updateToggle(id, value){
-  [...$(id).querySelectorAll("button")].forEach(btn=>btn.classList.toggle("active", btn.dataset.value===value));
+  const host = $(id);
+  if(!host) return;
+  [...host.querySelectorAll("button")].forEach(btn=>{
+    const active = btn.dataset.value === value;
+    btn.classList.toggle("active", active);
+    btn.setAttribute("aria-pressed", active ? "true" : "false");
+  });
 }
 function setStep(id, value){ const el = $(id); if(el) el.textContent = String(value); }
 
@@ -5046,9 +6723,6 @@ function renderConfigurator(){
   $("selectedThumb").innerHTML = d.thumb || "";
   $("selectedName").textContent = d.name || "No device selected";
   $("selectedMeta").textContent = `${d.brand} • ${d.sku}`;
-  if($("summaryThumb")) $("summaryThumb").innerHTML = d.thumb || "";
-  if($("summaryName")) $("summaryName").textContent = d.name || "No device selected";
-  if($("summaryMeta")) $("summaryMeta").textContent = `${d.brand} • ${d.sku}`;
   if($("configDeviceName")) $("configDeviceName").textContent = d.name || "Selected device";
   if($("configBreadcrumb")) $("configBreadcrumb").textContent = `${isPhone() ? "Phones" : isTablet() ? "Tablets" : "Watches"} / ${d.brand || "Selected"} / ${d.name || "Selected device"}`;
   if($("configPriceHead")){
@@ -5057,13 +6731,14 @@ function renderConfigurator(){
     const configHeaderPrice = (previewMonthly || down)
       ? `${money(previewMonthly)}/mo${down ? ` + ${money(down)} down` : ""}`
       : money(0);
+    $("configPriceHead").textContent = configHeaderPrice;
     if($("configBottomEstimatePrice")) $("configBottomEstimatePrice").textContent = configHeaderPrice;
   }
 
   $("qtyTitle").textContent = isTablet() ? (isByod() ? "How many tablets are you bringing?" : "Tablet quantity") : isWatch() ? (isByod() ? "How many smartwatches are you bringing?" : "Watch quantity") : isByod() ? "How many devices are you bringing?" : "Purchase quantity";
   $("qtySub").textContent = isByod() ? (isTablet() ? "Start by capturing how many customer-owned tablets will be activated." : isWatch() ? "Start by capturing how many customer-owned smartwatches will be activated." : "Capture the number of customer-owned devices that will be activated.") : (isTablet() ? "Choose the quantity after selecting the tablet attributes for this configuration." : isWatch() ? "Choose the quantity after selecting the watch attributes for this configuration." : "Choose the quantity after selecting the device attributes for this configuration.");
   $("qtyLabel").textContent = isTablet() ? (isByod() ? "BYOT quantity" : "Tablets being purchased") : isWatch() ? (isByod() ? "BYOW quantity" : "Watches being purchased") : (isByod() ? "BYOD quantity" : "Devices being purchased");
-  $("qtyValue").textContent = state.quantity;
+  renderQuantityPicker();
   $("baseTotal").textContent = money(getDeviceTotal(state));
 
   const isPhoneByod = isPhone() && isByod();
@@ -5071,14 +6746,15 @@ function renderConfigurator(){
   const isWatchByod = isWatch() && isByod();
   const anyByod = isByod();
   const planLockedFromEntry = isLockedPhonePlanFlow();
-  $("attrPanel").classList.toggle("hidden", isPhoneByod || isTabletByod || isWatchByod);
-  $("paymentPanel").classList.toggle("hidden", anyByod);
-  $("connectivityPanel").classList.toggle("hidden", !isWatch() || isWatchByod);
-  $("portPanel").classList.toggle("hidden", !isPhone());
-  $("tradePanel").classList.toggle("hidden", anyByod);
-  if($("planPanel")) $("planPanel").classList.toggle("hidden", planLockedFromEntry && isPhone() && !anyByod);
+  const panelState = getConfiguratorPanelState(state);
+  $("attrPanel").classList.toggle("hidden", !panelState.attrVisible);
+  $("paymentPanel").classList.toggle("hidden", !panelState.paymentVisible);
+  $("connectivityPanel").classList.toggle("hidden", !panelState.connectivityVisible);
+  $("portPanel").classList.toggle("hidden", !panelState.portVisible);
+  $("tradePanel").classList.toggle("hidden", !panelState.tradeVisible);
+  if($("planPanel")) $("planPanel").classList.toggle("hidden", !panelState.planVisible);
   if($("baseTotalTile")) $("baseTotalTile").classList.toggle("hidden", anyByod);
-  if($("appleCarePanel")) $("appleCarePanel").classList.toggle("hidden", !isApplePhoneSnapshot(state) || anyByod);
+  if($("appleCarePanel")) $("appleCarePanel").classList.toggle("hidden", !panelState.appleCareVisible);
 
   const configMain = $("configMain");
   const attrPanel = $("attrPanel");
@@ -5141,17 +6817,21 @@ function renderConfigurator(){
       setStep("tradeStep",6);
     }
   } else if(isWatch()){
+    const watchSteps = getWatchStepLabels(state) || {};
     if(isByod()){
-      setStep("qtyStep",1);
-      setStep("protectionStep",2);
+      setStep("qtyStep", watchSteps.qty || 1);
+      setStep("attrStep", watchSteps.attr || 2);
+      setStep("connectivityStep", watchSteps.connectivity || 3);
+      setStep("planStep", watchSteps.plan || 4);
+      setStep("protectionStep", watchSteps.protection || 5);
     } else {
-      setStep("attrStep",1);
-      setStep("qtyStep",2);
-      setStep("paymentStep",3);
-      setStep("connectivityStep",4);
-      setStep("planStep",5);
-      setStep("protectionStep",6);
-      setStep("tradeStep",7);
+      setStep("attrStep", watchSteps.attr || 1);
+      setStep("qtyStep", watchSteps.qty || 2);
+      setStep("paymentStep", watchSteps.payment || 3);
+      setStep("connectivityStep", watchSteps.connectivity || 4);
+      setStep("planStep", watchSteps.plan || 5);
+      setStep("protectionStep", watchSteps.protection || 6);
+      setStep("tradeStep", watchSteps.trade || 7);
     }
   }
 
@@ -5164,7 +6844,6 @@ function renderConfigurator(){
   $("colorSelect").innerHTML = (d.colors || []).map(v=>`<option value="${v}" ${state.color===v?"selected":""}>${v}</option>`).join("");
   $("storageSelect").innerHTML = (d.storages || []).map(v=>`<option value="${v}" ${state.storage===v?"selected":""}>${v}</option>`).join("");
   $("simSelect").innerHTML = (d.sims || []).map(v=>`<option value="${v}" ${state.sim===v?"selected":""}>${v}</option>`).join("");
-  $("connectivitySelect").innerHTML = ((d.connectivity || []).map(v=>`<option value="${v}" ${state.connectivity===v?"selected":""}>${v}</option>`).join(""));
 
   $("monthlyValue").textContent = state.monthly;
   $("retailValue").textContent = state.retail;
@@ -5213,18 +6892,21 @@ function renderConfigurator(){
   const qtyBanner = $("qtyBanner");
   if(state.quantity >= 11){
     qtyBanner.classList.remove("hidden");
-    qtyBanner.textContent = "Only a limited quantity is available for this configuration right now. Please reduce the quantity below 11 or choose a different device setup to continue.";
+    qtyBanner.textContent = "Only a limited quantity is available for this configuration right now. Reduce the quantity below 11 or choose a different setup to continue.";
   } else if(isTablet() && state.quantity > 6){
     qtyBanner.classList.remove("hidden");
-    qtyBanner.textContent = "Requested quantity is not available for this configuration. Reduce the quantity or choose a different device configuration.";
+    qtyBanner.textContent = "Requested quantity is not available for this configuration. Reduce the quantity or choose a different setup.";
+  } else if(state.quantity === 0){
+    qtyBanner.classList.add("hidden");
+    qtyBanner.textContent = "";
   } else {
     qtyBanner.classList.add("hidden");
     qtyBanner.textContent = "";
   }
 
-  const protectionIncluded = (isTablet() || isWatch()) ? hasProPhoneOnAccount() : state.plan==="Pro";
+  const protectionIncluded = panelState.protectionIncluded;
   $("proIncludedBanner").classList.toggle("hidden", !protectionIncluded);
-  $("proIncludedBanner").textContent = (isTablet() || isWatch()) ? "Device protection is included because a phone on the account is on the Pro plan." : "XMC Plus is included automatically with Pro plan.";
+  $("proIncludedBanner").textContent = (isTablet() || isWatch()) ? "Device protection is included because a phone in the cart/code is on the Pro plan." : "XMC Plus is included automatically with Pro plan.";
   $("protectionBlock").classList.toggle("hidden", protectionIncluded);
   updateToggle("protectionToggle", state.protectionDecision);
   $("protectionCountWrap").classList.toggle("hidden", state.protectionDecision!=="yes");
@@ -5250,6 +6932,16 @@ function renderConfigurator(){
 
   $("tradeSkipCard").classList.toggle("hidden", isByod() || !(state.tradeDecision==="yes" && state.tradeCount>0));
   $("tradeSkipBanner").classList.add("hidden");
+  if(isWatch()){
+    const watchState = getWatchConnectivityState(state);
+    if($("pairedValue")) $("pairedValue").textContent = watchState.paired;
+    if($("standaloneValue")) $("standaloneValue").textContent = watchState.standalone;
+    if($("connectivityBadge")) $("connectivityBadge").textContent = watchState.balanced ? "Balanced" : "Needs adjustment";
+    if($("connectivityStatus")){
+      $("connectivityStatus").className = watchState.balanced ? "status-banner" : "warn-banner";
+      $("connectivityStatus").textContent = `Paired (${watchState.paired}) + Standalone (${watchState.standalone}) = ${watchState.total} of ${watchState.qty} watches.`;
+    }
+  }
   const promoInfo = appliedPromoForSnapshot(state);
   if($("estimatePromoBox")){
     const breakdown = promoInfo && promoInfo.breakdown ? promoInfo.breakdown : null;
@@ -5264,6 +6956,8 @@ function renderConfigurator(){
       ` : ``;
     }
   }
+
+  syncConfiguratorCounterButtons();
 
   const ready = isConfiguratorReady(state);
   const continueBtn = $("configContinueBtn");
@@ -5280,57 +6974,32 @@ function renderConfigurator(){
 
 function appliedPromoForSnapshot(snapshot){
   if(!snapshot || snapshot.category !== "phones") return null;
-
-  const qty = Math.max(0, Number(snapshot.quantity || 0));
-  const monthly = Math.max(0, Number(snapshot.monthly || 0));
-  const portCount = Math.max(0, Number(snapshot.portCount || 0));
-  const tradeCount = Math.max(0, Number(snapshot.tradeCount || 0));
-
-  const monthlyEligibleDevices = Math.min(qty, monthly);
-  const tradeInDevices = Math.min(monthlyEligibleDevices, tradeCount);
-  const remainingAfterTrade = Math.max(0, monthlyEligibleDevices - tradeInDevices);
-  const portingDevices = Math.min(remainingAfterTrade, portCount);
-  const remainingAfterPort = Math.max(0, monthlyEligibleDevices - tradeInDevices - portingDevices);
-  const dppDevices = remainingAfterPort;
-
-  const tradeInCredit = tradeInDevices * 830;
-  const portingCredit = portingDevices * 500;
-  const dppCredit = dppDevices * 200;
-  const totalCredit = tradeInCredit + portingCredit + dppCredit;
-  const monthlyCredit = totalCredit / 36;
-
-  if(totalCredit <= 0) return null;
-
-  let title = "Applied promo";
-  if(tradeInCredit > 0) title = "Trade-in promo";
-  else if(portingCredit > 0) title = "Porting promo";
-  else if(dppCredit > 0) title = "Device payment promo";
-
+  const promo = getPromoAllocation(snapshot);
+  if(promo.totalCredit <= 0) return null;
   return {
-    title,
-    totalCredit,
+    title: promo.title,
+    totalCredit: promo.totalCredit,
     breakdown: {
-      tradeInDevices,
-      portingDevices,
-      dppDevices,
-      tradeInCredit,
-      portingCredit,
-      dppCredit,
-      monthlyCredit
+      tradeInDevices: promo.tradeInDevices,
+      portingDevices: promo.portingDevices,
+      dppDevices: promo.dppDevices,
+      tradeInCredit: promo.tradeInCredit,
+      portingCredit: promo.portingCredit,
+      dppCredit: promo.dppCredit,
+      monthlyCredit: promo.monthlyCredit
     }
   };
 }
 
 function promoValueForSnapshot(item){
-  const promo = appliedPromoForSnapshot(item);
-  return promo ? promo.totalCredit : 0;
+  return getPromoAllocation(item).totalCredit;
 }
 
 function renderCartItems(){
   const wrap = $("cartItemsList");
   const banner = $("cartSummaryBanner");
   if(!cart.length){
-    banner.innerHTML = "<strong>Cart is empty.</strong> Add a phone, tablet, or watch from the catalog to start building the cart.";
+    banner.innerHTML = "<strong>Cart is empty.</strong> Add a phone, tablet, or watch from the catalog to start building the quote.";
     wrap.innerHTML = `<div class="cart-item"><div class="cart-name">No devices added yet</div><div class="cart-meta">Build a device group in the configurator, then add it to the cart.</div></div>`;
     return;
   }
@@ -5352,8 +7021,8 @@ function renderCartItems(){
     const monthlyBase = item.monthly ? ((d.basePrice || 0) * item.monthly)/36 : 0;
     const promoValue = promoValueForSnapshot(item);
     const tradeEstimate = tradeTotalFromSnapshot(item);
-    const detailValue = item.category==="watches" ? (item.connectivity || "—") : "N/A";
-    const protectionIncluded = (item.category==="tablets" || item.category==="watches") ? hasProPhoneOnAccount() : item.plan==="Pro";
+    const detailValue = item.category==="watches" ? `${item.pairedCount || 0} paired / ${item.standaloneCount || 0} standalone` : "N/A";
+    const protectionIncluded = getProtectionState(item).included;
 
     return `
       <div class="cart-item">
@@ -5399,10 +7068,6 @@ function renderCartItems(){
     };
   });
 
-  if($("orderTotal")) $("orderTotal").textContent = money(totals.total);
-  if($("orderMonthly")) $("orderMonthly").textContent = money(totals.monthly);
-  if($("orderTrade")) $("orderTrade").textContent = money(totals.trade);
-  if($("orderPromo")) $("orderPromo").textContent = money(totals.promo);
 }
 
 
@@ -5867,11 +7532,12 @@ function renderReviewPlanModal(){
   document.getElementById("applyReviewPlanChangeBtn").onclick = ()=>{
     const target = cart[reviewPlanChangeIndex];
     if(target){
-      const chosen = reviewPlanSelection || normalizePlan(target.plan || "Standard");
+      const previous = normalizePlan(target.plan || "Standard");
+      const chosen = reviewPlanSelection || previous;
       target.plan = chosen;
-      if(chosen === "Pro"){
-        target.protectionDecision = "yes";
-        target.protectionCount = target.quantity || 0;
+      if(previous === "Pro" && chosen !== "Pro" && target.protectionDecision == null){
+        target.protectionDecision = "no";
+        target.protectionCount = 0;
       }
       normalizeSnapshot(target);
     }
@@ -5882,25 +7548,25 @@ function renderReviewPlanModal(){
 
 
 function getMonthlyPlanOnly(snapshot){
-  return getPlanChargeTotal(snapshot);
+  return getLineCostBreakdown(snapshot).planCost;
 }
 function getMonthlyDeviceOnly(snapshot){
   return getDeviceMonthlyCharge(snapshot);
 }
 function getMonthlyProtectionOnly(snapshot){
-  return 0;
+  return getLineCostBreakdown(snapshot).protectionMonthly;
 }
 function getMonthlyTaxesFeesOnly(snapshot){
-  return getMonthlyTaxesAndFees ? getMonthlyTaxesAndFees(snapshot) : getEstimatedTaxes(snapshot);
+  return getLineCostBreakdown(snapshot).monthlyTaxes;
 }
 function getDueTodayDownOnly(snapshot){
-  return getDownPayment(snapshot);
+  return getLineCostBreakdown(snapshot).downPayment;
 }
 function getDueTodayTaxesOnly(snapshot){
-  return typeof getDueTodayTaxes === "function" ? getDueTodayTaxes(snapshot) : 0;
+  return getLineCostBreakdown(snapshot).dueTodayTaxes;
 }
 function getDueTodayAppleCareOnly(snapshot){
-  return typeof getAppleCareDueToday === "function" ? getAppleCareDueToday(snapshot) : 0;
+  return getLineCostBreakdown(snapshot).appleCareDueToday;
 }
 function getDueTodayPotentPromoCredit(snapshot){
   return 0;
@@ -5948,7 +7614,7 @@ function renderReview(options = {}){
         </div>
       </div>
     `;
-    wrap.innerHTML = `<div class="card"><div class="card-body">Add a phone, tablet, or watch from the catalog to start building the cart.</div></div>`;
+    wrap.innerHTML = `<div class="card"><div class="card-body">Add a phone, tablet, or watch from the catalog to start building the quote.</div></div>`;
     return;
   }
 
@@ -5969,7 +7635,7 @@ function renderReview(options = {}){
     <div class="review-safe-head">
       <div>
         <div class="review-safe-title">Quote review</div>
-        <div class="review-safe-sub">${totals.lines} line(s) configured across ${cart.length} device group(s). Review the details before moving forward.</div>
+        <div class="review-safe-sub">${cart.length} device group(s) • ${totals.lines} total lines. Review before moving forward.</div>
       </div>
     </div>
   `;
@@ -5980,40 +7646,64 @@ function renderReview(options = {}){
         ${cart.map((item, idx)=>{
           normalizeSnapshot(item);
           const d = deviceFor(item);
-          const title = d.name || "Selected device";
-          const meta = [
-            d.brand || null,
-            item.color || null,
-            item.storage || null,
-            item.sim || null,
-            item.plan || null,
-            item.orderType === "byod" ? "BYOD" : "Purchase"
-          ].filter(Boolean).join(" • ");
+          const title = item.orderType === "byod"
+            ? ((item.quantity || 0) > 1 ? "Customer-owned phones" : "Bring your phone")
+            : (d.name || "Selected device");
+          const meta = item.orderType === "byod"
+            ? [
+                item.plan || null,
+                item.quantity ? `Qty ${item.quantity}` : null
+              ].filter(Boolean).join(" • ")
+            : [
+                d.brand || null,
+                item.color || null,
+                item.storage || null,
+                item.sim || null,
+                item.plan || null,
+                item.quantity ? `Qty ${item.quantity}` : null,
+                "Purchase"
+              ].filter(Boolean).join(" • ");
           const displayMonthly = getDeviceMonthlyCharge(item);
-          const price = displayMonthly > 0 ? `${money(displayMonthly)}/mo` : money(totalDeviceCost(item));
-          const priceSub = displayMonthly > 0 ? "device monthly" : "paid today";
+          const byodMonthly = getMonthlyCharge(item);
+          const price = item.orderType === "byod"
+            ? `${money(byodMonthly)}/mo`
+            : (displayMonthly > 0 ? `${money(displayMonthly)}/mo` : money(totalDeviceCost(item)));
+          const priceSub = item.orderType === "byod"
+            ? "estimated monthly"
+            : (displayMonthly > 0 ? "device monthly" : "paid today");
 
           return `
             <div class="review-safe-card">
               <div class="review-safe-top">
                 <div class="review-safe-thumb">${thumbFor(item)}</div>
                 <div>
-                  <div class="review-safe-name">${title}</div>
-                  <div class="review-safe-meta">${meta}</div>
+                  <button class="review-safe-name review-safe-name-link" data-review-action="open-config" data-review-idx="${idx}">${title}</button>
+                  <div class="review-safe-meta ${item.orderType === "byod" ? "byod" : ""}">${meta}</div>
                   <div class="review-safe-links">
                     <button data-review-action="change-plan" data-review-idx="${idx}">Change plan</button>
                     <button data-review-action="edit-device" data-review-idx="${idx}">Edit Device</button>
                     <button data-review-action="remove" data-review-idx="${idx}">Remove</button>
                   </div>
                 </div>
-                <div class="review-safe-price">
-                  <div class="k">${money(downPayment(item))} down payment +</div>
+                <div class="review-safe-price ${item.orderType === "byod" ? "byod" : ""}">
+                  <div class="k">${item.orderType === "byod" ? "Service estimate" : `${money(downPayment(item))} down payment +`}</div>
                   <div class="v">${price}</div>
                   <div class="sub">${priceSub}</div>
                 </div>
               </div>
 
-              <div class="review-safe-money">
+              <div class="review-safe-money ${item.orderType === "byod" ? "byod" : ""}">
+                ${item.orderType === "byod"
+                  ? `
+                <div class="review-safe-money-cell">
+                  <div class="review-safe-money-k">Monthly service</div>
+                  <div class="review-safe-money-v">${money(getPlanChargeTotal(item))}</div>
+                </div>
+                <div class="review-safe-money-cell">
+                  <div class="review-safe-money-k">Taxes & fees</div>
+                  <div class="review-safe-money-v">${money(taxesFees(item))}</div>
+                </div>`
+                  : `
                 <div class="review-safe-money-cell">
                   <div class="review-safe-money-k">Down payment</div>
                   <div class="review-safe-money-v">${money(downPayment(item))}</div>
@@ -6029,12 +7719,13 @@ function renderReview(options = {}){
                 <div class="review-safe-money-cell">
                   <div class="review-safe-money-k">Applied promo</div>
                   <div class="review-safe-money-v">${money(promoValue(item))}</div>
-                </div>
+                </div>`}
               </div>
 
               <div class="review-safe-bottom">
-                <div>Payment mix: ${item.monthly || 0} monthly / ${item.retail || 0} paid in full</div>
-                <div>Total due today: ${money(dueTodayTotal(item))}</div>
+                ${item.orderType === "byod"
+                  ? `<div></div><div>Total due today: ${money(dueTodayTotal(item))}</div>`
+                  : `<div>Payment mix: ${item.monthly || 0} monthly / ${item.retail || 0} paid in full</div><div>Total due today: ${money(dueTodayTotal(item))}</div>`}
               </div>
             </div>
           `;
@@ -6057,15 +7748,14 @@ function renderReview(options = {}){
           )}
           ${reviewAccordionItem(
             "Due Today",
-            money(cart.reduce((sum,item)=>sum + getDueTodayDownOnly(item) + getDueTodayTaxesOnly(item) + getDueTodayAppleCareOnly(item) - getDueTodayPotentPromoCredit(item),0)),
+            money(cart.reduce((sum,item)=>sum + getDueTodayDownOnly(item) + getDueTodayTaxesOnly(item) + getDueTodayAppleCareOnly(item),0)),
             `
               <div class="review-safe-breakdown-row"><span>Down payment</span><strong>${money(cart.reduce((sum,item)=>sum + getDueTodayDownOnly(item),0))}</strong></div>
               <div class="review-safe-breakdown-row"><span>Taxes & fees</span><strong>${money(cart.reduce((sum,item)=>sum + getDueTodayTaxesOnly(item),0))}</strong></div>
               <div class="review-safe-breakdown-row"><span>AppleCare Plus</span><strong>${money(cart.reduce((sum,item)=>sum + getDueTodayAppleCareOnly(item),0))}</strong></div>
-              <div class="review-safe-breakdown-row"><span>Trade-in credit</span><strong>${money(cart.reduce((sum,item)=>sum + tradeTotalFromSnapshot(item),0))}</strong></div>
-              <div class="review-safe-breakdown-row"><span>Applied promo</span><strong>${money(totals.promo)}</strong></div>
-              <div class="review-safe-breakdown-row"><span>Porting promo credit</span><strong>-${money(cart.reduce((sum,item)=>sum + getDueTodayPotentPromoCredit(item),0))}</strong></div>
-              <div class="review-safe-breakdown-note">Trade-in credit and standard promo are informational only in Due Today. Porting promo credit reduces Due Today when applicable.</div>
+              <div class="review-safe-breakdown-row"><span>Estimated trade-in credit</span><strong>${money(cart.reduce((sum,item)=>sum + tradeTotalFromSnapshot(item),0))}</strong></div>
+              <div class="review-safe-breakdown-row"><span>Estimated promo credit</span><strong>${money(totals.promo)}</strong></div>
+              <div class="review-safe-breakdown-note">Trade-in value and promo credits are shown for reference only and are not deducted from the due-today amount in this review step.</div>
             `,
             "due-today"
           )}
@@ -6085,6 +7775,12 @@ function renderReview(options = {}){
       </div>
     </div>
   `;
+
+  wrap.querySelectorAll('[data-review-action="open-config"]').forEach(btn=>{
+    btn.onclick = ()=>{
+      openReviewItemInConfigurator(Number(btn.dataset.reviewIdx));
+    };
+  });
 
   wrap.querySelectorAll('[data-review-action="remove"]').forEach(btn=>{
     btn.onclick = ()=>{
@@ -6108,15 +7804,7 @@ function renderReview(options = {}){
 
   wrap.querySelectorAll('[data-review-action="edit-device"]').forEach(btn=>{
     btn.onclick = ()=>{
-      const idx = Number(btn.dataset.reviewIdx);
-      const item = cart[idx];
-      if(!item) return;
-      state = JSON.parse(JSON.stringify(item));
-      normalizeState();
-      ensureStandaloneConfiguratorPlacement();
-      showOnly("configuratorView");
-      renderConfigurator();
-      window.scrollTo({top:0, behavior:"smooth"});
+      openReviewItemInConfigurator(Number(btn.dataset.reviewIdx));
     };
   });
 
@@ -6142,6 +7830,21 @@ function renderReview(options = {}){
     }
     if($("saveQuoteFormState")) $("saveQuoteFormState").classList.remove("hidden");
     if($("saveQuoteSuccessState")) $("saveQuoteSuccessState").classList.add("hidden");
+    const _saveQuoteError = ensureSaveQuoteEmailError();
+    if(_saveQuoteError) _saveQuoteError.classList.add("hidden");
+  };
+
+  const ensureSaveQuoteEmailError = ()=>{
+    let errorEl = $("saveQuoteEmailError");
+    if(errorEl) return errorEl;
+    const host = $("saveQuoteEmailBlock") || $("saveQuoteEmailList");
+    if(!host) return null;
+    errorEl = document.createElement("div");
+    errorEl.id = "saveQuoteEmailError";
+    errorEl.className = "save-quote-inline-error hidden";
+    errorEl.textContent = "Enter at least one valid email address to send the quote.";
+    host.appendChild(errorEl);
+    return errorEl;
   };
 
   const getSaveQuoteEmailInputs = ()=> [...document.querySelectorAll("#saveQuoteEmailList .save-quote-email-input")];
@@ -6151,8 +7854,10 @@ function renderReview(options = {}){
     const inputs = getSaveQuoteEmailInputs();
     const values = inputs.map(inp => inp.value.trim());
     const hasAnyValue = values.some(v => v !== "");
-    const hasValidEmail = values.some(v => isValidEmailAddress(v));
+    const validCount = values.filter(v => isValidEmailAddress(v)).length;
     const hasInvalidEnteredEmail = values.some(v => v !== "" && !isValidEmailAddress(v));
+    const allValid = hasAnyValue && validCount == values.length;
+    const errorEl = ensureSaveQuoteEmailError();
 
     if($("saveQuoteAddEmailBtn")) $("saveQuoteAddEmailBtn").classList.toggle("hidden", !hasAnyValue);
 
@@ -6170,7 +7875,21 @@ function renderReview(options = {}){
 
     if($("saveQuoteSubmitBtn")){
       $("saveQuoteSubmitBtn").textContent = sendChecked ? "Save and Email Quote" : "Save Quote";
-      $("saveQuoteSubmitBtn").disabled = sendChecked ? (!hasValidEmail || hasInvalidEnteredEmail) : false;
+      $("saveQuoteSubmitBtn").disabled = sendChecked ? !allValid : false;
+    }
+
+    if(errorEl){
+      if(!sendChecked){
+        errorEl.classList.add("hidden");
+      } else if(!hasAnyValue){
+        errorEl.classList.remove("hidden");
+        errorEl.textContent = "Enter at least one valid email address to send the quote.";
+      } else if(hasInvalidEnteredEmail){
+        errorEl.classList.remove("hidden");
+        errorEl.textContent = "Fix the invalid email address before sending the quote.";
+      } else {
+        errorEl.classList.add("hidden");
+      }
     }
   };
 
@@ -6178,6 +7897,7 @@ function renderReview(options = {}){
     $("reviewSaveQuoteBtn").onclick = ()=>{
       resetSaveQuoteModal();
       if($("saveQuoteOverlay")) $("saveQuoteOverlay").classList.remove("hidden");
+      ensureSaveQuoteEmailError();
       syncSaveQuoteEmailUi();
     };
   }
@@ -6196,7 +7916,14 @@ function renderReview(options = {}){
       if(!list) return;
       const wrap = document.createElement("div");
       wrap.className = "save-quote-extra-email";
-      wrap.innerHTML = '<input class="save-quote-email-input" type="email" placeholder="Enter email address" />';
+      wrap.innerHTML = '<input class="save-quote-email-input" type="email" placeholder="Enter email address" /><button type="button" class="save-quote-remove-email">Remove</button>';
+      const removeBtn = wrap.querySelector(".save-quote-remove-email");
+      if(removeBtn){
+        removeBtn.onclick = ()=>{
+          wrap.remove();
+          syncSaveQuoteEmailUi();
+        };
+      }
       list.appendChild(wrap);
       syncSaveQuoteEmailUi();
     };
@@ -6223,15 +7950,11 @@ function renderReview(options = {}){
         : `The quote has been saved and will remain available until ${expiry}.`;
     }
   };
-
   $("reviewAddMoreBtn").onclick = ()=>{
-    ensureStandaloneConfiguratorPlacement();
-    resetForNewDevice(state.category);
-    showOnly("catalogView");
-    renderCatalog();
+    goToEntryStart();
   };
   $("reviewConfigureQuoteBtn").onclick = ()=>{
-    if(!cart.length) return;
+    activeLineEditIndex = null;
     initAsurionLines();
     renderAsurion();
     showOnly("asurionView");
@@ -6278,22 +8001,20 @@ function updateProceed(){
 
 
 function renderFinalCheckoutPage(){
-  const totals = asurionLines.reduce((acc,line)=>{
-    const deviceMonthly = line.payToday ? 0 : Number(line.monthlyPrice || 0);
-    const planMonthly = getPlanMonthlyCharge(line.plan);
-    const full = Number(line.fullPrice || 0);
-    const dueToday = line.payToday ? full : 0;
-    const oneTimeTaxes = Math.max(0, full * 0.04);
-    acc.down += dueToday;
-    acc.monthly += deviceMonthly + planMonthly;
-    acc.oneTimeTaxes += oneTimeTaxes;
+  const cartTotals = cart.reduce((acc,item)=>{
+    normalizeSnapshot(item);
+    acc.dueToday += getDueToday(item);
+    acc.dueNext += getMonthlyCharge(item);
+    acc.monthlyTaxes += getMonthlyTaxesAndFees(item);
+    acc.monthlyProtection += getDeviceProtectionMonthlyCost(item);
+    acc.appleCare += getAppleCareDueToday(item);
     return acc;
-  }, {down:0, monthly:0, oneTimeTaxes:0});
+  }, {dueToday:0, dueNext:0, monthlyTaxes:0, monthlyProtection:0, appleCare:0});
 
-  const dueTodayTotal = totals.down + totals.oneTimeTaxes;
-  const dueNextTotal = totals.monthly;
+  const dueTodayTotal = cartTotals.dueToday;
+  const dueNextTotal = cartTotals.dueNext;
 
-  if($("finalCheckoutTitle")) $("finalCheckoutTitle").textContent = "Ok CBM, let’s review your order";
+  if($("finalCheckoutTitle")) $("finalCheckoutTitle").textContent = "Let’s review your order";
 
   if($("finalCheckoutDeviceProposal")){
     $("finalCheckoutDeviceProposal").innerHTML = asurionLines.map(line=>{
@@ -6306,11 +8027,14 @@ function renderFinalCheckoutPage(){
   if($("finalDueNext")) $("finalDueNext").textContent = money(dueNextTotal);
   if($("finalOneTime")) $("finalOneTime").textContent = money(dueTodayTotal);
   if($("finalPlanMonthly")) $("finalPlanMonthly").textContent = money(dueNextTotal) + "/mo";
-  if($("finalTaxesFees")) $("finalTaxesFees").textContent = money(0) + "/mo";
+  if($("finalTaxesFees")) $("finalTaxesFees").textContent = money(cartTotals.monthlyTaxes) + "/mo";
   if($("finalDueTodayDetail")) $("finalDueTodayDetail").textContent = money(dueTodayTotal);
   if($("finalDueNextDetail")) $("finalDueNextDetail").textContent = money(dueNextTotal);
 
   if($("finalPlanItems")){
+    const protectionRow = cartTotals.monthlyProtection > 0
+      ? `<div class="final-mini-row"><span>Device protection</span><strong>${money(cartTotals.monthlyProtection)}/mo</strong></div>`
+      : "";
     $("finalPlanItems").innerHTML = asurionLines.map(line=>{
       const planCharge = getPlanMonthlyCharge(line.plan);
       const deviceMonthly = line.payToday ? 0 : Number(line.monthlyPrice || 0);
@@ -6326,14 +8050,17 @@ function renderFinalCheckoutPage(){
           <div class="final-line-price">${line.payToday ? money(0) : `${money(deviceMonthly)}/mo`}</div>
         </div>
       `;
-    }).join("");
+    }).join("") + protectionRow;
   }
 
   if($("finalDueTodayItems")){
+    const appleCareRow = cartTotals.appleCare > 0
+      ? `<div class="final-mini-row"><span>AppleCare Plus</span><strong>${money(cartTotals.appleCare)}</strong></div>`
+      : "";
     $("finalDueTodayItems").innerHTML = asurionLines.map(line=>{
       const full = Number(line.fullPrice || 0);
       const dueToday = line.payToday ? full : 0;
-      const taxes = Math.max(0, full * 0.04);
+      const taxes = line.payToday ? Math.max(0, full * 0.06675) : 0;
       return `
         <div class="final-mini-row"><span>Mobile</span><strong>${money(dueToday + taxes)}</strong></div>
         <div class="final-line-item">
@@ -6346,10 +8073,16 @@ function renderFinalCheckoutPage(){
           <div class="final-line-price">${money(dueToday + taxes)}</div>
         </div>
       `;
-    }).join("");
+    }).join("") + appleCareRow;
   }
 
   if($("finalDueNextItems")){
+    const protectionRow = cartTotals.monthlyProtection > 0
+      ? `<div class="final-mini-row"><span>Device protection</span><strong>${money(cartTotals.monthlyProtection)}/mo</strong></div>`
+      : "";
+    const taxesRow = cartTotals.monthlyTaxes > 0
+      ? `<div class="final-mini-row"><span>Taxes, charges & fees</span><strong>${money(cartTotals.monthlyTaxes)}/mo</strong></div>`
+      : "";
     $("finalDueNextItems").innerHTML = asurionLines.map(line=>{
       const deviceMonthly = line.payToday ? 0 : Number(line.monthlyPrice || 0);
       const planCharge = getPlanMonthlyCharge(line.plan);
@@ -6365,7 +8098,7 @@ function renderFinalCheckoutPage(){
           <div class="final-line-price">${money(deviceMonthly + planCharge)}/mo</div>
         </div>
       `;
-    }).join("");
+    }).join("") + protectionRow + taxesRow;
   }
 
   if($("finalIdBlock")){
@@ -6396,6 +8129,8 @@ function initAsurionLines(){
       const monthlyPrice = Number(((d.basePrice || 0) / 36).toFixed(2));
       const payToday = i >= (item.monthly || 0);
 
+      const pairedLine = item.category === "watches" && i < (item.pairedCount || 0);
+
       asurionLines.push({
         label:`Line ${lineIndex}`,
         isEditingName:false,
@@ -6417,6 +8152,7 @@ function initAsurionLines(){
         payToday,
         monthlyPrice:monthlyPrice || 0,
         fullPrice:Number(d.basePrice || 0),
+        connectivity: item.category === "watches" ? (pairedLine ? "Paired with host line" : "Standalone") : (item.connectivity || ""),
         plan:item.plan || (item.category === "phones" ? "Standard" : item.category === "watches" ? "Watch Plan ($10)" : "Tablet Plan")
       });
       lineIndex += 1;
@@ -6575,11 +8311,11 @@ function renderAsurion(){
             </button>
           </div>
         </div>
-        <div class="card"><div class="card-body">There are no configured lines yet. Add a device from the catalog to continue.</div></div>
+        <div class="card"><div class="card-body">There are no configured lines yet. Add a device from the catalog to continue building the quote.</div></div>
       </div>
     `;
     if($("checkoutStatus")) $("checkoutStatus").classList.add("hidden");
-    if($("addLineBtn")) $("addLineBtn").onclick = ()=>{ showOnly("catalogView"); window.scrollTo({top:0, behavior:"smooth"}); };
+    if($("addLineBtn")) $("addLineBtn").onclick = ()=>{ goToEntryStart(); };
     return;
   }
 
@@ -6672,8 +8408,7 @@ function renderAsurion(){
 
   if($("addLineBtn")){
     $("addLineBtn").onclick = ()=>{
-      showOnly("catalogView");
-      window.scrollTo({top:0, behavior:"smooth"});
+      goToEntryStart();
     };
   }
 
@@ -6767,8 +8502,11 @@ function renderAsurion(){
 
 
 function bindCounter(minus, plus, get, set, maxFn){
-  $(minus).onclick = ()=>{ set(Math.max(0, get()-1)); renderConfigurator(); };
-  $(plus).onclick = ()=>{ set(Math.min(maxFn(), get()+1)); renderConfigurator(); };
+  const minusEl = $(minus);
+  const plusEl = $(plus);
+  if(!minusEl || !plusEl) return;
+  minusEl.onclick = ()=>{ set(Math.max(0, get()-1)); renderConfigurator(); };
+  plusEl.onclick = ()=>{ set(Math.min(maxFn(), get()+1)); renderConfigurator(); };
 }
 
 
@@ -6781,16 +8519,7 @@ function init(){
   };
   if($("topBackBtn")) $("topBackBtn").onclick = ()=> goBackScreen();
 
-  if($("entryShopPhonesBtn")) $("entryShopPhonesBtn").onclick = ()=>{ entryPlanPreference = ""; openCatalogForCategory("phones"); };
-  if($("entryShopTabletsBtn")) $("entryShopTabletsBtn").onclick = ()=>{ entryPlanPreference = ""; openCatalogForCategory("tablets"); };
-  if($("entryShopWatchesBtn")) $("entryShopWatchesBtn").onclick = ()=>{ entryPlanPreference = ""; openCatalogForCategory("watches"); };
-  if($("entryBringYourOwnBtn")) $("entryBringYourOwnBtn").onclick = ()=>{
-    byoInlineCategory = "";
-    if($("byoDeviceTypeSelect")) $("byoDeviceTypeSelect").value = "";
-    renderByoInlineConfigurator();
-    showOnly("byoChooserView");
-    window.scrollTo({top:0, behavior:"smooth"});
-  };
+  bindEntryActions();
 
   if($("byoDeviceTypeSelect")) $("byoDeviceTypeSelect").onchange = (e)=>{
     ensureStandaloneConfiguratorPlacement();
@@ -6833,12 +8562,6 @@ function init(){
 
 
 
-  if($("dataOptionProBtn")) $("dataOptionProBtn").onclick = ()=> openCatalogFromPlanChoice("phones", "Pro");
-  if($("dataOptionStandardBtn")) $("dataOptionStandardBtn").onclick = ()=> openCatalogFromPlanChoice("phones", "Standard");
-  if($("dataOptionTabletBtn")) $("dataOptionTabletBtn").onclick = ()=> openCatalogFromPlanChoice("tablets", "Tablet Plan");
-  if($("dataOptionWatchBtn")) $("dataOptionWatchBtn").onclick = ()=> openCatalogFromPlanChoice("watches", "Watch Plan ($10)");
-
-
   renderCatalog();
   setVisibleView("entryView");
 
@@ -6852,11 +8575,24 @@ function init(){
   bindCounter("tradeMinus","tradePlus", ()=>state.tradeCount, v=>{ state.tradeCount=v; normalizeState(); }, ()=>state.quantity);
   bindCounter("protectionMinus","protectionPlus", ()=>state.protectionCount, v=>{ state.protectionCount=v; normalizeState(); }, ()=>state.quantity);
   bindCounter("appleCareMinus","appleCarePlus", ()=>state.appleCareCount, v=>{ state.appleCareCount=v; normalizeState(); }, ()=>state.quantity);
+  bindCounter("pairedMinus","pairedPlus", ()=>state.pairedCount, v=>{
+    state.pairedCount = v;
+    if(state.pairedCount > 0 && state.standaloneCount > 0) state.connectivity = "Mixed";
+    else if(state.pairedCount > 0) state.connectivity = "Paired with host line";
+    else state.connectivity = "Standalone";
+    normalizeState();
+  }, ()=>Math.max(0, state.quantity - Number(state.standaloneCount || 0)));
+  bindCounter("standaloneMinus","standalonePlus", ()=>state.standaloneCount, v=>{
+    state.standaloneCount = v;
+    if(state.pairedCount > 0 && state.standaloneCount > 0) state.connectivity = "Mixed";
+    else if(state.pairedCount > 0) state.connectivity = "Paired with host line";
+    else state.connectivity = "Standalone";
+    normalizeState();
+  }, ()=>Math.max(0, state.quantity - Number(state.pairedCount || 0)));
 
   $("colorSelect").onchange = e=>{ state.color=e.target.value; renderConfigurator(); };
   $("storageSelect").onchange = e=>{ state.storage=e.target.value; renderConfigurator(); };
   $("simSelect").onchange = e=>{ state.sim=e.target.value; renderConfigurator(); };
-  $("connectivitySelect").onchange = e=>{ state.connectivity=e.target.value; renderConfigurator(); };
 
   $("planStandard").onclick = ()=>{ if(isTablet() || isWatch()) return; state.plan="Standard"; renderConfigurator(); };
   $("planPro").onclick = ()=>{ state.plan = isTablet() ? "Tablet Plan" : isWatch() ? "Watch Plan ($10)" : "Pro"; renderConfigurator(); };
@@ -6873,10 +8609,6 @@ function init(){
     ensureStandaloneConfiguratorPlacement();
     showOnly("catalogView");
   };
-  if($("summaryAddToCartBtn")){
-    $("summaryAddToCartBtn").textContent = "Add to Cart";
-    $("summaryAddToCartBtn").onclick = ()=>{ renderReview({commitCurrent:true}); showOnly("reviewView"); window.scrollTo({top:0,behavior:"smooth"}); };
-  }
   if($("configContinueBtn")){
     $("configContinueBtn").onclick = ()=>{
       const ready = isConfiguratorReady(state);
@@ -6889,16 +8621,6 @@ function init(){
       window.scrollTo({top:0,behavior:"smooth"});
     };
   }
-  if($("summaryBackBtn")){
-    $("summaryBackBtn").onclick = ()=>{
-      ensureStandaloneConfiguratorPlacement();
-      showOnly("configuratorView", false);
-      window.scrollTo({top:0,behavior:"smooth"});
-    };
-  }
-  if($("addMoreDeviceBtn")) $("addMoreDeviceBtn").onclick = ()=>{ resetForNewDevice(state.category); showOnly("catalogView"); renderCatalog(); };
-  if($("saveQuoteBtn")) $("saveQuoteBtn").onclick = ()=> alert("Quote saved successfully for this demo.");
-  if($("moveToConciergeBtn")) $("moveToConciergeBtn").onclick = ()=> showConciergeModal();
 
   if($("cancelConciergeBtn")) $("cancelConciergeBtn").onclick = ()=> hideConciergeModal();
   ["confirm1","confirm2","confirm3"].forEach(id=>{
@@ -6917,7 +8639,15 @@ function init(){
     if(successSub) successSub.textContent = "Your order has been sent to Asurion.";
     showOnly("successView");
   };
-  $("scheduleLaterBtn").onclick = ()=>{ window.open("https://www.asurion.com/", "_blank", "noopener,noreferrer"); };
+  $("scheduleLaterBtn").onclick = ()=>{
+    const panel = $("appointmentPanel");
+    if(panel){
+      panel.classList.remove("hidden");
+      panel.style.display = "block";
+      panel.scrollIntoView({behavior:"smooth", block:"nearest"});
+    }
+    if($("appointmentDate")) $("appointmentDate").focus();
+  };
   $("confirmAppointmentBtn").onclick = ()=>{
     const date = $("appointmentDate").value.trim();
     const time = $("appointmentTime").value.trim();
@@ -6925,6 +8655,10 @@ function init(){
     const summary = [date || "Date TBD", time || "Time TBD", notes].filter(Boolean).join(" • ");
     const successSub = document.querySelector("#successView .success-sub");
     if(successSub) successSub.textContent = `Appointment scheduled for ${summary}. The order is ready for Asurion handoff at the scheduled time.`;
+    if($("appointmentPanel")){
+      $("appointmentPanel").classList.add("hidden");
+      $("appointmentPanel").style.display = "none";
+    }
     showOnly("successView");
   };
 
@@ -6955,8 +8689,7 @@ function init(){
 
   if($("eligibilityAddLineBtn")){
     $("eligibilityAddLineBtn").onclick = ()=>{
-      showOnly("catalogView");
-      window.scrollTo({top:0, behavior:"smooth"});
+      goToEntryStart();
     };
   }
 }
@@ -6968,6 +8701,7 @@ window.addEventListener("load", ()=>{
     if(document.getElementById("entryView")){
       screenHistory = ["entryView"];
       setVisibleView("entryView");
+      bindEntryActions();
       try { history.replaceState({viewId:"entryView"}, "", "#entryView"); } catch(e) {}
     }
   }catch(e){
@@ -6977,12 +8711,7 @@ window.addEventListener("load", ()=>{
 
 init();
 
-if($("eligibilityAddLineBtn")){
-  $("eligibilityAddLineBtn").onclick = ()=>{
-    showOnly("catalogView");
-    window.scrollTo({top:0, behavior:"smooth"});
-  };
-}
+
 
 
 </script>
