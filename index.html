@@ -5830,7 +5830,7 @@ function getWatchStepLabels(snapshot=state){
   if(snapshot?.category !== "watches") return null;
   return snapshot?.orderType === "byod"
     ? { qty:1, attr:2, connectivity:3, plan:4, protection:5 }
-    : { attr:1, qty:2, payment:3, connectivity:4, plan:5, protection:6, trade:7 };
+    : { attr:1, qty:2, plan:3, payment:4, connectivity:5, protection:6, trade:7 };
 }
 
 function getConfiguratorPanelState(snapshot=state){
@@ -6857,6 +6857,7 @@ function renderConfigurator(){
   const attrPanel = $("attrPanel");
   const qtyPanel = $("qtyPanel");
   const byoDevicePanel = $("byoDevicePanel");
+  const planPanel = $("planPanel");
   if(configMain && attrPanel && qtyPanel){
     if(isByod()){
       if(configMain.firstElementChild !== qtyPanel){
@@ -6875,6 +6876,9 @@ function renderConfigurator(){
       if(attrPanel.nextElementSibling !== qtyPanel){
         configMain.insertBefore(qtyPanel, attrPanel.nextElementSibling);
       }
+      if(planPanel && qtyPanel.nextElementSibling !== planPanel){
+        configMain.insertBefore(planPanel, qtyPanel.nextElementSibling);
+      }
     }
   }
 
@@ -6890,13 +6894,14 @@ function renderConfigurator(){
   } else if(isPhone()){
     setStep("attrStep",1);
     setStep("qtyStep",2);
-    setStep("paymentStep",3);
     if(planLockedFromEntry){
+      setStep("paymentStep",3);
       setStep("protectionStep",4);
       if(isApplePhoneSnapshot(state)){ setStep("appleCareStep",5); setStep("portStep",6); setStep("tradeStep",7); }
       else { setStep("portStep",5); setStep("tradeStep",6); }
     } else {
-      setStep("planStep",4);
+      setStep("planStep",3);
+      setStep("paymentStep",4);
       setStep("protectionStep",5);
       setStep("portStep",6);
       setStep("tradeStep",7);
@@ -6909,8 +6914,8 @@ function renderConfigurator(){
     } else {
       setStep("attrStep",1);
       setStep("qtyStep",2);
-      setStep("paymentStep",3);
-      setStep("planStep",4);
+      setStep("planStep",3);
+      setStep("paymentStep",4);
       setStep("protectionStep",5);
       setStep("tradeStep",6);
     }
@@ -6925,11 +6930,11 @@ function renderConfigurator(){
     } else {
       setStep("attrStep", watchSteps.attr || 1);
       setStep("qtyStep", watchSteps.qty || 2);
-      setStep("paymentStep", watchSteps.payment || 3);
-      setStep("connectivityStep", watchSteps.connectivity || 4);
-      setStep("planStep", watchSteps.plan || 5);
-      setStep("protectionStep", watchSteps.protection || 6);
-      setStep("tradeStep", watchSteps.trade || 7);
+      setStep("planStep", 3);
+      setStep("paymentStep", 4);
+      setStep("connectivityStep", 5);
+      setStep("protectionStep", 6);
+      setStep("tradeStep", 7);
     }
   }
 
